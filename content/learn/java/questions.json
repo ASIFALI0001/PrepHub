@@ -1,0 +1,881 @@
+{
+  "metadata": {
+    "title": "Top 100 Java Interview Questions",
+    "description": "Most probable Java interview questions compiled from top Java learning sources. Each question is tagged with the sources it appears in and a frequency ranking based on how often it shows up across those sources.",
+    "total_questions": 100,
+    "last_updated": "2026-04-24",
+    "sources": {
+      "JavaTpoint": {
+        "full_name": "JavaTpoint / Tpoint Tech",
+        "url": "https://www.tpointtech.com/corejava-interview-questions",
+        "strength": "Massive Q&A bank, well-organized by subtopic (core, collections, multithreading, JVM, JDBC)"
+      },
+      "Baeldung": {
+        "full_name": "Baeldung",
+        "url": "https://www.baeldung.com/java-interview-questions",
+        "strength": "Deep, high-quality articles; great for explain-this-concept style questions"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit Java Section",
+        "url": "https://www.interviewbit.com/java-interview-questions/",
+        "strength": "Structured difficulty progression from basic to advanced"
+      },
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks Java Interview Questions",
+        "url": "https://www.geeksforgeeks.org/java/java-interview-questions/",
+        "strength": "Broad coverage across every Java subtopic"
+      },
+      "Journaldev": {
+        "full_name": "Journaldev (now DigitalOcean Community)",
+        "url": "https://www.digitalocean.com/community/tutorials/java-multithreading-concurrency-interview-questions-answers",
+        "strength": "Strong on collections, concurrency, and Spring"
+      },
+      "Programiz": {
+        "full_name": "Programiz Java",
+        "url": "https://www.programiz.com/java-programming",
+        "strength": "Beginner-friendly explanations adaptable into interview answers"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every Java interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "Java Basics & JVM",
+      "question": "What is Java?",
+      "answer": "A high-level, object-oriented, platform-independent, multithreaded, secure, robust programming language developed by James Gosling at Sun Microsystems in 1991 (released 1995). Its 'write once, run anywhere' promise comes from bytecode + JVM.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "2",
+      "section": "Java Basics & JVM",
+      "question": "Why is Java platform-independent?",
+      "answer": "The javac compiler produces bytecode (.class), not machine code. Any machine with a compatible JVM can execute this bytecode, so the same .class file runs on Windows, Linux, and Mac without modification.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "3",
+      "section": "Java Basics & JVM",
+      "question": "Difference between JDK, JRE, and JVM?",
+      "answer": "JVM is the virtual machine that runs bytecode. JRE is JVM + standard libraries (enough to run Java apps). JDK is JRE + compilers + tools like javac, javadoc, jdb (needed to develop).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "4",
+      "section": "Java Basics & JVM",
+      "question": "Is Java purely object-oriented?",
+      "answer": "No. Java has primitive types (int, char, boolean, etc.) that are not objects. A purely OO language treats everything as an object; Java does not.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "5",
+      "section": "Java Basics & JVM",
+      "question": "What is bytecode?",
+      "answer": "An intermediate, platform-neutral instruction set produced by the Java compiler. The JVM either interprets it or JIT-compiles it to native code at runtime.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "6",
+      "section": "Java Basics & JVM",
+      "question": "What is the JIT compiler?",
+      "answer": "Just-In-Time compiler, part of the JVM. It compiles frequently executed bytecode ('hot spots') into native machine code at runtime to boost performance.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "7",
+      "section": "Java Basics & JVM",
+      "question": "What is a ClassLoader?",
+      "answer": "A JVM subsystem that loads class files into memory on demand. The hierarchy is Bootstrap → Extension (Platform) → Application (System) loaders, following the parent-delegation model.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "8",
+      "section": "Java Basics & JVM",
+      "question": "What are the main memory areas managed by JVM?",
+      "answer": "Heap (objects), Stack (method frames, local variables), Method Area / Metaspace (class metadata), PC Register (current instruction), and Native Method Stack.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks"]
+    },
+    {
+      "id": "9",
+      "section": "Java Basics & JVM",
+      "question": "Stack vs Heap memory?",
+      "answer": "Stack stores method calls and local primitives/references; it's thread-local and fast. Heap stores all objects and arrays; shared across threads and managed by the garbage collector.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "10",
+      "section": "Java Basics & JVM",
+      "question": "Difference between == and .equals()?",
+      "answer": "== compares references (same object in memory). .equals() compares content/value as defined by the class. String and wrapper classes override equals; Object.equals() by default behaves like ==.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "11",
+      "section": "Java Basics & JVM",
+      "question": "What are the main features of Java?",
+      "answer": "Simple, object-oriented, platform-independent, secure, robust, architecture-neutral, portable, multithreaded, distributed, dynamic, and high-performance (via JIT).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "12",
+      "section": "Java Basics & JVM",
+      "question": "What is the default value of a local variable?",
+      "answer": "There is none. Local variables must be explicitly initialized before use (compiler-enforced). Instance and class variables do get defaults: 0 for numeric, false for boolean, null for references.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "13",
+      "section": "Java Basics & JVM",
+      "question": "Can we execute a Java program without main()?",
+      "answer": "Not in modern Java. Historically a static block could print output before main was called, but the JVM still required main as the entry point. Since Java 7 it's strictly required.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "14",
+      "section": "Java Basics & JVM",
+      "question": "Difference between final, finally, and finalize()?",
+      "answer": "final is a keyword (constant variable / non-overridable method / non-extendable class). finally is a block that always executes after try/catch for cleanup. finalize() was a method called by the GC before reclaiming an object; deprecated since Java 9.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "15",
+      "section": "Java Basics & JVM",
+      "question": "What is a package in Java?",
+      "answer": "A namespace that groups related classes/interfaces. Benefits: avoids name clashes, provides access control, makes code easier to locate and maintain.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "16",
+      "section": "OOP Concepts",
+      "question": "What are the four pillars of OOP?",
+      "answer": "Encapsulation, Inheritance, Polymorphism, and Abstraction.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "17",
+      "section": "OOP Concepts",
+      "question": "What is encapsulation?",
+      "answer": "Bundling data (fields) and behavior (methods) inside a class, and restricting direct access to data via private fields with public getters/setters.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "18",
+      "section": "OOP Concepts",
+      "question": "What is inheritance?",
+      "answer": "A mechanism where a subclass acquires the properties and methods of a superclass via the extends keyword. Java supports single inheritance for classes and multiple inheritance via interfaces.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "19",
+      "section": "OOP Concepts",
+      "question": "Why doesn't Java support multiple inheritance with classes?",
+      "answer": "To avoid the diamond problem (ambiguity when two parents have the same method). Java solves this by letting a class extend only one class but implement multiple interfaces.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "20",
+      "section": "OOP Concepts",
+      "question": "What is polymorphism?",
+      "answer": "'One interface, many implementations.' Two kinds: compile-time (method overloading) and runtime (method overriding).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "21",
+      "section": "OOP Concepts",
+      "question": "Difference between method overloading and overriding?",
+      "answer": "Overloading: same method name, different parameter lists, same class; resolved at compile time. Overriding: subclass redefines a parent method with the same signature; resolved at runtime via dynamic dispatch.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "22",
+      "section": "OOP Concepts",
+      "question": "What is abstraction? Abstract class vs interface?",
+      "answer": "Abstraction hides implementation details and exposes only functionality. Abstract class: can have both abstract and concrete methods, fields, constructors; single inheritance. Interface: only abstract methods + constants historically; since Java 8 also default/static methods; Java 9 also private methods; allows multiple inheritance.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "23",
+      "section": "OOP Concepts",
+      "question": "Can we declare a class private or protected?",
+      "answer": "A top-level class can only be public or package-private (no modifier). Inner/nested classes can be private or protected.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "24",
+      "section": "OOP Concepts",
+      "question": "What is a constructor?",
+      "answer": "A special block with the same name as the class, called when an object is created. It initializes the object's state. If none is defined, the compiler provides a no-arg default constructor.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "25",
+      "section": "OOP Concepts",
+      "question": "Difference between default, parameterized, and copy constructor?",
+      "answer": "Default: no args; compiler-generated if none defined. Parameterized: accepts args to initialize fields. Copy: takes another instance of the same class to duplicate its state (Java doesn't provide one automatically; you write it yourself).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "26",
+      "section": "OOP Concepts",
+      "question": "Can a constructor be final, static, or abstract?",
+      "answer": "No. Constructors aren't inherited (so final is meaningless), they operate on instances (so static is wrong), and they need a body (so abstract is wrong).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "27",
+      "section": "OOP Concepts",
+      "question": "What is the this keyword?",
+      "answer": "A reference to the current object. Used to refer to instance fields, invoke other constructors via this(...), or pass the current object to a method.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "28",
+      "section": "OOP Concepts",
+      "question": "What is the super keyword?",
+      "answer": "A reference to the immediate parent class. Used to call parent methods (super.method()), access parent fields, or invoke the parent constructor (super(...)).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "29",
+      "section": "OOP Concepts",
+      "question": "What is the static keyword?",
+      "answer": "Marks a field/method/block/nested class as belonging to the class itself, not to instances. Shared across all objects. Loaded once when the class is loaded.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "30",
+      "section": "OOP Concepts",
+      "question": "Can we override a static method?",
+      "answer": "No. Static methods belong to the class, not instances. They are hidden in subclasses, not overridden. Polymorphism doesn't apply.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "31",
+      "section": "String Handling",
+      "question": "Why are Strings immutable in Java?",
+      "answer": "Three reasons: security (safe for passwords, class loaders, URLs), thread safety (no synchronization needed), and String Pool optimization (same literal shared across references). Bonus: hashCode can be cached.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "32",
+      "section": "String Handling",
+      "question": "What is the String Pool?",
+      "answer": "A special region in the heap where String literals are stored. Writing String s = \"hello\" twice makes both references point to the same pool object, saving memory.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "33",
+      "section": "String Handling",
+      "question": "Difference between String, StringBuilder, and StringBuffer?",
+      "answer": "String is immutable. StringBuilder is mutable, not thread-safe, fast — prefer in single-threaded code. StringBuffer is mutable, thread-safe (synchronized), slower.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "34",
+      "section": "String Handling",
+      "question": "Difference between String s = \"abc\" and String s = new String(\"abc\")?",
+      "answer": "The literal form uses/reuses the String Pool (one object). The new form creates a new object in the heap in addition to the pool entry — so potentially two objects exist.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "35",
+      "section": "String Handling",
+      "question": "How do you compare two strings in Java?",
+      "answer": "Use .equals() for content comparison, .equalsIgnoreCase() for case-insensitive, and .compareTo() for lexicographic order. Never use == unless you genuinely want reference equality.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "36",
+      "section": "String Handling",
+      "question": "What does intern() do?",
+      "answer": "Returns the canonical representation of the string from the pool. If the string is already pooled, returns the pooled reference; otherwise, adds it to the pool and returns the reference.",
+      "frequency": "LOW",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "37",
+      "section": "String Handling",
+      "question": "Is String a primitive or an object in Java?",
+      "answer": "An object — java.lang.String. Java has no primitive string type.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "Programiz"]
+    },
+    {
+      "id": "38",
+      "section": "String Handling",
+      "question": "Can we use String in a switch statement?",
+      "answer": "Yes, since Java 7. Before that, switch only supported primitives and enums.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "39",
+      "section": "String Handling",
+      "question": "What is the output of \"10\" + 20 + 30?",
+      "answer": "\"102030\". Evaluation is left-to-right: \"10\"+20 → \"1020\" (String concat), then \"1020\"+30 → \"102030\".",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "40",
+      "section": "String Handling",
+      "question": "How do you reverse a string in Java?",
+      "answer": "Easiest: new StringBuilder(s).reverse().toString(). Or iterate from end to start manually (common coding question).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "41",
+      "section": "Collections Framework",
+      "question": "What is the Java Collections Framework?",
+      "answer": "A unified architecture for storing and manipulating groups of objects. Core interfaces: Collection, List, Set, Queue, Map (Map doesn't extend Collection, by design).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "42",
+      "section": "Collections Framework",
+      "question": "Why doesn't Map extend Collection?",
+      "answer": "Because a Map is a key-value pair structure, not a single-element collection. The Collection contract (add(E), remove(E)) doesn't fit naturally.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "43",
+      "section": "Collections Framework",
+      "question": "Difference between ArrayList and LinkedList?",
+      "answer": "ArrayList: backed by a dynamic array; O(1) random access via index; slower mid-list insertions (shifts). LinkedList: doubly-linked list; O(1) insertions/deletions at head/tail; O(n) random access; higher memory overhead per node.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "44",
+      "section": "Collections Framework",
+      "question": "Difference between ArrayList and Vector?",
+      "answer": "Vector is synchronized (thread-safe but slower) and legacy; ArrayList is not synchronized (fast; use Collections.synchronizedList or CopyOnWriteArrayList if concurrency is needed). Vector doubles on resize; ArrayList grows by ~50%.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "45",
+      "section": "Collections Framework",
+      "question": "Difference between HashMap and Hashtable?",
+      "answer": "HashMap: not synchronized, allows one null key and many null values, fast. Hashtable: synchronized, no null keys/values, legacy. Prefer ConcurrentHashMap over Hashtable for concurrent use.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "46",
+      "section": "Collections Framework",
+      "question": "How does HashMap work internally?",
+      "answer": "An array of buckets (default 16, power of two). hashCode() of the key determines the bucket index. On collision, entries are stored in a linked list — or since Java 8, a red-black tree once a bucket exceeds 8 entries. equals() resolves which exact key matches.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "47",
+      "section": "Collections Framework",
+      "question": "What is the load factor of a HashMap?",
+      "answer": "The threshold (default 0.75) that triggers rehashing. When the map is 75% full, the internal array doubles. Balances space vs time.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "48",
+      "section": "Collections Framework",
+      "question": "What happens if two keys have the same hashCode?",
+      "answer": "Collision. Both entries land in the same bucket, stored as a linked list (or red-black tree since Java 8). On lookup, equals() distinguishes the exact key.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "49",
+      "section": "Collections Framework",
+      "question": "What contract must hashCode() and equals() satisfy?",
+      "answer": "If a.equals(b) is true, then a.hashCode() == b.hashCode() must be true. Equal hash codes don't imply equals. equals must be reflexive, symmetric, transitive, and consistent. Breaking this breaks every hash-based collection.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "50",
+      "section": "Collections Framework",
+      "question": "Difference between HashMap, LinkedHashMap, and TreeMap?",
+      "answer": "HashMap: no order, O(1) average, allows one null key. LinkedHashMap: maintains insertion (or access) order, O(1) average. TreeMap: sorted by keys (natural or Comparator), O(log n), no null keys.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "51",
+      "section": "Collections Framework",
+      "question": "Difference between HashSet and TreeSet?",
+      "answer": "HashSet: unordered, O(1) average, backed by HashMap, allows one null. TreeSet: sorted, O(log n), backed by TreeMap, implements NavigableSet, doesn't allow null.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "52",
+      "section": "Collections Framework",
+      "question": "Difference between Iterator and ListIterator?",
+      "answer": "Iterator: forward-only, works on any Collection. ListIterator: bidirectional, works only on Lists, supports add() and set() during iteration.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "53",
+      "section": "Collections Framework",
+      "question": "Fail-fast vs fail-safe iterators?",
+      "answer": "Fail-fast throws ConcurrentModificationException if the collection is modified during iteration (e.g., ArrayList, HashMap iterators). Fail-safe iterates over a copy, no exception, may miss latest changes (e.g., ConcurrentHashMap, CopyOnWriteArrayList).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "54",
+      "section": "Collections Framework",
+      "question": "Difference between Comparable and Comparator?",
+      "answer": "Comparable: natural ordering, implemented by the class itself via compareTo(), single sort order. Comparator: external, separate class or lambda via compare(), multiple sort orders possible.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "55",
+      "section": "Collections Framework",
+      "question": "How does ConcurrentHashMap work?",
+      "answer": "Java 7 used segment-level locking (lock stripes). Java 8+ uses fine-grained synchronization at the bucket level with CAS and a synchronized lock on the first node — far better concurrency than Hashtable's full-map lock.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "56",
+      "section": "Collections Framework",
+      "question": "What is CopyOnWriteArrayList?",
+      "answer": "A thread-safe List variant. Every write (add/set/remove) creates a fresh copy of the underlying array. Great for read-heavy, rarely-written scenarios — terrible if writes are frequent.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "57",
+      "section": "Collections Framework",
+      "question": "What is BlockingQueue?",
+      "answer": "A Queue that blocks on put() when full and take() when empty — the foundation of producer-consumer patterns. Implementations: ArrayBlockingQueue, LinkedBlockingQueue, PriorityBlockingQueue.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "58",
+      "section": "Collections Framework",
+      "question": "What is PriorityQueue?",
+      "answer": "A Queue where elements are ordered by priority (natural or Comparator). The head is always the minimum element. O(log n) insert/remove.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "59",
+      "section": "Collections Framework",
+      "question": "Can you store primitive types in collections?",
+      "answer": "No. Collections only hold objects. Primitives are autoboxed into wrapper classes (int → Integer, etc.) when added.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "60",
+      "section": "Collections Framework",
+      "question": "How do you make a collection read-only?",
+      "answer": "Collections.unmodifiableList(list) / unmodifiableMap / unmodifiableSet. Since Java 9, also List.of(...), Map.of(...), Set.of(...) for truly immutable instances.",
+      "frequency": "LOW",
+      "sources": ["Baeldung", "Journaldev"]
+    },
+    {
+      "id": "61",
+      "section": "Exception Handling",
+      "question": "What is an exception?",
+      "answer": "An abnormal event that disrupts normal program flow. Java represents them as objects of Throwable or its subclasses.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "62",
+      "section": "Exception Handling",
+      "question": "Hierarchy of exceptions in Java?",
+      "answer": "Throwable splits into Error (unrecoverable, e.g., OutOfMemoryError) and Exception (recoverable). Exception splits further into checked exceptions and unchecked (RuntimeException and its subclasses).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "63",
+      "section": "Exception Handling",
+      "question": "Checked vs unchecked exceptions?",
+      "answer": "Checked: verified at compile time; must be declared or caught (e.g., IOException, SQLException). Unchecked: verified at runtime; no compile-time enforcement (e.g., NullPointerException, ArithmeticException).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "64",
+      "section": "Exception Handling",
+      "question": "Difference between throw and throws?",
+      "answer": "throw: actually throws an exception instance (throw new IOException()). throws: method signature declaration of what a method may throw.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "65",
+      "section": "Exception Handling",
+      "question": "What does finally do? When does it NOT execute?",
+      "answer": "finally always runs after try/catch for cleanup. It won't execute if the JVM exits (System.exit()), the thread is killed, or an infinite loop/deadlock occurs in try.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "66",
+      "section": "Exception Handling",
+      "question": "Can we have try without catch?",
+      "answer": "Yes. try-finally is valid. Also try-with-resources (Java 7+) doesn't need an explicit catch.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "67",
+      "section": "Exception Handling",
+      "question": "What is try-with-resources?",
+      "answer": "A syntax (Java 7+) that auto-closes any resource implementing AutoCloseable — no explicit finally block needed. Cleaner and safer than manual close.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "68",
+      "section": "Exception Handling",
+      "question": "Can we catch multiple exceptions in one catch block?",
+      "answer": "Yes, since Java 7: catch (IOException | SQLException e). The caught variable is implicitly final.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks"]
+    },
+    {
+      "id": "69",
+      "section": "Exception Handling",
+      "question": "Can a finally block override a return from try?",
+      "answer": "Yes — if finally has its own return, it overrides try's return. Considered bad practice; static analyzers warn against it.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "70",
+      "section": "Exception Handling",
+      "question": "How do you create a custom exception?",
+      "answer": "Extend Exception (checked) or RuntimeException (unchecked), add constructors that delegate to super. Use a meaningful name like InsufficientBalanceException.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "71",
+      "section": "Multithreading & Concurrency",
+      "question": "Process vs Thread?",
+      "answer": "A process is an independent program with its own memory space. A thread is a lightweight unit of execution inside a process, sharing the heap but with its own stack.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "72",
+      "section": "Multithreading & Concurrency",
+      "question": "How do you create a thread in Java?",
+      "answer": "Two ways: extend Thread and override run(), or implement Runnable and pass it to a Thread constructor. Option 2 is preferred — keeps inheritance free and works with lambdas/executors.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "73",
+      "section": "Multithreading & Concurrency",
+      "question": "Difference between start() and run()?",
+      "answer": "start() creates a new thread and calls run() on it. Calling run() directly just executes the code on the current thread — no concurrency.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "74",
+      "section": "Multithreading & Concurrency",
+      "question": "What are the thread states?",
+      "answer": "NEW → RUNNABLE → (RUNNING) → BLOCKED / WAITING / TIMED_WAITING → TERMINATED.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "75",
+      "section": "Multithreading & Concurrency",
+      "question": "What is the synchronized keyword?",
+      "answer": "Locks either an instance (synchronized method), a class (synchronized static method), or an object (synchronized(lock) block). Ensures only one thread at a time executes the protected section.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "76",
+      "section": "Multithreading & Concurrency",
+      "question": "What is the volatile keyword?",
+      "answer": "Guarantees visibility: a write by one thread is immediately visible to others; prevents caching in registers. Does NOT guarantee atomicity — use AtomicInteger etc. for that.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "77",
+      "section": "Multithreading & Concurrency",
+      "question": "Difference between wait(), sleep(), and yield()?",
+      "answer": "wait(): releases the lock, waits on an object's monitor (must be inside synchronized block); called on an object. sleep(): pauses the thread for given time; does NOT release locks; called on Thread. yield(): hint to the scheduler that this thread is willing to pause; no guaranteed effect.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "78",
+      "section": "Multithreading & Concurrency",
+      "question": "What is a deadlock?",
+      "answer": "Two or more threads waiting forever for locks held by each other, forming a cycle. Prevention: fixed lock ordering, timeouts (tryLock), avoiding nested locks.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "79",
+      "section": "Multithreading & Concurrency",
+      "question": "Race condition vs Livelock vs Starvation?",
+      "answer": "Race condition: multiple threads access shared state without proper sync, leading to unpredictable results. Livelock: threads are running but keep reacting to each other with no progress. Starvation: a thread never gets CPU/resources because higher-priority threads monopolize them.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "80",
+      "section": "Multithreading & Concurrency",
+      "question": "What is the Executor / ExecutorService framework?",
+      "answer": "A higher-level thread management abstraction introduced in Java 5. Instead of creating threads manually, submit tasks to a thread pool (Executors.newFixedThreadPool(...)) that reuses threads.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "81",
+      "section": "Multithreading & Concurrency",
+      "question": "Difference between Runnable and Callable?",
+      "answer": "Runnable: run() returns void; can't throw checked exceptions. Callable<V>: call() returns a value and can throw checked exceptions; paired with Future.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "82",
+      "section": "Multithreading & Concurrency",
+      "question": "What is Future and CompletableFuture?",
+      "answer": "Future: placeholder for an async result; blocking get(). CompletableFuture (Java 8): non-blocking, composable pipelines via thenApply, thenCompose, thenCombine, with async callbacks.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "83",
+      "section": "Multithreading & Concurrency",
+      "question": "What is the Java Memory Model (JMM)?",
+      "answer": "Defines how threads interact through memory: what writes are visible to what reads, rules around volatile, synchronized, and final fields, and the 'happens-before' relationship.",
+      "frequency": "LOW",
+      "sources": ["Baeldung", "Journaldev"]
+    },
+    {
+      "id": "84",
+      "section": "Multithreading & Concurrency",
+      "question": "Difference between CyclicBarrier and CountDownLatch?",
+      "answer": "CountDownLatch: one-shot; threads wait until a count reaches zero; not reusable. CyclicBarrier: threads wait at a barrier until all arrive; reusable after tripping.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "85",
+      "section": "Multithreading & Concurrency",
+      "question": "What are atomic classes like AtomicInteger?",
+      "answer": "Lock-free thread-safe classes in java.util.concurrent.atomic that use CAS (Compare-And-Swap) for atomic updates without synchronization overhead.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "86",
+      "section": "Java 8+ Features",
+      "question": "What are the key features introduced in Java 8?",
+      "answer": "Lambda expressions, Stream API, Functional Interfaces, Method References, default/static methods in interfaces, Optional, new Date/Time API (java.time), CompletableFuture, Nashorn JS engine.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "87",
+      "section": "Java 8+ Features",
+      "question": "What is a lambda expression?",
+      "answer": "A concise, anonymous function — a block of code you can pass around like data. Syntax: (params) -> expression or (params) -> { statements; }. Can only be assigned to a functional interface.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "88",
+      "section": "Java 8+ Features",
+      "question": "What is a functional interface?",
+      "answer": "An interface with exactly one abstract method (default/static methods don't count). Examples: Runnable, Comparator, Predicate, Function, Consumer, Supplier. Use @FunctionalInterface for compiler enforcement.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "89",
+      "section": "Java 8+ Features",
+      "question": "What is the Stream API?",
+      "answer": "An abstraction for processing sequences of elements declaratively — filter, map, reduce, collect. Streams are lazy, consume a source (collection/array), and support parallel execution.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "90",
+      "section": "Java 8+ Features",
+      "question": "Intermediate vs terminal operations on a Stream?",
+      "answer": "Intermediate: return a new stream, lazy (filter, map, sorted, distinct). Terminal: trigger execution and produce a result (collect, forEach, reduce, count).",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "91",
+      "section": "Java 8+ Features",
+      "question": "Difference between map() and flatMap()?",
+      "answer": "map applies a function to each element (1-to-1 transform). flatMap applies a function that returns a stream, then flattens the result (1-to-many, flattened into one stream).",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "92",
+      "section": "Java 8+ Features",
+      "question": "What is Optional?",
+      "answer": "A container for a possibly-null value. Helps avoid NullPointerException by forcing explicit absence handling: isPresent(), orElse(), map(), ifPresent(). Use for return values, not fields/parameters.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "93",
+      "section": "Java 8+ Features",
+      "question": "What is a method reference?",
+      "answer": "Shorthand for a lambda that just calls a method: String::toUpperCase instead of s -> s.toUpperCase(). Four kinds: static, bound instance, unbound instance, constructor reference.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "94",
+      "section": "Java 8+ Features",
+      "question": "What are default methods in interfaces?",
+      "answer": "Methods with a body inside an interface (Java 8+), marked with default. They let you add new methods to interfaces without breaking existing implementations — how List.forEach was introduced.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "95",
+      "section": "Java 8+ Features",
+      "question": "Difference between Collection and Stream?",
+      "answer": "A Collection stores data in memory. A Stream is a computation pipeline over data — it doesn't store, it processes. Streams are lazy, single-use, and can be parallelized.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "Journaldev"]
+    },
+    {
+      "id": "96",
+      "section": "Miscellaneous & Advanced",
+      "question": "What is serialization?",
+      "answer": "Converting an object into a byte stream for storage or transmission; deserialization reverses it. Class must implement Serializable (marker). Use transient to skip fields. serialVersionUID handles version compatibility.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "97",
+      "section": "Miscellaneous & Advanced",
+      "question": "Shallow copy vs deep copy?",
+      "answer": "Shallow: copies object fields as-is; nested object references are shared. Deep: recursively copies nested objects too; fully independent duplicate.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "98",
+      "section": "Miscellaneous & Advanced",
+      "question": "What are generics and type erasure?",
+      "answer": "Generics provide compile-time type safety (List<String>). Type erasure: at runtime, generic info is stripped (List<String> → List) for backward compatibility with pre-generics code.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "99",
+      "section": "Miscellaneous & Advanced",
+      "question": "What is garbage collection? Can you force it?",
+      "answer": "Automatic memory reclamation of unreachable objects. You can suggest it via System.gc() or Runtime.getRuntime().gc(), but the JVM decides. Algorithms: Serial, Parallel, G1 (default since Java 9), ZGC, Shenandoah.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "100",
+      "section": "Miscellaneous & Advanced",
+      "question": "Difference between ==, equals(), and hashCode() for objects?",
+      "answer": "== checks reference identity. equals() checks logical equality (override for value-based classes). hashCode() returns an int used by hash-based collections. Rule: if you override equals, you MUST override hashCode consistently.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "Java Basics & JVM": 15,
+      "OOP Concepts": 15,
+      "String Handling": 10,
+      "Collections Framework": 20,
+      "Exception Handling": 10,
+      "Multithreading & Concurrency": 15,
+      "Java 8+ Features": 10,
+      "Miscellaneous & Advanced": 5
+    },
+    "by_frequency": {
+      "MOST_FREQ": 52,
+      "MED": 40,
+      "LOW": 8
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q70 (Basics, OOP, Strings, Collections, Exceptions). All MOST_FREQ in these sections.",
+      "mid_level_2_to_5_yrs": "Add Q71–Q95 (Multithreading, Java 8). Dig deeper into Q46 (HashMap internals), Q55 (ConcurrentHashMap), Q83 (JMM).",
+      "senior_5_plus_yrs": "All 100 + follow-ups on JVM internals, GC tuning, and real-world concurrency bugs."
+    },
+    "highest_probability_topics": [
+      "HashMap internals (Q46)",
+      "ArrayList vs LinkedList (Q43)",
+      "String immutability (Q31)",
+      "final vs finally vs finalize (Q14)",
+      "Checked vs unchecked exceptions (Q63)",
+      "synchronized vs volatile (Q75, Q76)",
+      "Method overloading vs overriding (Q21)",
+      "Abstract class vs interface (Q22)",
+      "Stream API (Q89)",
+      "Lambda + functional interfaces (Q87, Q88)"
+    ]
+  }
+}

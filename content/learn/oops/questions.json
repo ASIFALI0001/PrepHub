@@ -1,0 +1,883 @@
+{
+  "metadata": {
+    "title": "Top 100 OOPs Interview Questions",
+    "description": "Most probable OOPs (Object-Oriented Programming) interview questions compiled from top Java learning sources. Each question is tagged with the sources it appears in and a frequency ranking based on how often it shows up across those sources. Answers are Java-oriented since OOPs is most commonly asked in Java interviews.",
+    "total_questions": 100,
+    "last_updated": "2026-04-24",
+    "sources": {
+      "JavaTpoint": {
+        "full_name": "JavaTpoint / Tpoint Tech",
+        "url": "https://www.tpointtech.com/oops-interview-questions",
+        "strength": "Dedicated OOPs interview questions page; organized by sub-topic (constructors, static, inheritance, abstraction, polymorphism)"
+      },
+      "Baeldung": {
+        "full_name": "Baeldung",
+        "url": "https://www.baeldung.com/java-oop",
+        "strength": "Deep articles on each OOP pillar, composition vs inheritance, Object class methods; great for explain-this-concept framing"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit OOPs Section",
+        "url": "https://www.interviewbit.com/oops-interview-questions/",
+        "strength": "Structured difficulty progression; strong on fresher questions and design-oriented ones"
+      },
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks OOPs Interview Questions",
+        "url": "https://www.geeksforgeeks.org/oops-interview-questions/",
+        "strength": "Broad coverage; separate pages for each pillar, constructors, inheritance, polymorphism, keywords"
+      },
+      "Journaldev": {
+        "full_name": "Journaldev (now DigitalOcean Community)",
+        "url": "https://www.digitalocean.com/community/tutorials/object-oriented-programming",
+        "strength": "Strong on constructors, this/super, static vs instance, and method overriding edge cases"
+      },
+      "Programiz": {
+        "full_name": "Programiz Java OOP",
+        "url": "https://www.programiz.com/java-programming/object-class-objects",
+        "strength": "Beginner-friendly tutorials on the four pillars and access modifiers; clean fresher-level explanations"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every OOPs interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "OOP Basics",
+      "question": "What is Object-Oriented Programming (OOP)?",
+      "answer": "A programming style that organizes code around objects — real-world entities with data (fields) and behavior (methods). It focuses on reusing code, hiding complexity, and modeling the real world instead of just writing instructions.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "2",
+      "section": "OOP Basics",
+      "question": "What are the four main pillars of OOP?",
+      "answer": "Encapsulation, Inheritance, Polymorphism, and Abstraction. Together they make code reusable, secure, flexible, and easy to maintain.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "3",
+      "section": "OOP Basics",
+      "question": "What is a class?",
+      "answer": "A blueprint or template that describes what an object will look like and what it can do. It defines fields (data) and methods (behavior) but takes no memory until an object is created.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "4",
+      "section": "OOP Basics",
+      "question": "What is an object?",
+      "answer": "A real instance of a class, created using the `new` keyword. It occupies memory and has its own state (field values) and behavior (methods).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "5",
+      "section": "OOP Basics",
+      "question": "Difference between a class and an object?",
+      "answer": "A class is a blueprint (logical, no memory). An object is the actual thing built from that blueprint (physical, has memory). One class can produce many objects.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "6",
+      "section": "OOP Basics",
+      "question": "What are the advantages of OOP?",
+      "answer": "Code reusability (via inheritance), easier maintenance, better security (via encapsulation), modularity (split into objects), and the ability to model real-world problems clearly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "7",
+      "section": "OOP Basics",
+      "question": "Difference between OOP and procedural programming?",
+      "answer": "Procedural programming focuses on functions and sequences of steps. OOP groups data and the functions that act on it into objects. OOP is better for large, complex systems because it hides details and makes code reusable.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "8",
+      "section": "OOP Basics",
+      "question": "Is Java a purely object-oriented language?",
+      "answer": "No. Java has primitive types (int, char, boolean, etc.) that are not objects. A purely OO language treats everything as an object, so Java isn't 100% pure.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "9",
+      "section": "OOP Basics",
+      "question": "What is a reference variable?",
+      "answer": "A variable that stores the address of an object (not the object itself). For example, `Car c = new Car();` — here `c` is a reference pointing to the actual Car object on the heap.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "10",
+      "section": "OOP Basics",
+      "question": "Can a class exist without any object?",
+      "answer": "Yes. A class is just a blueprint. It lives as a class file and takes no runtime memory until you create objects from it. Static methods can even be used without creating any object.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "11",
+      "section": "Encapsulation",
+      "question": "What is encapsulation?",
+      "answer": "Wrapping data (fields) and the code that works on that data (methods) into one unit (a class), and hiding the internal details. Done by making fields `private` and giving access via public getters/setters.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "12",
+      "section": "Encapsulation",
+      "question": "What are the benefits of encapsulation?",
+      "answer": "Data security (outsiders can't change fields directly), better control (you can validate inside setters), easier maintenance (change internals without breaking callers), and cleaner code.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "13",
+      "section": "Encapsulation",
+      "question": "How do you achieve encapsulation in Java?",
+      "answer": "Make fields `private`, then provide public getter and setter methods to read and update them. The outside world talks to the object only through these methods.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "14",
+      "section": "Encapsulation",
+      "question": "What are access modifiers in Java?",
+      "answer": "Keywords that control visibility: `private` (same class only), `default` / no keyword (same package), `protected` (same package + subclasses), `public` (everywhere).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "15",
+      "section": "Encapsulation",
+      "question": "Difference between private, default, protected, and public?",
+      "answer": "private → same class. default → same package. protected → same package + child classes (even in other packages). public → accessible everywhere.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "16",
+      "section": "Encapsulation",
+      "question": "Difference between data hiding and encapsulation?",
+      "answer": "Data hiding is the goal — keep data safe from outside code. Encapsulation is the tool — bundle data + methods and control access. Data hiding is achieved through encapsulation.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "17",
+      "section": "Encapsulation",
+      "question": "What is an immutable class? How do you create one?",
+      "answer": "A class whose object state cannot change after creation (e.g., String). To make one: declare the class `final`, make all fields `private final`, set values only via constructor, and don't provide setters.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "18",
+      "section": "Encapsulation",
+      "question": "Can encapsulation exist without data hiding?",
+      "answer": "Technically yes — you could bundle data and methods but keep fields public (bad design). But real encapsulation includes data hiding; otherwise the whole point is lost.",
+      "frequency": "LOW",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "19",
+      "section": "Inheritance",
+      "question": "What is inheritance?",
+      "answer": "A mechanism where one class (child/subclass) acquires fields and methods of another class (parent/superclass) using the `extends` keyword. It promotes code reuse and IS-A relationships.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "20",
+      "section": "Inheritance",
+      "question": "What are the different types of inheritance?",
+      "answer": "Single (one parent → one child), Multilevel (grandparent → parent → child), Hierarchical (one parent → many children), Multiple (one child → many parents — not supported via classes in Java), and Hybrid (combination).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "21",
+      "section": "Inheritance",
+      "question": "Why doesn't Java support multiple inheritance with classes?",
+      "answer": "To avoid the Diamond Problem — if a class inherits from two parents that both have the same method, the compiler can't decide which one to use. Java allows multiple inheritance through interfaces instead.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "22",
+      "section": "Inheritance",
+      "question": "What is the Diamond Problem?",
+      "answer": "Ambiguity when a class inherits from two parents that share the same method — the compiler doesn't know which version to pick. Java avoids it by disallowing multiple class inheritance; interfaces solve it using `default` method rules.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "23",
+      "section": "Inheritance",
+      "question": "What is the `extends` keyword?",
+      "answer": "Used to inherit from a class: `class Dog extends Animal`. The child class gets all non-private members of the parent and can add its own or override existing ones.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "24",
+      "section": "Inheritance",
+      "question": "What is the `super` keyword?",
+      "answer": "A reference to the immediate parent class. Use `super.method()` to call a parent method, `super.field` to access a parent field, and `super(...)` to call the parent constructor from the child constructor.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "25",
+      "section": "Inheritance",
+      "question": "What is an IS-A relationship?",
+      "answer": "The relationship inheritance creates. 'Dog IS-A Animal' means Dog extends Animal. If class X extends class Y, then X IS-A Y — it can be used anywhere Y is expected.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "26",
+      "section": "Inheritance",
+      "question": "What is a HAS-A relationship?",
+      "answer": "A relationship where one class contains a reference to another (composition/aggregation). Example: `class Car { Engine e; }` — 'Car HAS-A Engine'. Preferred over inheritance when appropriate.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "27",
+      "section": "Inheritance",
+      "question": "Difference between inheritance and composition?",
+      "answer": "Inheritance = IS-A (Dog IS-A Animal), creates tight coupling. Composition = HAS-A (Car HAS-A Engine), more flexible. Modern principle: 'favor composition over inheritance' unless there's a true IS-A relationship.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "28",
+      "section": "Inheritance",
+      "question": "Can a subclass access private members of the parent class?",
+      "answer": "No. Private members are strictly class-scoped. The subclass inherits them in memory (as part of the parent's layout), but can only access them indirectly through parent's public/protected methods.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "29",
+      "section": "Inheritance",
+      "question": "Are constructors inherited in Java?",
+      "answer": "No. Constructors are not inherited — each class has its own. But the child constructor implicitly calls the parent constructor (via `super()`) as the first line to initialize inherited fields.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "30",
+      "section": "Inheritance",
+      "question": "What happens when a child class doesn't explicitly call super()?",
+      "answer": "Java automatically inserts a no-arg `super()` call as the first line of the child constructor. If the parent has no no-arg constructor, the code won't compile — you must call `super(...)` explicitly.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "31",
+      "section": "Polymorphism",
+      "question": "What is polymorphism?",
+      "answer": "'One name, many forms.' The same method or reference behaves differently based on context. Two types in Java: compile-time (method overloading) and runtime (method overriding).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "32",
+      "section": "Polymorphism",
+      "question": "What are the types of polymorphism?",
+      "answer": "Compile-time (static) polymorphism — method overloading, resolved at compile time. Runtime (dynamic) polymorphism — method overriding, resolved at runtime based on actual object type.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "33",
+      "section": "Polymorphism",
+      "question": "What is method overloading?",
+      "answer": "Defining multiple methods in the same class with the same name but different parameter lists (different count, types, or order). The compiler picks the right one based on the arguments passed.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "34",
+      "section": "Polymorphism",
+      "question": "What is method overriding?",
+      "answer": "When a subclass provides its own version of a method that's already defined in the parent class, with the same signature. Resolved at runtime based on the actual object.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "35",
+      "section": "Polymorphism",
+      "question": "Difference between method overloading and method overriding?",
+      "answer": "Overloading: same class, different parameters, compile-time, no inheritance needed. Overriding: parent-child classes, same signature, runtime, needs inheritance. Overloading is 'same name, different work'; overriding is 'same work, different class'.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "36",
+      "section": "Polymorphism",
+      "question": "What is static binding and dynamic binding?",
+      "answer": "Static (early) binding: method call resolved at compile time — used for overloaded, private, static, and final methods. Dynamic (late) binding: resolved at runtime based on the actual object — used for overridden methods.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "37",
+      "section": "Polymorphism",
+      "question": "Can we override a static method?",
+      "answer": "No. Static methods belong to the class, not instances. If a subclass defines a static method with the same name, it's called method hiding — not overriding. Polymorphism doesn't apply.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "38",
+      "section": "Polymorphism",
+      "question": "Can we overload the main() method?",
+      "answer": "Yes, you can define multiple `main` methods with different parameters. But the JVM always calls the one with signature `public static void main(String[] args)` to start the program.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "39",
+      "section": "Polymorphism",
+      "question": "Can we override a private method?",
+      "answer": "No. Private methods are not visible to subclasses, so they can't be overridden. If you define a method with the same signature in the subclass, it's treated as a brand-new method, not an override.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "40",
+      "section": "Polymorphism",
+      "question": "Can we override a final method?",
+      "answer": "No. The `final` modifier on a method means it cannot be overridden by any subclass. Trying to do so causes a compile-time error.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "41",
+      "section": "Polymorphism",
+      "question": "What is a covariant return type?",
+      "answer": "When an overriding method returns a subclass of what the parent method returned. For example, parent returns `Animal`, child returns `Dog`. Allowed since Java 5 — makes overrides more specific.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks"]
+    },
+    {
+      "id": "42",
+      "section": "Polymorphism",
+      "question": "What is method hiding?",
+      "answer": "When a subclass defines a static method with the same signature as the parent's static method. It hides the parent's method rather than overriding it. The call is resolved at compile time based on reference type.",
+      "frequency": "LOW",
+      "sources": ["Baeldung", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "43",
+      "section": "Polymorphism",
+      "question": "Can overloaded methods have different return types?",
+      "answer": "Yes, they can — but return type alone is NOT enough to overload. The parameter list must also differ. Otherwise the compiler throws an ambiguity error.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "44",
+      "section": "Polymorphism",
+      "question": "Rules for method overriding in Java?",
+      "answer": "Same method name, same parameters, same (or covariant) return type. Access can't be more restrictive than the parent. Can't override static, final, or private methods. Overriding method can throw fewer or narrower checked exceptions.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "45",
+      "section": "Abstraction",
+      "question": "What is abstraction?",
+      "answer": "Hiding the internal complexity and showing only what matters. You use a feature without worrying about how it's built. In Java, achieved through abstract classes and interfaces.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "46",
+      "section": "Abstraction",
+      "question": "Difference between abstraction and encapsulation?",
+      "answer": "Abstraction = hide complexity (show only WHAT, not HOW). Encapsulation = hide data (bundle fields + methods, restrict access). Abstraction is about design; encapsulation is about implementation.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "47",
+      "section": "Abstraction",
+      "question": "What is an abstract class?",
+      "answer": "A class declared with the `abstract` keyword. It cannot be instantiated and may contain both abstract methods (no body) and concrete methods (with body). Subclasses must implement all abstract methods.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "48",
+      "section": "Abstraction",
+      "question": "What is an abstract method?",
+      "answer": "A method declared with `abstract` and no body (just a signature followed by a semicolon). Can only exist inside an abstract class or interface. Concrete subclasses must provide the implementation.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "49",
+      "section": "Abstraction",
+      "question": "Can an abstract class have a constructor?",
+      "answer": "Yes. Even though you can't instantiate it directly, its constructor runs when a subclass object is created — used to initialize the abstract class's fields via `super()`.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "50",
+      "section": "Abstraction",
+      "question": "Can we instantiate an abstract class?",
+      "answer": "No. Abstract classes are incomplete by design — you can only create objects of their concrete (non-abstract) subclasses. Trying to do `new AbstractClass()` is a compile-time error.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "51",
+      "section": "Abstraction",
+      "question": "Can an abstract class have concrete (non-abstract) methods?",
+      "answer": "Yes. That's one of its advantages — it can define shared behavior (concrete methods) while forcing subclasses to implement specific ones (abstract methods).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "52",
+      "section": "Abstraction",
+      "question": "Can an abstract class be final?",
+      "answer": "No. `abstract` means 'must be subclassed,' and `final` means 'cannot be subclassed.' They contradict each other, so the compiler throws an error.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "53",
+      "section": "Abstraction",
+      "question": "What is an interface?",
+      "answer": "A 100% abstract type (pre-Java 8) that defines a contract of methods a class must implement. Since Java 8 it can have `default` and `static` methods with bodies; since Java 9, `private` methods too.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "54",
+      "section": "Abstraction",
+      "question": "Difference between abstract class and interface?",
+      "answer": "Abstract class: can have fields, constructors, concrete + abstract methods; single inheritance. Interface: primarily abstract methods (plus default/static since Java 8); no constructors; multiple inheritance allowed. Use abstract class for 'IS-A with shared code'; interface for 'can-do' contracts.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "55",
+      "section": "Abstraction",
+      "question": "Can an interface extend another interface?",
+      "answer": "Yes. An interface can extend one or multiple other interfaces using `extends` (not `implements`). The child interface inherits all abstract methods of its parent(s).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "56",
+      "section": "Abstraction",
+      "question": "Can a class implement multiple interfaces?",
+      "answer": "Yes. Java supports multiple interface inheritance. A class can implement any number of interfaces: `class Car implements Drivable, Fuelable, Serializable`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "57",
+      "section": "Abstraction",
+      "question": "What are default methods in interfaces?",
+      "answer": "Methods with a body defined inside an interface using the `default` keyword (Java 8+). They let you add new methods to interfaces without breaking existing classes that implement them.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "58",
+      "section": "Abstraction",
+      "question": "Can an interface have a constructor?",
+      "answer": "No. Interfaces cannot be instantiated directly, so they don't need constructors. Their fields are implicitly `public static final`, set at declaration time.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "59",
+      "section": "Abstraction",
+      "question": "Can an interface have variables?",
+      "answer": "Yes, but all variables in an interface are implicitly `public static final` (constants). You can't declare instance variables. Example: `interface Config { int MAX = 100; }`.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "60",
+      "section": "Abstraction",
+      "question": "What is a marker interface?",
+      "answer": "An interface with no methods or fields. It 'marks' a class for special treatment by the JVM or frameworks. Examples: `Serializable`, `Cloneable`.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "61",
+      "section": "Abstraction",
+      "question": "When should you use abstract class vs interface?",
+      "answer": "Use abstract class when classes share common code and state (IS-A relationship). Use interface when you only want to specify a contract of behavior (CAN-DO), and when multiple inheritance is needed.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "62",
+      "section": "Constructors",
+      "question": "What is a constructor?",
+      "answer": "A special block with the same name as the class that runs automatically when an object is created. It initializes the object's fields. It has no return type — not even `void`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "63",
+      "section": "Constructors",
+      "question": "What are the types of constructors in Java?",
+      "answer": "Default constructor (no args, compiler-generated if none defined), parameterized constructor (accepts args), and copy constructor (takes another object of the same class; you write it yourself in Java).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "64",
+      "section": "Constructors",
+      "question": "Difference between a constructor and a method?",
+      "answer": "Constructor: same name as class, no return type, runs automatically on object creation, used to initialize. Method: any name, has a return type, called explicitly, used to define behavior.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "65",
+      "section": "Constructors",
+      "question": "Can a constructor be final?",
+      "answer": "No. Constructors aren't inherited, so the idea of preventing overriding doesn't apply. The compiler throws an error if you try.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "66",
+      "section": "Constructors",
+      "question": "Can a constructor be static?",
+      "answer": "No. Constructors operate on instances of a class — `static` means 'belongs to the class, not any instance.' The two contradict, so it's not allowed.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "67",
+      "section": "Constructors",
+      "question": "Can a constructor be abstract?",
+      "answer": "No. Abstract means no body, but constructors must have a body to initialize objects. The compiler rejects `abstract` constructors.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "68",
+      "section": "Constructors",
+      "question": "What is constructor overloading?",
+      "answer": "Defining multiple constructors in the same class with different parameter lists. Lets you create objects in multiple ways, e.g., `new Car()`, `new Car(\"Tesla\")`, `new Car(\"Tesla\", 2025)`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "69",
+      "section": "Constructors",
+      "question": "What is constructor chaining?",
+      "answer": "Calling one constructor from another. Within the same class use `this(...)`; to call the parent constructor use `super(...)`. Must be the very first line of the constructor.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "70",
+      "section": "Constructors",
+      "question": "What is a copy constructor? Does Java have one built-in?",
+      "answer": "A constructor that creates a new object by copying fields from another object of the same class. Java does NOT provide one automatically — you write it yourself (unlike C++).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "71",
+      "section": "Constructors",
+      "question": "What happens if you don't define any constructor?",
+      "answer": "The compiler inserts a default no-arg constructor automatically. It calls `super()` and leaves fields at their default values. If you define ANY constructor, the default is no longer auto-added.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "72",
+      "section": "Constructors",
+      "question": "Can we call a constructor from a method?",
+      "answer": "Not directly. You can't invoke `this()` or `super()` from a regular method. But you can create a new object inside a method using `new ClassName(...)`, which does call a constructor.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "73",
+      "section": "Keywords: static, final, this, super",
+      "question": "What is the `static` keyword?",
+      "answer": "Marks a field, method, block, or nested class as belonging to the class itself — not to any instance. Shared across all objects, loaded once when the class is loaded.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "74",
+      "section": "Keywords: static, final, this, super",
+      "question": "Difference between static method and instance method?",
+      "answer": "Static method: belongs to the class, called with ClassName.method(), no `this` reference, can't access instance fields directly. Instance method: belongs to an object, called on an instance, has access to `this` and instance fields.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "75",
+      "section": "Keywords: static, final, this, super",
+      "question": "What is a static block?",
+      "answer": "A block of code inside a class marked with `static { ... }`. Runs once when the class is first loaded, before any object is created. Used to initialize static fields.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "76",
+      "section": "Keywords: static, final, this, super",
+      "question": "Can a static method access non-static members?",
+      "answer": "No, not directly. Static methods run without an instance, so they can't touch instance fields or call instance methods. You'd need to first create an object and access via it.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Programiz"]
+    },
+    {
+      "id": "77",
+      "section": "Keywords: static, final, this, super",
+      "question": "What is the `final` keyword?",
+      "answer": "A keyword that restricts modification. `final` variable = constant (can't be reassigned). `final` method = can't be overridden. `final` class = can't be subclassed (e.g., String).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "78",
+      "section": "Keywords: static, final, this, super",
+      "question": "Difference between final, finally, and finalize()?",
+      "answer": "`final`: keyword for constants / non-overridable methods / non-extendable classes. `finally`: block that always runs after try/catch for cleanup. `finalize()`: old GC callback before an object is reclaimed (deprecated since Java 9).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "79",
+      "section": "Keywords: static, final, this, super",
+      "question": "What is the `this` keyword?",
+      "answer": "A reference to the current object (the one the method was called on). Used to refer to instance fields, call another constructor via `this(...)`, or pass the current object to a method.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "80",
+      "section": "Keywords: static, final, this, super",
+      "question": "Difference between `this` and `super`?",
+      "answer": "`this` = current object reference (this class's members, this class's other constructor via this()). `super` = parent class reference (parent's members, parent's constructor via super()).",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "81",
+      "section": "Keywords: static, final, this, super",
+      "question": "Can a final variable be reassigned?",
+      "answer": "No, once assigned it cannot be changed. For primitive final variables the value is locked; for final reference variables the reference is locked but the object's internal state can still change (unless the object itself is immutable).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "82",
+      "section": "Object Class & Methods",
+      "question": "What is the Object class in Java?",
+      "answer": "The root of the Java class hierarchy — every class directly or indirectly inherits from `java.lang.Object`. It provides common methods like `equals()`, `hashCode()`, `toString()`, `clone()`, `getClass()`, `wait()`, `notify()`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "83",
+      "section": "Object Class & Methods",
+      "question": "Difference between == and .equals()?",
+      "answer": "`==` compares references (same object in memory). `.equals()` compares content/value as defined by the class. For value-based classes like String, always use `.equals()`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "84",
+      "section": "Object Class & Methods",
+      "question": "What is the hashCode() method? Its contract with equals()?",
+      "answer": "Returns an integer used by hash-based collections (HashMap, HashSet). Contract: if `a.equals(b)` is true, `a.hashCode() == b.hashCode()` must be true. Equal hashCodes do NOT imply equal objects, though.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "85",
+      "section": "Object Class & Methods",
+      "question": "Why should you override hashCode() when you override equals()?",
+      "answer": "Because hash-based collections (HashMap, HashSet) use hashCode to find the bucket. If two objects are 'equal' but have different hashCodes, they'll land in different buckets and equal lookups will fail.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "86",
+      "section": "Object Class & Methods",
+      "question": "What is the toString() method?",
+      "answer": "Returns a string representation of the object. Default `Object.toString()` returns ClassName@hashcode. Override it to print meaningful info — useful for logging and debugging.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev", "Programiz"]
+    },
+    {
+      "id": "87",
+      "section": "Object Class & Methods",
+      "question": "What is the clone() method? Shallow vs deep copy?",
+      "answer": "`clone()` creates a copy of an object. Shallow copy: copies fields as-is; nested object references are shared. Deep copy: recursively copies nested objects too, giving a fully independent duplicate.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "88",
+      "section": "Object Class & Methods",
+      "question": "What is the finalize() method?",
+      "answer": "A method called by the garbage collector before reclaiming an object, allowing last-minute cleanup. Deprecated since Java 9 because it's unreliable and slow — use try-with-resources or `Cleaner` instead.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "Baeldung", "GeeksforGeeks"]
+    },
+    {
+      "id": "89",
+      "section": "Nested & Inner Classes",
+      "question": "What is a nested class?",
+      "answer": "A class defined inside another class. Four kinds: static nested class, (non-static) inner class, local class (inside a method), and anonymous class (no name, defined inline).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "90",
+      "section": "Nested & Inner Classes",
+      "question": "Difference between static nested class and inner class?",
+      "answer": "Static nested class: behaves like a top-level class, doesn't need an outer instance. Inner (non-static) class: tied to an outer instance, can access outer's fields directly, needs an outer object to be created.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "91",
+      "section": "Nested & Inner Classes",
+      "question": "What is an anonymous inner class?",
+      "answer": "A nameless class declared and instantiated in a single expression — typically used to override a method of a class or implement an interface inline. Largely replaced by lambdas since Java 8 for functional interfaces.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "92",
+      "section": "Nested & Inner Classes",
+      "question": "What is a local inner class?",
+      "answer": "A class defined inside a method or block. Its scope is limited to that method. Can access the enclosing method's local variables only if they're final or effectively final.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "93",
+      "section": "Advanced & Design",
+      "question": "What is association, aggregation, and composition?",
+      "answer": "Association: a general HAS-A relationship between two classes. Aggregation: weak HAS-A — parts can exist independently (Department has Professors). Composition: strong HAS-A — parts can't exist without the whole (House has Rooms).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "94",
+      "section": "Advanced & Design",
+      "question": "What is coupling and cohesion?",
+      "answer": "Coupling: how much one class depends on another. Low coupling is better. Cohesion: how focused a class is on one responsibility. High cohesion is better. Good OOP design = loose coupling + high cohesion.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "95",
+      "section": "Advanced & Design",
+      "question": "What are SOLID principles?",
+      "answer": "Five OOP design principles: **S**ingle Responsibility, **O**pen/Closed, **L**iskov Substitution, **I**nterface Segregation, **D**ependency Inversion. They guide you toward maintainable, flexible code.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "96",
+      "section": "Advanced & Design",
+      "question": "Single Responsibility Principle (SRP)?",
+      "answer": "A class should have only one reason to change — it should do one thing and do it well. If a class handles too many responsibilities, split it into smaller classes.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "97",
+      "section": "Advanced & Design",
+      "question": "What is the Liskov Substitution Principle (LSP)?",
+      "answer": "Subclasses should be replaceable for their parent class without breaking the program. If `Dog extends Animal`, anywhere an `Animal` is expected, a `Dog` should also work without surprise behavior.",
+      "frequency": "LOW",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "98",
+      "section": "Advanced & Design",
+      "question": "What is dependency injection?",
+      "answer": "A design pattern where a class gets the objects it depends on from outside (via constructor, setter, or field) instead of creating them itself. Reduces coupling and makes testing easier. Frameworks like Spring automate this.",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "99",
+      "section": "Advanced & Design",
+      "question": "What are common OOP design patterns you know?",
+      "answer": "Singleton (one instance), Factory (create without exposing class), Builder (step-by-step construction), Observer (publish-subscribe), Strategy (pluggable algorithm), Decorator (wrap to add behavior), Adapter (bridge two incompatible interfaces).",
+      "frequency": "MED",
+      "sources": ["Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    },
+    {
+      "id": "100",
+      "section": "Advanced & Design",
+      "question": "What is the Singleton pattern?",
+      "answer": "A design pattern that ensures a class has only one instance and provides a global point of access to it. Done by making the constructor private and exposing a static `getInstance()` method.",
+      "frequency": "MOST_FREQ",
+      "sources": ["JavaTpoint", "Baeldung", "InterviewBit", "GeeksforGeeks", "Journaldev"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "OOP Basics": 10,
+      "Encapsulation": 8,
+      "Inheritance": 12,
+      "Polymorphism": 14,
+      "Abstraction": 17,
+      "Constructors": 11,
+      "Keywords: static, final, this, super": 9,
+      "Object Class & Methods": 7,
+      "Nested & Inner Classes": 4,
+      "Advanced & Design": 8
+    },
+    "by_frequency": {
+      "MOST_FREQ": 50,
+      "MED": 42,
+      "LOW": 8
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q72 (OOP Basics, Encapsulation, Inheritance, Polymorphism, Abstraction, Constructors). All MOST_FREQ in these sections are must-know.",
+      "mid_level_2_to_5_yrs": "Add Q73–Q92 (keywords, Object class methods, nested classes). Dig deeper into overriding rules (Q44), equals/hashCode contract (Q84-Q85), and abstract class vs interface (Q54).",
+      "senior_5_plus_yrs": "All 100 + follow-ups on SOLID, design patterns, dependency injection, and real-world design decisions. Q93–Q100 are interviewer favorites for senior roles."
+    },
+    "highest_probability_topics": [
+      "Four pillars of OOP (Q2)",
+      "Class vs Object (Q5)",
+      "Method overloading vs overriding (Q35)",
+      "Abstract class vs interface (Q54)",
+      "Can we override static/final/private methods (Q37, Q39, Q40)",
+      "Constructor chaining (Q69)",
+      "this vs super (Q80)",
+      "final vs finally vs finalize (Q78)",
+      "equals() and hashCode() contract (Q84, Q85)",
+      "Singleton pattern (Q100)"
+    ]
+  }
+}
