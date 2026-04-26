@@ -426,7 +426,7 @@ export async function scrapeCompanyContext(
   }
 
   const chunks = interleave(buckets, MAX_TOTAL_CHUNKS);
-  const sourcesDeduped = [...new Set(allSources)].slice(0, MAX_TOTAL_SOURCES);
+  const sourcesDeduped = Array.from(new Set(allSources)).slice(0, MAX_TOTAL_SOURCES);
   const totalMs = Date.now() - totalStart;
 
   log("done", `${chunks.length} chunks / ${sourcesDeduped.length} sources in ${totalMs}ms`);
