@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/authOptions";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { TOPIC_MAP } from "@/lib/topics";
+import { updateStreak } from "@/lib/streak";
 
 export async function PATCH(
   req: NextRequest,
@@ -51,6 +52,7 @@ export async function PATCH(
     user.topicProgress = progress;
     user.markModified("topicProgress");
     await user.save();
+    if (action === "add") updateStreak(session.user.id); // fire-and-forget
 
     return NextResponse.json({
       topicId,

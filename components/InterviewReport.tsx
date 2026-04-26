@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, ChevronDown, Award, TrendingUp, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import {
+  ChevronLeft, ChevronDown, Award, TrendingUp,
+  AlertTriangle, CheckCircle, XCircle, RotateCcw, MessageSquare,
+} from "lucide-react";
 import { useState } from "react";
 import type { IInterview } from "@/models/Interview";
 
@@ -9,119 +12,150 @@ interface Props {
   interview: IInterview & { _id: string };
 }
 
-function ScoreBadge({ score, max = 100 }: { score: number; max?: number }) {
-  const pct = Math.round((score / max) * 100);
-  const color =
-    pct >= 80 ? "text-accent-green" :
-    pct >= 60 ? "text-yellow-400" :
-    pct >= 40 ? "text-accent-orange" :
-    "text-red-400";
-  return <span className={`font-bold ${color}`}>{score}{max !== 100 ? `/${max}` : ""}</span>;
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function gradeColor(score: number) {
+  if (score >= 80) return { text: "text-accent-green", border: "border-accent-green/40", bg: "bg-accent-green/10", bar: "from-accent-green to-emerald-400", ring: "stroke-accent-green" };
+  if (score >= 60) return { text: "text-yellow-400", border: "border-yellow-400/40", bg: "bg-yellow-400/10", bar: "from-yellow-400 to-amber-400", ring: "stroke-yellow-400" };
+  if (score >= 40) return { text: "text-accent-orange", border: "border-accent-orange/40", bg: "bg-accent-orange/10", bar: "from-accent-orange to-orange-400", ring: "stroke-accent-orange" };
+  return { text: "text-red-400", border: "border-red-400/40", bg: "bg-red-400/10", bar: "from-red-400 to-rose-400", ring: "stroke-red-400" };
 }
 
-function GradeCircle({ grade, score }: { grade: string; score: number }) {
-  const color =
-    score >= 80 ? "text-accent-green border-accent-green/40 bg-accent-green/10" :
-    score >= 60 ? "text-yellow-400 border-yellow-400/40 bg-yellow-400/10" :
-    score >= 40 ? "text-accent-orange border-accent-orange/40 bg-accent-orange/10" :
-    "text-red-400 border-red-400/40 bg-red-400/10";
+function questionScoreColor(score: number) {
+  if (score >= 8) return { pill: "bg-accent-green/15 text-accent-green border-accent-green/30", bar: "bg-accent-green" };
+  if (score >= 6) return { pill: "bg-yellow-400/15 text-yellow-400 border-yellow-400/30", bar: "bg-yellow-400" };
+  if (score >= 4) return { pill: "bg-accent-orange/15 text-accent-orange border-accent-orange/30", bar: "bg-accent-orange" };
+  return { pill: "bg-red-400/15 text-red-400 border-red-400/30", bar: "bg-red-400" };
+}
+
+// Circular SVG score ring
+function ScoreRing({ score, grade }: { score: number; grade: string }) {
+  const c = gradeColor(score);
+  const r = 52;
+  const circ = 2 * Math.PI * r;
+  const dash = (score / 100) * circ;
 
   return (
-    <div className={`w-20 h-20 rounded-full border-2 flex flex-col items-center justify-center ${color}`}>
-      <span className="text-2xl font-black">{grade}</span>
-      <span className="text-xs font-medium">{score}%</span>
+    <div className="relative w-36 h-36 shrink-0">
+      <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r={r} fill="none" stroke="currentColor" strokeWidth="8" className="text-bg-border" />
+        <circle
+          cx="60" cy="60" r={r} fill="none" strokeWidth="8"
+          strokeDasharray={`${dash} ${circ}`}
+          strokeLinecap="round"
+          className={`${c.ring} transition-all duration-1000`}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className={`text-4xl font-black ${c.text}`}>{grade}</span>
+        <span className="text-xs text-text-muted font-medium">{score}%</span>
+      </div>
     </div>
   );
 }
 
+function ScoreBar({ label, val, color }: { label: string; val: number; color: string }) {
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-xs text-text-muted">{label}</span>
+        <span className="text-xs font-bold text-text">{val}%</span>
+      </div>
+      <div className="h-2 rounded-full bg-bg-border overflow-hidden">
+        <div className={`h-full rounded-full bg-gradient-to-r ${color} transition-all duration-700`}
+          style={{ width: `${val}%` }} />
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+
 export default function InterviewReport({ interview }: Props) {
   const report = interview.report!;
-  const [expandedQ, setExpandedQ] = useState<string | null>(null);
+  const [expandedQ, setExpandedQ] = useState<string | null>(report.questionReports[0]?.questionId ?? null);
+  const c = gradeColor(report.overallScore);
 
   return (
     <div className="max-w-3xl mx-auto space-y-5">
+
       {/* Back */}
-      <Link
-        href="/interview"
-        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Back to Interviews
+      <Link href="/interview"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors">
+        <ChevronLeft className="w-4 h-4" /> Back to Interviews
       </Link>
 
-      {/* Header */}
-      <div className="glass-card rounded-2xl border border-bg-border p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-          <GradeCircle grade={report.grade} score={report.overallScore} />
-          <div className="flex-1">
-            <h1 className="text-xl font-bold text-text mb-1">{interview.title}</h1>
-            <p className="text-sm text-text-muted mb-3">{report.summary}</p>
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
+      {/* ── Hero header ─────────────────────────────────────────────── */}
+      <div className={`glass-card rounded-2xl border ${c.border} p-6`}>
+        <div className="flex flex-col sm:flex-row gap-6 items-start">
+          <ScoreRing score={report.overallScore} grade={report.grade} />
+
+          <div className="flex-1 min-w-0">
+            <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg border mb-3 ${c.bg} ${c.border} ${c.text}`}>
+              <Award className="w-3 h-3" />
+              {report.overallScore >= 80 ? "Excellent" : report.overallScore >= 60 ? "Good" : report.overallScore >= 40 ? "Needs Work" : "Poor"}
+            </div>
+            <h1 className="text-lg font-bold text-text mb-1 leading-snug">{interview.title}</h1>
+            <p className="text-sm text-text-muted leading-relaxed mb-4">{report.summary}</p>
+
+            {/* Mini scores row */}
+            <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Correctness", val: report.correctness },
                 { label: "Structure", val: report.structure },
                 { label: "Confidence", val: report.confidence },
-              ].map(({ label, val }) => (
-                <div key={label} className="text-sm">
-                  <span className="text-text-muted">{label}: </span>
-                  <ScoreBadge score={val} />
-                  <span className="text-text-muted text-xs">%</span>
-                </div>
-              ))}
+              ].map(({ label, val }) => {
+                const sc = gradeColor(val);
+                return (
+                  <div key={label} className="bg-bg-surface rounded-xl border border-bg-border px-3 py-2 text-center">
+                    <div className={`text-xl font-black ${sc.text}`}>{val}%</div>
+                    <div className="text-[10px] text-text-muted mt-0.5">{label}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Score breakdown bars */}
-      <div className="glass-card rounded-2xl border border-bg-border p-6 space-y-4">
+      {/* ── Score breakdown bars ────────────────────────────────────── */}
+      <div className="glass-card rounded-2xl border border-bg-border p-5 space-y-3.5">
         <h2 className="text-sm font-semibold text-text flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-primary" /> Score Breakdown
         </h2>
-        {[
-          { label: "Overall Score", val: report.overallScore, color: "from-primary to-primary-light" },
-          { label: "Correctness", val: report.correctness, color: "from-accent-green to-accent-green/60" },
-          { label: "Structure", val: report.structure, color: "from-accent-blue to-accent-blue/60" },
-          { label: "Confidence", val: report.confidence, color: "from-yellow-400 to-yellow-400/60" },
-        ].map(({ label, val, color }) => (
-          <div key={label}>
-            <div className="flex justify-between text-xs mb-1">
-              <span className="text-text-muted">{label}</span>
-              <span className="font-semibold text-text">{val}%</span>
-            </div>
-            <div className="h-2 rounded-full bg-bg-border overflow-hidden">
-              <div
-                className={`h-full rounded-full bg-gradient-to-r ${color} transition-all duration-700`}
-                style={{ width: `${val}%` }}
-              />
-            </div>
-          </div>
-        ))}
+        <ScoreBar label="Overall Score" val={report.overallScore} color="from-primary to-primary-light" />
+        <ScoreBar label="Correctness" val={report.correctness} color="from-accent-green to-emerald-400/60" />
+        <ScoreBar label="Structure" val={report.structure} color="from-accent-blue to-accent-blue/60" />
+        <ScoreBar label="Confidence" val={report.confidence} color="from-yellow-400 to-yellow-400/60" />
       </div>
 
-      {/* Strengths & Improvements */}
+      {/* ── Strengths & Improvements ────────────────────────────────── */}
       <div className="grid sm:grid-cols-2 gap-4">
-        <div className="glass-card rounded-2xl border border-bg-border p-5 space-y-3">
+        <div className="glass-card rounded-2xl border border-accent-green/20 p-5 space-y-3">
           <h2 className="text-sm font-semibold text-text flex items-center gap-2">
-            <Award className="w-4 h-4 text-accent-green" /> Strengths
+            <CheckCircle className="w-4 h-4 text-accent-green" /> Strengths
           </h2>
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {report.strengths.map((s, i) => (
-              <li key={i} className="flex gap-2 text-xs text-text-muted">
-                <CheckCircle className="w-3.5 h-3.5 text-accent-green shrink-0 mt-0.5" />
+              <li key={i} className="flex gap-2.5 text-xs text-text-muted leading-relaxed">
+                <span className="w-4 h-4 rounded-full bg-accent-green/15 text-accent-green flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
                 {s}
               </li>
             ))}
           </ul>
         </div>
-        <div className="glass-card rounded-2xl border border-bg-border p-5 space-y-3">
+        <div className="glass-card rounded-2xl border border-yellow-400/20 p-5 space-y-3">
           <h2 className="text-sm font-semibold text-text flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-yellow-400" /> Areas to Improve
           </h2>
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {report.improvements.map((s, i) => (
-              <li key={i} className="flex gap-2 text-xs text-text-muted">
-                <XCircle className="w-3.5 h-3.5 text-yellow-400 shrink-0 mt-0.5" />
+              <li key={i} className="flex gap-2.5 text-xs text-text-muted leading-relaxed">
+                <span className="w-4 h-4 rounded-full bg-yellow-400/15 text-yellow-400 flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
                 {s}
               </li>
             ))}
@@ -129,80 +163,111 @@ export default function InterviewReport({ interview }: Props) {
         </div>
       </div>
 
-      {/* Per-question breakdown */}
+      {/* ── Per-question breakdown ──────────────────────────────────── */}
       <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-text px-1">Question-by-Question Breakdown</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-sm font-semibold text-text flex items-center gap-2">
+            <MessageSquare className="w-4 h-4 text-primary" /> Question Breakdown
+          </h2>
+          <span className="text-xs text-text-muted">{report.questionReports.length} questions</span>
+        </div>
+
         {report.questionReports.map((qr, i) => {
           const isOpen = expandedQ === qr.questionId;
+          const sc = questionScoreColor(qr.score);
           const scorePct = qr.score * 10;
-          const scoreColor =
-            scorePct >= 80 ? "text-accent-green" :
-            scorePct >= 60 ? "text-yellow-400" :
-            "text-red-400";
 
           return (
-            <div key={qr.questionId} className="glass-card rounded-xl border border-bg-border overflow-hidden">
+            <div key={qr.questionId}
+              className={`glass-card rounded-2xl border overflow-hidden transition-all ${isOpen ? "border-primary/30" : "border-bg-border"}`}>
+
+              {/* Question header — always visible, full text, never truncated */}
               <button
                 onClick={() => setExpandedQ(isOpen ? null : qr.questionId)}
-                className="w-full flex items-center gap-4 px-5 py-4 hover:bg-bg-border/20 transition-colors text-left"
+                className="w-full text-left px-5 py-4 hover:bg-bg-border/10 transition-colors"
               >
-                <div className={`text-sm font-bold w-10 shrink-0 ${scoreColor}`}>{qr.score}/10</div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold text-text-muted mb-0.5">Q{i + 1}</div>
-                  <div className="text-sm text-text truncate">{qr.questionText}</div>
-                </div>
-                <ChevronDown className={`w-4 h-4 text-text-muted transition-transform shrink-0 ${isOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {isOpen && (
-                <div className="border-t border-bg-border px-5 py-4 space-y-4">
-                  {/* Score bar */}
-                  <div className="h-1.5 rounded-full bg-bg-border overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${scorePct >= 80 ? "bg-accent-green" : scorePct >= 60 ? "bg-yellow-400" : "bg-red-400"}`}
-                      style={{ width: `${scorePct}%` }}
-                    />
+                <div className="flex items-start gap-3">
+                  {/* Score pill */}
+                  <div className={`shrink-0 px-2.5 py-1 rounded-lg border text-xs font-bold tabular-nums ${sc.pill}`}>
+                    {qr.score}/10
                   </div>
 
+                  <div className="flex-1 min-w-0">
+                    {/* Q number */}
+                    <div className="text-[10px] font-semibold text-text-muted uppercase tracking-widest mb-1">
+                      Question {i + 1}
+                    </div>
+                    {/* Full question — wraps, never truncates */}
+                    <p className="text-sm text-text leading-relaxed">
+                      {qr.questionText}
+                    </p>
+
+                    {/* Mini score bar always visible */}
+                    <div className="mt-2.5 h-1 rounded-full bg-bg-border overflow-hidden">
+                      <div className={`h-full rounded-full ${sc.bar} transition-all duration-700`}
+                        style={{ width: `${scorePct}%` }} />
+                    </div>
+                  </div>
+
+                  <ChevronDown className={`w-4 h-4 text-text-muted transition-transform shrink-0 mt-1 ${isOpen ? "rotate-180" : ""}`} />
+                </div>
+              </button>
+
+              {/* Expanded detail */}
+              {isOpen && (
+                <div className="border-t border-bg-border">
+
                   {/* Answer */}
-                  <div>
-                    <div className="text-xs font-semibold text-text-muted mb-1">Your Answer</div>
-                    <p className="text-xs text-text bg-bg-surface rounded-lg px-3 py-2 leading-relaxed">{qr.answerText || "(no answer)"}</p>
+                  <div className="px-5 pt-4 pb-3">
+                    <div className="text-xs font-semibold text-text-muted uppercase tracking-widest mb-2">Your Answer</div>
+                    <div className="bg-bg-surface rounded-xl border border-bg-border px-4 py-3 text-sm text-text leading-relaxed">
+                      {qr.answerText || <span className="text-text-muted italic">(no answer recorded)</span>}
+                    </div>
                   </div>
 
                   {/* Feedback */}
-                  <div>
-                    <div className="text-xs font-semibold text-text-muted mb-1">Feedback</div>
-                    <p className="text-xs text-text leading-relaxed">{qr.feedback}</p>
+                  <div className="px-5 pb-3">
+                    <div className="text-xs font-semibold text-text-muted uppercase tracking-widest mb-2">Feedback</div>
+                    <div className="bg-primary/5 border border-primary/15 rounded-xl px-4 py-3 text-sm text-text leading-relaxed">
+                      {qr.feedback}
+                    </div>
                   </div>
 
                   {/* Key points */}
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {qr.keyPointsCovered.length > 0 && (
-                      <div>
-                        <div className="text-xs font-semibold text-accent-green mb-1.5">Covered</div>
-                        <ul className="space-y-1">
-                          {qr.keyPointsCovered.map((p, j) => (
-                            <li key={j} className="flex gap-1.5 text-xs text-text-muted">
-                              <CheckCircle className="w-3 h-3 text-accent-green shrink-0 mt-0.5" />{p}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {qr.keyPointsMissed.length > 0 && (
-                      <div>
-                        <div className="text-xs font-semibold text-red-400 mb-1.5">Missed</div>
-                        <ul className="space-y-1">
-                          {qr.keyPointsMissed.map((p, j) => (
-                            <li key={j} className="flex gap-1.5 text-xs text-text-muted">
-                              <XCircle className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />{p}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
+                  {(qr.keyPointsCovered.length > 0 || qr.keyPointsMissed.length > 0) && (
+                    <div className="px-5 pb-4 grid sm:grid-cols-2 gap-4">
+                      {qr.keyPointsCovered.length > 0 && (
+                        <div>
+                          <div className="text-xs font-semibold text-accent-green uppercase tracking-widest mb-2">
+                            ✓ Covered
+                          </div>
+                          <ul className="space-y-1.5">
+                            {qr.keyPointsCovered.map((p, j) => (
+                              <li key={j} className="flex gap-2 text-xs text-text-muted leading-relaxed">
+                                <CheckCircle className="w-3.5 h-3.5 text-accent-green shrink-0 mt-0.5" />
+                                {p}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {qr.keyPointsMissed.length > 0 && (
+                        <div>
+                          <div className="text-xs font-semibold text-red-400 uppercase tracking-widest mb-2">
+                            ✗ Missed
+                          </div>
+                          <ul className="space-y-1.5">
+                            {qr.keyPointsMissed.map((p, j) => (
+                              <li key={j} className="flex gap-2 text-xs text-text-muted leading-relaxed">
+                                <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0 mt-0.5" />
+                                {p}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -210,13 +275,19 @@ export default function InterviewReport({ interview }: Props) {
         })}
       </div>
 
-      {/* Retake button */}
-      <div className="text-center pb-4">
+      {/* ── Footer actions ──────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row gap-3 justify-center pb-6">
+        <Link
+          href={`/interview/${interview._id}`}
+          className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl border border-bg-border text-sm text-text-muted hover:text-text transition-colors font-medium"
+        >
+          <RotateCcw className="w-4 h-4" /> Retake Interview
+        </Link>
         <Link
           href="/interview"
-          className="btn-primary inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium"
+          className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-medium text-sm"
         >
-          Start New Interview
+          New Interview
         </Link>
       </div>
     </div>

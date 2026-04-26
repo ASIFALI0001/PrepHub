@@ -6,6 +6,7 @@ import Interview from "@/models/Interview";
 import { evaluateInterviewAnswers, evaluateFromTranscript } from "@/lib/gemini";
 import type { IAnswer } from "@/models/Interview";
 import type { TranscriptEntry } from "@/lib/gemini";
+import { updateStreak } from "@/lib/streak";
 
 export async function POST(
   req: NextRequest,
@@ -65,6 +66,7 @@ export async function POST(
     interview.report = report;
     interview.status = "completed";
     await interview.save();
+    updateStreak(session.user.id); // fire-and-forget
 
     return NextResponse.json({ report });
   } catch (err) {

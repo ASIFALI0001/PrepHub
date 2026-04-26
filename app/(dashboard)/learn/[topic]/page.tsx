@@ -28,7 +28,7 @@ export default async function TopicPage({ params }: { params: { topic: string } 
       <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
         <div className="noise-overlay" />
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
-        <div className="relative z-10 max-w-4xl mx-auto">
+        <div className="relative z-10 max-w-6xl mx-auto">
           <TopicPageContent topic={topic} initialLearnedIds={learnedIds} />
         </div>
       </main>
