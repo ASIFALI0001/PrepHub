@@ -38,8 +38,8 @@ export async function GET(
       return NextResponse.json({ error: "Quiz not available for this topic yet" }, { status: 404 });
     }
 
-    const data = JSON.parse(raw);
-    const questions = shuffle(data.questions).slice(0, count).map((q: Record<string, unknown>, i: number) => ({
+    const data = JSON.parse(raw) as { questions: Record<string, unknown>[] };
+    const questions = shuffle(data.questions).slice(0, count).map((q, i) => ({
       ...q,
       index: i + 1,
     }));
