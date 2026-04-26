@@ -125,7 +125,7 @@ type SrcResult = { chunks: string[]; sources: string[] };
 const empty: SrcResult = { chunks: [], sources: [] };
 
 function trimResult(r: SrcResult, maxChunks = MAX_CHUNKS_PER_SOURCE): SrcResult {
-  return { chunks: r.chunks.slice(0, maxChunks), sources: [...new Set(r.sources)].slice(0, 5) };
+  return { chunks: r.chunks.slice(0, maxChunks), sources: Array.from(new Set(r.sources)).slice(0, 5) };
 }
 
 // ─── SOURCE 1: Reddit ─────────────────────────────────────────────────────
