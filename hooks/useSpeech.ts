@@ -73,7 +73,7 @@ export function useSpeech() {
       }
     };
 
-    rec.onresult = (e: SpeechRecognitionEvent) => {
+    rec.onresult = (e: any) => {
       for (let i = e.resultIndex; i < e.results.length; i++) {
         if (e.results[i].isFinal) {
           const chunk = e.results[i][0].transcript.trim();
@@ -82,7 +82,7 @@ export function useSpeech() {
       }
     };
 
-    rec.onerror = (e: SpeechRecognitionErrorEvent) => {
+    rec.onerror = (e: any) => {
       if (e.error === "no-speech") return; // ignore silence gaps
       setState("idle");
     };
