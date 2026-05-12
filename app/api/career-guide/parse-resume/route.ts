@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,41 +16,30 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const base64 = buffer.toString("base64");
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // pdfjs-dist v3 legacy CJS build — supports fake worker in Node.js
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "";
 
-    const result = await model.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              inlineData: {
-                mimeType: "application/pdf",
-                data: base64,
-              },
-            },
-            {
-              text: "Extract all the text from this resume PDF exactly as it appears. Return only the raw text content with no commentary, no markdown formatting, and no additional notes.",
-            },
-          ],
-        },
-      ],
-    });
+    const pdf = await pdfjsLib.getDocument({
+      data: new Uint8Array(buffer),
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true,
+    }).promise;
 
-    // Safely extract text — response.text() can throw if content is filtered
-    let text = "";
-    try {
-      text = result.response.text().trim();
-    } catch {
-      const parts = result.response.candidates?.[0]?.content?.parts;
-      text = parts?.map((p: { text?: string }) => p.text ?? "").join("").trim() ?? "";
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pageText = content.items.map((item: any) => item.str ?? "").join(" ");
+      fullText += pageText + "\n";
     }
 
-    if (!text) {
-      return NextResponse.json({ error: "Could not extract text from PDF" }, { status: 422 });
-    }
+    const text = fullText.trim();
+    if (!text) return NextResponse.json({ error: "Could not extract text from PDF" }, { status: 422 });
 
     return NextResponse.json({ text });
   } catch (err) {
