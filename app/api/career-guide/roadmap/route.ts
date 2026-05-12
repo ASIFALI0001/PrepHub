@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     const roadmap = await generateCareerRoadmap(
       chosenPath,
       guide.resumeText,
-      guide.githubData as GitHubData | null,
+      guide.githubData as unknown as GitHubData | null,
       {},
       guide.mcqAnswers as { question: string; answer: string }[]
     );
