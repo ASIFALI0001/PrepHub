@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
   GraduationCap, Zap, Mic, Flame, BarChart3, Trophy,
-  ArrowRight, Code2, Database, Cpu, Network, Brain,
+  ArrowRight, Code2, Database, Cpu, Network, Brain, Compass,
 } from "lucide-react";
 
 interface Stats {
@@ -21,6 +21,7 @@ const quickActions = [
   { href: "/learn", icon: GraduationCap, label: "Learn", desc: "Browse curated Q&A", color: "text-accent-blue", bg: "bg-accent-blue/10 hover:bg-accent-blue/15", border: "hover:border-accent-blue/40", glow: "hover:shadow-glow-blue" },
   { href: "/quiz",  icon: Zap,           label: "Quiz",  desc: "Start a timed session", color: "text-accent-cyan", bg: "bg-accent-cyan/10 hover:bg-accent-cyan/15", border: "hover:border-accent-cyan/40", glow: "hover:shadow-glow-cyan" },
   { href: "/interview", icon: Mic, label: "Live Interview", desc: "Practice with AI", color: "text-primary-light", bg: "bg-primary/10 hover:bg-primary/15", border: "hover:border-primary/40", glow: "hover:shadow-glow", badge: "AI" },
+  { href: "/career-guide", icon: Compass, label: "Career Guide", desc: "Find your path with AI", color: "text-accent-cyan", bg: "bg-accent-cyan/10 hover:bg-accent-cyan/15", border: "hover:border-accent-cyan/40", glow: "hover:shadow-glow-cyan" },
 ];
 
 const topics = [

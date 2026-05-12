@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-import { BookOpen, GraduationCap, Zap, Mic, LogOut, ChevronDown, Brain } from "lucide-react";
+import { BookOpen, GraduationCap, Zap, Mic, LogOut, ChevronDown, Brain, Compass } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { href: "/quiz", label: "Quiz", icon: Zap },
   { href: "/interview", label: "Interview", icon: Mic },
   { href: "/company-brain", label: "Company Brain", icon: Brain },
+  { href: "/career-guide", label: "Career Guide", icon: Compass },
 ];
 
 interface Props {
