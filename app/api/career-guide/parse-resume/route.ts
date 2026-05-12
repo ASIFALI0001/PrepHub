@@ -22,18 +22,38 @@ export async function POST(req: NextRequest) {
     const base64 = buffer.toString("base64");
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const result = await model.generateContent([
-      {
-        inlineData: {
-          mimeType: "application/pdf",
-          data: base64,
-        },
-      },
-      "Extract all text content from this resume PDF. Return only the raw extracted text preserving structure. No commentary, no formatting changes.",
-    ]);
 
-    const text = result.response.text().trim();
-    if (!text) return NextResponse.json({ error: "Could not extract text from PDF" }, { status: 422 });
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              inlineData: {
+                mimeType: "application/pdf",
+                data: base64,
+              },
+            },
+            {
+              text: "Extract all the text from this resume PDF exactly as it appears. Return only the raw text content with no commentary, no markdown formatting, and no additional notes.",
+            },
+          ],
+        },
+      ],
+    });
+
+    // Safely extract text — response.text() can throw if content is filtered
+    let text = "";
+    try {
+      text = result.response.text().trim();
+    } catch {
+      const parts = result.response.candidates?.[0]?.content?.parts;
+      text = parts?.map((p: { text?: string }) => p.text ?? "").join("").trim() ?? "";
+    }
+
+    if (!text) {
+      return NextResponse.json({ error: "Could not extract text from PDF" }, { status: 422 });
+    }
 
     return NextResponse.json({ text });
   } catch (err) {
