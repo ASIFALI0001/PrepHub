@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// pdf-parse is CJS only — must use require to avoid ESM interop issues on Vercel
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,9 +19,20 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const result = await pdfParse(buffer);
-    const text = result.text.trim();
+    const base64 = buffer.toString("base64");
 
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent([
+      {
+        inlineData: {
+          mimeType: "application/pdf",
+          data: base64,
+        },
+      },
+      "Extract all text content from this resume PDF. Return only the raw extracted text preserving structure. No commentary, no formatting changes.",
+    ]);
+
+    const text = result.response.text().trim();
     if (!text) return NextResponse.json({ error: "Could not extract text from PDF" }, { status: 422 });
 
     return NextResponse.json({ text });
