@@ -13,6 +13,7 @@
     "@types/pdf-parse": "^1.1.5",
     "@vapi-ai/web": "^2.5.2",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^17.4.2",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.395.0",
     "mongoose": "^8.4.1",
