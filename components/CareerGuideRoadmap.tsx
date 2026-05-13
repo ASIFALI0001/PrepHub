@@ -3,147 +3,144 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  Printer, ArrowLeft, CheckCircle2, GraduationCap, Target,
-  Award, Loader2, Sparkles, TrendingUp, MapPin, Clock,
-  ChevronRight, Star, Zap,
-} from "lucide-react";
+import { Printer, ArrowLeft, Loader2, CheckCircle2, GraduationCap, Zap, ChevronRight } from "lucide-react";
 import type { IRoadmap, ICareerPath } from "@/models/CareerGuide";
 
-interface GuideData {
-  roadmap: IRoadmap;
-  careerOptions: ICareerPath[];
-  githubUsername: string;
+interface GuideData { roadmap: IRoadmap; careerOptions: ICareerPath[]; }
+
+const PHASE_COLORS = ["#6366f1", "#06b6d4", "#8b5cf6", "#10b981"];
+
+function ScoreRing({ score }: { score: number }) {
+  const r = 52, circ = 2 * Math.PI * r;
+  const color = score >= 80 ? "#10b981" : score >= 60 ? "#f59e0b" : "#6b7280";
+  return (
+    <svg width="140" height="140" viewBox="0 0 140 140" className="shrink-0">
+      <circle cx="70" cy="70" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
+      <circle cx="70" cy="70" r={r} fill="none" stroke={color} strokeWidth="10"
+        strokeDasharray={circ} strokeDashoffset={circ - (score / 100) * circ}
+        strokeLinecap="round" transform="rotate(-90 70 70)"
+        style={{ transition: "stroke-dashoffset 1s ease" }} />
+      <text x="70" y="65" textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="26" fontWeight="900">{score}%</text>
+      <text x="70" y="84" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.5)" fontSize="11" fontWeight="600">MATCH</text>
+    </svg>
+  );
 }
-
-const phaseConfig = [
-  { accent: "#6366f1", light: "rgba(99,102,241,0.08)", border: "rgba(99,102,241,0.25)", label: "Phase 1" },
-  { accent: "#06b6d4", light: "rgba(6,182,212,0.08)",  border: "rgba(6,182,212,0.25)",  label: "Phase 2" },
-  { accent: "#8b5cf6", light: "rgba(139,92,246,0.08)", border: "rgba(139,92,246,0.25)", label: "Phase 3" },
-  { accent: "#10b981", light: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.25)", label: "Phase 4" },
-];
-
-const scoreColor = (s: number) =>
-  s >= 80 ? "#10b981" : s >= 60 ? "#f59e0b" : "#6b7280";
 
 export default function CareerGuideRoadmap() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [data, setData] = useState<GuideData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activePhase, setActivePhase] = useState(0);
 
   useEffect(() => {
     const id = searchParams.get("id");
     fetch("/api/career-guide", { credentials: "include" })
-      .then((r) => r.json())
-      .then((d) => {
-        const guides: Array<{ _id: string; roadmap?: IRoadmap; careerOptions: ICareerPath[]; githubUsername: string }> = d.guides ?? [];
-        const guide = id ? guides.find((g) => g._id === id) : guides.find((g) => g.roadmap);
-        if (guide?.roadmap) {
-          setData({ roadmap: guide.roadmap, careerOptions: guide.careerOptions, githubUsername: guide.githubUsername });
-        } else {
-          router.push("/career-guide");
-        }
+      .then(r => r.json())
+      .then(d => {
+        const guides: Array<{ _id: string; roadmap?: IRoadmap; careerOptions: ICareerPath[] }> = d.guides ?? [];
+        const guide = id ? guides.find(g => g._id === id) : guides.find(g => g.roadmap);
+        if (guide?.roadmap) setData({ roadmap: guide.roadmap, careerOptions: guide.careerOptions });
+        else router.push("/career-guide");
       })
       .catch(() => router.push("/career-guide"))
       .finally(() => setLoading(false));
   }, [router, searchParams]);
 
-  if (loading) {
-    return (
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
-        <div className="relative z-10 max-w-5xl mx-auto flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-text-muted text-sm">Loading your roadmap…</p>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  if (loading) return (
+    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
+      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+      <div className="relative z-10 flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-9 h-9 text-primary animate-spin" />
+      </div>
+    </main>
+  );
 
   if (!data) return null;
   const { roadmap, careerOptions } = data;
-  const chosen = careerOptions.find((o) => o.path === roadmap.chosenPath);
+  const chosen = careerOptions.find(o => o.path === roadmap.chosenPath);
 
   return (
     <>
       <style>{`
         @media print {
           nav, .no-print { display: none !important; }
-          body { background: white !important; color: black !important; }
-          .print-page { padding: 0 !important; margin: 0 !important; }
-          .phase-card { break-inside: avoid; }
+          main { padding-top: 0 !important; background: white !important; }
+          .print-section { break-inside: avoid; }
+          * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
         }
       `}</style>
 
-      <main className="pt-20 pb-20 px-4 sm:px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
-        <div className="mesh-gradient fixed inset-0 pointer-events-none" />
+      <main className="pt-20 pb-24 px-4 sm:px-6 min-h-screen relative overflow-hidden">
+        <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+        <div className="relative z-10 max-w-4xl mx-auto">
 
-        <div className="relative z-10 max-w-5xl mx-auto">
-
-          {/* Top nav */}
+          {/* Toolbar */}
           <div className="flex items-center justify-between mb-8 no-print">
             <button onClick={() => router.push("/career-guide")}
               className="flex items-center gap-2 text-sm text-text-muted hover:text-text transition-colors group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Back to Career Guide
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Back
             </button>
             <button onClick={() => window.print()}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold glass border border-bg-border rounded-xl hover:border-primary/50 hover:text-primary transition-all text-text-muted">
+              className="flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-xl border border-bg-border glass hover:border-primary/50 hover:text-primary transition-all text-text-muted">
               <Printer className="w-4 h-4" /> Export PDF
             </button>
           </div>
 
-          {/* ── HERO HEADER ─────────────────────────────────────────────── */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-bg-card to-accent-cyan/10 p-8 sm:p-10">
-              <div className="absolute -top-16 -right-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-accent-cyan/10 rounded-full blur-3xl pointer-events-none" />
+          {/* ══════════════════════════════════════════
+              SECTION 1 — HERO
+          ══════════════════════════════════════════ */}
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="print-section mb-6">
+            <div className="relative overflow-hidden rounded-3xl" style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #042f2e 100%)" }}>
+              {/* Decorative blobs */}
+              <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-20" style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)", transform: "translate(30%, -30%)" }} />
+              <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-15" style={{ background: "radial-gradient(circle, #06b6d4, transparent 70%)", transform: "translate(-30%, 30%)" }} />
 
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
-                    <Sparkles className="w-3 h-3" /> AI Career Report
-                  </span>
-                  <span className="text-xs text-text-muted">{new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</span>
+              <div className="relative p-8 sm:p-10">
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="h-px flex-1 bg-white/10" />
+                  <span className="text-xs font-bold tracking-[0.2em] text-white/50 uppercase">PrepHub · AI Career Report</span>
+                  <div className="h-px flex-1 bg-white/10" />
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl font-black text-text mb-2 leading-tight">{roadmap.chosenPath}</h1>
-                <p className="text-lg text-text-muted mb-6">
-                  Specialization: <span className="font-bold text-text">{roadmap.specialization}</span>
-                </p>
+                {/* Main content */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+                  {chosen && <ScoreRing score={chosen.score} />}
 
-                {/* Stats row */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    { label: "Match Score", value: `${chosen?.score ?? "—"}%`, icon: TrendingUp, color: scoreColor(chosen?.score ?? 0) },
-                    { label: "Timeline", value: "24 Months", icon: Clock, color: "#6366f1" },
-                    { label: "Phases", value: `${roadmap.phases.length} Phases`, icon: MapPin, color: "#06b6d4" },
-                    { label: "Key Skills", value: `${roadmap.keySkills?.length ?? 0} Skills`, icon: Zap, color: "#10b981" },
-                  ].map(({ label, value, icon: Icon, color }) => (
-                    <div key={label} className="glass rounded-2xl border border-bg-border p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Icon className="w-4 h-4" style={{ color }} />
-                        <span className="text-xs text-text-muted font-medium">{label}</span>
-                      </div>
-                      <p className="text-xl font-black text-text">{value}</p>
+                  <div className="flex-1">
+                    <p className="text-white/50 text-sm font-semibold uppercase tracking-widest mb-2">Recommended Path</p>
+                    <h1 className="text-3xl sm:text-4xl font-black text-white mb-1 leading-tight">{roadmap.chosenPath}</h1>
+                    <p className="text-white/60 text-base mb-5">
+                      Specialization: <span className="text-white font-semibold">{roadmap.specialization}</span>
+                    </p>
+
+                    {/* Quick stats */}
+                    <div className="flex flex-wrap gap-3">
+                      {[
+                        { label: "Timeline", val: "24 Months" },
+                        { label: "Phases", val: `${roadmap.phases.length} Phases` },
+                        { label: "Key Skills", val: `${roadmap.keySkills?.length ?? 0} to Build` },
+                      ].map(({ label, val }) => (
+                        <div key={label} className="px-4 py-2 rounded-xl text-sm" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                          <span className="text-white/50 text-xs">{label} · </span>
+                          <span className="text-white font-bold">{val}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
 
-                {/* Why this path */}
-                {chosen && (
-                  <div className="mt-6 p-4 rounded-2xl bg-bg-card/60 border border-bg-border">
-                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Why this path was recommended</p>
-                    <p className="text-sm text-text leading-relaxed">{chosen.reasoning}</p>
+                {/* Reasoning */}
+                {chosen?.reasoning && (
+                  <div className="mt-8 pt-6 border-t border-white/10">
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-3">Why this path</p>
+                    <p className="text-white/75 text-sm leading-relaxed">{chosen.reasoning}</p>
+
                     {chosen.pros?.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {chosen.pros.map((p) => (
-                          <span key={p} className="flex items-center gap-1 text-xs text-accent-green bg-accent-green/10 border border-accent-green/20 px-2.5 py-1 rounded-full">
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {chosen.pros.map(p => (
+                          <span key={p} className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full"
+                            style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)", color: "#6ee7b7" }}>
                             <CheckCircle2 className="w-3 h-3" />{p}
                           </span>
                         ))}
@@ -155,208 +152,183 @@ export default function CareerGuideRoadmap() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* ══════════════════════════════════════════
+              SECTION 2 — SKILLS + COLLEGES
+          ══════════════════════════════════════════ */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="print-section grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
 
-            {/* ── KEY SKILLS ──────────────────────────────────────────── */}
+            {/* Key Skills */}
             {roadmap.keySkills?.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                className="glass-card rounded-2xl border border-bg-border p-6">
-                <div className="flex items-center gap-2 mb-5">
-                  <div className="w-8 h-8 rounded-xl bg-accent-orange/10 flex items-center justify-center">
-                    <Target className="w-4 h-4 text-accent-orange" />
+              <div className="glass-card rounded-2xl border border-bg-border overflow-hidden">
+                <div className="px-6 py-4 border-b border-bg-border flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-amber-400" />
                   </div>
-                  <h2 className="text-sm font-bold text-text">Key Skills to Build</h2>
+                  <h2 className="text-sm font-bold text-text">Skills to Build</h2>
                 </div>
-                <div className="space-y-2.5">
+                <div className="p-4 space-y-2">
                   {roadmap.keySkills.map((skill, i) => (
-                    <div key={skill} className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-accent-orange/60 w-4">{i + 1}</span>
-                      <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-orange/5 border border-accent-orange/15">
-                        <Star className="w-3 h-3 text-accent-orange shrink-0" />
-                        <span className="text-sm font-medium text-text">{skill}</span>
+                    <div key={skill} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-bg-card transition-colors group">
+                      <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
+                        style={{ background: `${PHASE_COLORS[i % PHASE_COLORS.length]}20`, color: PHASE_COLORS[i % PHASE_COLORS.length] }}>
+                        {i + 1}
+                      </span>
+                      <span className="text-sm font-medium text-text flex-1">{skill}</span>
+                      <div className="w-16 h-1.5 rounded-full bg-bg-border overflow-hidden">
+                        <div className="h-full rounded-full transition-all" style={{ width: `${100 - i * 10}%`, background: PHASE_COLORS[i % PHASE_COLORS.length] }} />
                       </div>
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
 
-            {/* ── COLLEGE TARGETS ─────────────────────────────────────── */}
-            {roadmap.collegeTargets ? (
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-                className="glass-card rounded-2xl border border-bg-border p-6 lg:col-span-2">
-                <div className="flex items-center gap-2 mb-5">
-                  <div className="w-8 h-8 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
+            {/* College Targets */}
+            {roadmap.collegeTargets && (
+              <div className="glass-card rounded-2xl border border-bg-border overflow-hidden">
+                <div className="px-6 py-4 border-b border-bg-border flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-accent-cyan/10 flex items-center justify-center">
                     <GraduationCap className="w-4 h-4 text-accent-cyan" />
                   </div>
                   <h2 className="text-sm font-bold text-text">College Targets</h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-4 space-y-4">
                   {[
-                    { label: "Reach", desc: "Dream schools", colleges: roadmap.collegeTargets.reach, accent: "#f59e0b", bg: "bg-amber-500/8", border: "border-amber-500/20", dot: "bg-amber-400" },
-                    { label: "Match", desc: "Strong fit",   colleges: roadmap.collegeTargets.match, accent: "#10b981", bg: "bg-emerald-500/8", border: "border-emerald-500/20", dot: "bg-emerald-400" },
-                    { label: "Safe",  desc: "High chance",  colleges: roadmap.collegeTargets.safe,  accent: "#6366f1", bg: "bg-indigo-500/8",  border: "border-indigo-500/20",  dot: "bg-indigo-400" },
-                  ].map(({ label, desc, colleges, accent, bg, border, dot }) => (
-                    <div key={label} className={`rounded-2xl ${bg} border ${border} p-4`}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className={`w-2 h-2 rounded-full ${dot}`} />
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-wider" style={{ color: accent }}>{label}</p>
-                          <p className="text-xs text-text-muted">{desc}</p>
-                        </div>
+                    { tier: "Reach", emoji: "🎯", colleges: roadmap.collegeTargets.reach, color: "#f59e0b" },
+                    { tier: "Match", emoji: "✅", colleges: roadmap.collegeTargets.match, color: "#10b981" },
+                    { tier: "Safe",  emoji: "🛡️", colleges: roadmap.collegeTargets.safe,  color: "#6366f1" },
+                  ].map(({ tier, emoji, colleges, color }) => (
+                    <div key={tier}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs">{emoji}</span>
+                        <span className="text-xs font-bold uppercase tracking-wider" style={{ color }}>{tier}</span>
+                        <div className="h-px flex-1 bg-bg-border" />
                       </div>
-                      <ul className="space-y-1.5">
-                        {colleges.map((c) => (
-                          <li key={c} className="flex items-start gap-2 text-sm text-text">
-                            <ChevronRight className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: accent }} />{c}
-                          </li>
+                      <div className="space-y-1 pl-5">
+                        {colleges.map(c => (
+                          <div key={c} className="flex items-center gap-2">
+                            <ChevronRight className="w-3 h-3 shrink-0" style={{ color }} />
+                            <span className="text-sm text-text">{c}</span>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </motion.div>
-            ) : (
-              /* If no college targets, make skills full width */
-              <div className="lg:col-span-2" />
+              </div>
             )}
-          </div>
-
-          {/* ── TIMELINE ROADMAP ──────────────────────────────────────── */}
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-text">24-Month Roadmap</h2>
-                <p className="text-xs text-text-muted">Phase-by-phase action plan tailored to your profile</p>
-              </div>
-            </div>
-
-            {/* Phase tabs */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-1 no-print">
-              {roadmap.phases.map((phase, i) => {
-                const c = phaseConfig[i % phaseConfig.length];
-                return (
-                  <button key={i} onClick={() => setActivePhase(i)}
-                    className="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold transition-all border"
-                    style={activePhase === i
-                      ? { background: c.light, borderColor: c.border, color: c.accent }
-                      : { background: "transparent", borderColor: "var(--border)", color: "var(--text-muted)" }
-                    }>
-                    {phase.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active phase detail */}
-            {roadmap.phases.map((phase, i) => {
-              const c = phaseConfig[i % phaseConfig.length];
-              return (
-                <div key={i} className={`phase-card ${i === activePhase ? "block" : "hidden"} print:block`}>
-                  <div className="rounded-3xl border p-6 sm:p-8 mb-4 print:mb-6"
-                    style={{ background: c.light, borderColor: c.border }}>
-
-                    {/* Phase header */}
-                    <div className="flex items-start justify-between gap-4 mb-6">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.accent }} />
-                          <span className="text-xs font-bold uppercase tracking-widest" style={{ color: c.accent }}>{phase.label}</span>
-                        </div>
-                        <h3 className="text-xl font-black text-text">{phase.title}</h3>
-                      </div>
-                      {phase.exams && phase.exams.length > 0 && (
-                        <div className="shrink-0 flex flex-wrap gap-2 justify-end">
-                          {phase.exams.map((e) => (
-                            <span key={e} className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full glass border border-bg-border text-text">
-                              <Award className="w-3 h-3" style={{ color: c.accent }} />{e}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      {/* Goals */}
-                      {phase.goals?.length > 0 && (
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Goals</p>
-                          <div className="space-y-2.5">
-                            {phase.goals.map((g) => (
-                              <div key={g} className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                                  style={{ background: `${c.accent}20` }}>
-                                  <CheckCircle2 className="w-3 h-3" style={{ color: c.accent }} />
-                                </div>
-                                <p className="text-sm text-text leading-relaxed">{g}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Action Items */}
-                      {phase.actions?.length > 0 && (
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Action Items</p>
-                          <div className="space-y-2.5">
-                            {phase.actions.map((a, ai) => (
-                              <div key={ai} className="flex items-start gap-3">
-                                <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black shrink-0 mt-0.5"
-                                  style={{ background: `${c.accent}20`, color: c.accent }}>
-                                  {ai + 1}
-                                </span>
-                                <p className="text-sm text-text leading-relaxed">{a}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Phase navigation (no-print) */}
-                  <div className="flex items-center justify-between no-print">
-                    <button onClick={() => setActivePhase(Math.max(0, i - 1))}
-                      disabled={i === 0}
-                      className="text-sm text-text-muted hover:text-text disabled:opacity-30 transition-colors flex items-center gap-1">
-                      ← Previous phase
-                    </button>
-                    <div className="flex gap-1.5">
-                      {roadmap.phases.map((_, pi) => (
-                        <button key={pi} onClick={() => setActivePhase(pi)}
-                          className="w-2 h-2 rounded-full transition-all"
-                          style={{ background: pi === activePhase ? phaseConfig[pi % phaseConfig.length].accent : "var(--border)" }} />
-                      ))}
-                    </div>
-                    <button onClick={() => setActivePhase(Math.min(roadmap.phases.length - 1, i + 1))}
-                      disabled={i === roadmap.phases.length - 1}
-                      className="text-sm text-text-muted hover:text-text disabled:opacity-30 transition-colors flex items-center gap-1">
-                      Next phase →
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
           </motion.div>
 
-          {/* ── PRINT FOOTER ────────────────────────────────────────────── */}
-          <div className="hidden print:block text-center text-xs text-text-muted pt-6 border-t border-bg-border mt-8">
-            <p className="font-semibold text-text mb-1">PrepHub Career Guide</p>
-            <p>Generated on {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} · Powered by Gemini AI</p>
+          {/* ══════════════════════════════════════════
+              SECTION 3 — TIMELINE ROADMAP
+          ══════════════════════════════════════════ */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="print-section mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 bg-bg-border" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-text-muted px-3">24-Month Action Plan</span>
+              <div className="h-px flex-1 bg-bg-border" />
+            </div>
+
+            <div className="relative">
+              {/* Vertical line */}
+              <div className="absolute left-6 top-6 bottom-6 w-px bg-gradient-to-b from-primary/60 via-accent-cyan/40 to-accent-green/30 hidden sm:block" />
+
+              <div className="space-y-5">
+                {roadmap.phases.map((phase, i) => {
+                  const color = PHASE_COLORS[i % PHASE_COLORS.length];
+                  return (
+                    <motion.div key={i} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 + i * 0.1 }}
+                      className="print-section relative sm:pl-16">
+
+                      {/* Timeline dot */}
+                      <div className="absolute left-0 top-6 hidden sm:flex w-12 h-12 rounded-full items-center justify-center text-sm font-black text-white shadow-lg"
+                        style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, boxShadow: `0 0 20px ${color}40` }}>
+                        {i + 1}
+                      </div>
+
+                      <div className="rounded-2xl border overflow-hidden" style={{ borderColor: `${color}30` }}>
+                        {/* Phase header */}
+                        <div className="px-6 py-4 flex items-center justify-between gap-4"
+                          style={{ background: `linear-gradient(90deg, ${color}12, transparent)`, borderBottom: `1px solid ${color}20` }}>
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: `${color}cc` }}>{phase.label}</p>
+                            <h3 className="text-base font-bold text-text">{phase.title}</h3>
+                          </div>
+                          {phase.exams && phase.exams.length > 0 && (
+                            <div className="flex flex-wrap gap-2 justify-end">
+                              {phase.exams.map(e => (
+                                <span key={e} className="text-xs font-semibold px-3 py-1.5 rounded-full glass border border-bg-border text-text">
+                                  🎓 {e}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Phase body */}
+                        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6 bg-bg-card/30">
+                          {/* Goals */}
+                          {phase.goals?.length > 0 && (
+                            <div>
+                              <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3 flex items-center gap-2">
+                                <span className="w-4 h-px bg-bg-border inline-block" /> Goals
+                              </p>
+                              <ul className="space-y-2.5">
+                                {phase.goals.map(g => (
+                                  <li key={g} className="flex items-start gap-2.5">
+                                    <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
+                                      style={{ borderColor: color }}>
+                                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+                                    </div>
+                                    <p className="text-sm text-text leading-relaxed">{g}</p>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Actions */}
+                          {phase.actions?.length > 0 && (
+                            <div>
+                              <p className="text-xs font-bold uppercase tracking-wider text-text-muted mb-3 flex items-center gap-2">
+                                <span className="w-4 h-px bg-bg-border inline-block" /> Action Items
+                              </p>
+                              <ol className="space-y-2.5">
+                                {phase.actions.map((a, ai) => (
+                                  <li key={ai} className="flex items-start gap-3">
+                                    <span className="w-5 h-5 rounded-md flex items-center justify-center text-xs font-black shrink-0 mt-0.5"
+                                      style={{ background: `${color}18`, color }}>
+                                      {ai + 1}
+                                    </span>
+                                    <p className="text-sm text-text leading-relaxed">{a}</p>
+                                  </li>
+                                ))}
+                              </ol>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Print footer */}
+          <div className="hidden print:block text-center pt-6 border-t border-bg-border">
+            <p className="text-xs text-text-muted">Generated by <strong>PrepHub Career Guide</strong> · Powered by Gemini AI · {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</p>
           </div>
 
-          {/* ── BOTTOM ACTIONS ────────────────────────────────────────── */}
-          <div className="no-print mt-8 flex flex-col sm:flex-row gap-3">
+          {/* Action buttons */}
+          <div className="no-print flex flex-col sm:flex-row gap-3">
             <button onClick={() => router.push("/career-guide/new")}
-              className="flex-1 py-3 text-sm font-semibold glass border border-bg-border rounded-2xl hover:border-primary/40 hover:text-primary transition-all text-text-muted text-center">
+              className="flex-1 py-3.5 text-sm font-semibold glass border border-bg-border rounded-2xl hover:border-primary/40 hover:text-primary transition-all text-text-muted">
               Redo assessment
             </button>
             <button onClick={() => window.print()}
-              className="flex-1 btn-primary flex items-center justify-center gap-2 py-3 rounded-2xl">
+              className="flex-1 btn-primary flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold">
               <Printer className="w-4 h-4" /> Export as PDF
             </button>
           </div>
