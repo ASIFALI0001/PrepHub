@@ -1,0 +1,805 @@
+================================================================================
+                    PREPHUB — COMPLETE PROJECT OVERVIEW
+                    Technical Interview Preparation Platform
+================================================================================
+
+OVERVIEW
+--------
+PrepHub is a full-stack AI-powered technical interview preparation platform
+built for Indian Computer Science engineering students. It combines structured
+learning, AI-driven mock interviews, quiz assessments, company-specific
+research, career path guidance, and ATS resume optimization into a single
+cohesive platform. Every feature is personalized — the platform tracks user
+performance, builds a profile over time, and uses that data to give smarter
+recommendations.
+
+--------------------------------------------------------------------------------
+TECH STACK
+--------------------------------------------------------------------------------
+
+Frontend     : Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS,
+               Framer Motion
+Backend      : Next.js API Routes (serverless, runs on Vercel)
+Database     : MongoDB Atlas (cloud-hosted, Mongoose ODM)
+AI / LLM     : Google Gemini 2.5 Flash & 2.5 Pro (question generation,
+               evaluation, career analysis, resume building)
+Embeddings   : Google Gemini Embedding-2 (3072-dim vectors for RAG)
+Voice AI     : Vapi (real-time voice interview agent)
+Auth         : NextAuth.js (email/password with bcrypt hashing)
+Deployment   : Vercel (serverless, global CDN)
+Vector Search: MongoDB Atlas Vector Search (cosine similarity)
+
+--------------------------------------------------------------------------------
+FEATURE 1 — AUTHENTICATION
+--------------------------------------------------------------------------------
+
+What it does:
+  Full user authentication system with secure signup and login.
+
+How it works:
+  - User registers with name, email, password
+  - Password is hashed using bcrypt before storage
+  - Sessions managed via NextAuth.js with JWT strategy
+  - Protected routes redirect unauthenticated users to /login
+  - Session persisted across browser sessions
+
+Pages: /login, /signup
+API Routes: /api/auth/register, /api/auth/[...nextauth]
+
+Data stored per user (MongoDB User model):
+  - name, email, password (hashed)
+  - streak (day streak counter)
+  - lastActive (date of last activity)
+  - quizStats (per-topic quiz performance)
+
+--------------------------------------------------------------------------------
+FEATURE 2 — DASHBOARD
+--------------------------------------------------------------------------------
+
+What it does:
+  Central home page after login showing personalized stats, quick navigation,
+  and an overview of the user's progress.
+
+What is displayed:
+  1. Day Streak — consecutive days the user has been active on the platform
+     (quiz or interview completion updates streak)
+  2. Quiz Accuracy — average score across all quiz topics attempted
+  3. Interview Average — average grade (A/B/C/D/F) across all completed
+     AI interviews
+  4. Quick Start — direct links to Learn, Quiz, Live Interview, Career Guide
+  5. Explore Topics — topic cards for DSA, OOPS, DBMS, OS, CN, SQL with
+     question counts
+  6. Live AI Interview CTA — promotional banner for the flagship AI interview
+
+Streak Logic:
+  - If last activity was yesterday → streak increments by 1
+  - If last activity was today → streak stays (no double count)
+  - If last activity was 2+ days ago → streak resets to 1
+  - Streak is updated fire-and-forget after quiz submission and interview completion
+
+Page: /dashboard
+API Route: /api/dashboard (returns streak, quizAccuracy, quizTopicsAttempted,
+           interviewsCompleted, interviewAvgScore, interviewAvgGrade)
+
+--------------------------------------------------------------------------------
+FEATURE 3 — LEARN (Topic Q&A Library)
+--------------------------------------------------------------------------------
+
+What it does:
+  A structured learning library of curated interview questions and answers
+  across 6 core CS topics. Users can browse, read, and mark questions as learned.
+
+Topics covered:
+  - DSA (Data Structures & Algorithms) — 1300+ questions
+  - OOPS (Object-Oriented Programming) — 100+ questions
+  - DBMS (Database Management Systems) — 100+ questions
+  - OS (Operating Systems) — 100+ questions
+  - CN (Computer Networks) — 100+ questions
+  - SQL — 100+ questions
+
+How it works:
+  - Questions are stored as JSON files in /content/learn/{topic}/
+  - Each question has: id, question, answer, difficulty, tags, mustKnow flag
+  - Users can mark questions as "Learned" — stored in MongoDB under user profile
+  - Progress is tracked per topic showing: Total, Must Know, Expected, Deep Dive,
+    Learned counts
+  - Section headers show a mini progress bar (learned / total)
+  - Questions are grouped into sections with accordions for Study Plan and Sources
+
+UI Features:
+  - Topic selection page at /learn with topic cards
+  - Individual topic page at /learn/{topic} with full Q&A list
+  - 5-tile stats grid per topic (Total, Must Know, Expected, Deep Dive, Learned)
+  - Question cards with difficulty badge, tags, answer expansion
+  - "Mark as Learned" toggle button on each question card
+  - Wide content layout (max-w-6xl) for comfortable reading
+
+Pages: /learn, /learn/[topic]
+API Routes: /api/content/learn/[topic], /api/progress, /api/progress/[topicId]
+
+--------------------------------------------------------------------------------
+FEATURE 4 — QUIZ (Timed MCQ Assessment)
+--------------------------------------------------------------------------------
+
+What it does:
+  Topic-based multiple choice quiz sessions that test the user's knowledge and
+  track their performance over time.
+
+Topics available: Java, OOPS, CN, OS, DBMS (5 topics)
+Questions per session: Up to 20 (randomly shuffled from a larger pool)
+Question format: 4-option MCQ with one correct answer
+
+How it works:
+  - Questions loaded from /content/quiz/{topic}/mcq.json
+  - Questions are shuffled on every session (different each time)
+  - User selects an answer → immediately shown correct/incorrect
+  - After each answer, "Next" button appears
+  - On final question, score is submitted to the server
+  - Score is saved to user's quizStats in MongoDB
+
+Score Saving:
+  - POST /api/quiz/{topic}/submit with { score, total }
+  - Server calculates percentage, running average, attempt count
+  - Running average formula: ((prevAvg * prevAttempts) + newScore) / newAttempts
+  - Streak is updated fire-and-forget after submission
+
+Performance data stored per topic:
+  - attempts (total times taken)
+  - avgScore (running average percentage)
+  - lastScore (most recent percentage)
+  - lastTaken (timestamp)
+
+Stats visible on the quiz topic page: fetched from /api/quiz/stats showing
+per-topic attempts and average scores.
+
+Technical fix: scoreRef pattern used to avoid React stale closure bug on final
+question submission (scoreRef.current tracks score synchronously alongside state)
+
+Pages: /quiz, /quiz/[topic]
+API Routes: /api/quiz/[topic] (GET questions), /api/quiz/[topic]/submit (POST score),
+            /api/quiz/stats (GET all topic stats)
+
+--------------------------------------------------------------------------------
+FEATURE 5 — AI MOCK INTERVIEW (Voice-Based)
+--------------------------------------------------------------------------------
+
+What it does:
+  A fully AI-driven mock interview system where the user speaks their answers
+  and receives a detailed evaluation report with scores, grades, and feedback.
+
+Two modes available:
+  1. Vapi Voice Mode (Primary) — AI voice agent (Alex) conducts the interview
+     via real-time voice using Vapi's conversational AI
+  2. Web Speech Mode (Fallback) — uses browser's built-in speech recognition
+     for environments where Vapi isn't available
+
+Interview Setup (Wizard):
+  Users configure their interview before starting:
+  - Role: Software Engineer, Data Scientist, Frontend Developer, Backend Engineer,
+    Full Stack Developer, DevOps Engineer, ML Engineer, Product Manager
+  - Interview Type: Technical, Behavioral, Mixed
+  - Experience Level: Beginner (0-2 yrs), Intermediate (2-5 yrs), Senior (5+ yrs)
+  - Number of Questions: 3, 5, or 7
+
+Question Generation:
+  - Gemini 2.5 Flash generates questions tailored to role + type + level
+  - Each question includes: text, expectedKeyPoints (array of key concepts)
+  - Questions stored in MongoDB Interview document
+
+Interview Flow (Vapi Mode):
+  - Vapi's AI assistant (Alex) greets the user and asks questions conversationally
+  - Full conversation transcript is captured via Vapi SDK events
+  - On call end, transcript is sent to server for evaluation
+
+Interview Flow (Web Speech Mode):
+  - Questions displayed one by one on screen
+  - User clicks microphone button to record answer
+  - Browser speech recognition captures spoken answer as text
+  - User clicks stop/next to proceed
+
+Evaluation (Gemini):
+  - For Vapi mode: evaluateFromTranscript() maps conversation to questions,
+    scores each question from the transcript
+  - For Web Speech mode: evaluateInterviewAnswers() scores structured answers
+
+Report generated per question:
+  - questionId, questionText, answerText
+  - score (0-100)
+  - grade (A/B/C/D/F)
+  - feedback (specific comments on the answer)
+  - keyPointsCovered (which expected points were addressed)
+  - missingPoints (what was not covered)
+  - improvements (specific suggestions)
+
+Overall Report:
+  - overallScore (average of all question scores)
+  - overallGrade
+  - strengths (array of strong points)
+  - areasForImprovement (array of weak areas)
+  - recommendations (next steps for the candidate)
+
+Report UI (/interview/[id]/report):
+  - Overall score with grade badge
+  - Per-question breakdown with expandable details
+  - Full answer text shown (no truncation)
+  - Missing points highlighted
+  - Improvement suggestions
+
+Interview History:
+  - All interviews stored in MongoDB Interview collection
+  - Listed on /interview page with role, type, level, date, status
+  - Completed interviews link to their report
+
+Pages: /interview, /interview/setup, /interview/[id], /interview/[id]/report
+API Routes: /api/interview (GET list, POST create),
+            /api/interview/[id] (GET details),
+            /api/interview/[id]/submit (POST answers/transcript → runs evaluation)
+
+Models: Interview (userId, role, type, level, questions[], answers[], report, status)
+
+--------------------------------------------------------------------------------
+FEATURE 6 — COMPANY BRAIN
+--------------------------------------------------------------------------------
+
+What it does:
+  Research any company's interview process and get a curated set of tailored
+  interview questions specific to that company and role. Uses web scraping +
+  Gemini AI to generate comprehensive question sets.
+
+How it works:
+  User inputs:
+  - Company name (e.g., Google, Amazon, Flipkart)
+  - Role they're applying for (e.g., SDE-1, Data Analyst, ML Engineer)
+  - Optional description / additional context
+
+  Data collection (multi-source scraping):
+  Sources scraped include Reddit (r/cscareerquestions, r/leetcode), GitHub
+  repositories with interview experience compilations, and Jina AI Reader for
+  general web content extraction.
+
+  For each source:
+  - HTTP requests with structured extraction
+  - Content chunked into manageable pieces
+  - Sources deduplicated and trimmed
+
+  Question Generation:
+  - Scraped content + company/role context fed to Gemini
+  - Gemini generates 50 tailored interview questions
+  - Questions categorized into: DSA, System Design, OOPS, Core CS, Behavioral,
+    Domain-specific
+  - Each question tagged with difficulty: easy / medium / hard
+  - Source hint included per question
+
+  Generation Progress (SSE Streaming):
+  - Real-time progress shown to user during generation
+  - Steps: "Scraping Reddit...", "Fetching GitHub data...", "Generating with AI..."
+  - Percentage completion displayed
+  - Prevents "stuck" feeling during long generation
+
+  Results display:
+  - 50 questions organized by category (tabs/sections)
+  - Difficulty badges (Easy/Medium/Hard)
+  - Category icons (DSA, System Design, etc.)
+  - Source attribution where available
+  - Questions saved and viewable anytime
+
+History:
+  - All generated Company Brain sessions stored per user
+  - Listed on /company-brain page as cards showing company, role, date
+  - Each card links to the full question set
+
+Pages: /company-brain, /company-brain/new, /company-brain/[id]
+API Routes: /api/company-brain (GET list, POST create),
+            /api/company-brain/[id] (GET details),
+            /api/company-brain/generate (POST — SSE streaming generation)
+
+Model: CompanyBrain (userId, companyName, role, description, questions[],
+       sources[], status: generating/ready/error)
+
+--------------------------------------------------------------------------------
+FEATURE 7 — CAREER GUIDE
+--------------------------------------------------------------------------------
+
+What it does:
+  An AI-powered career path recommendation system that analyzes the user's
+  resume, GitHub profile, platform performance, and personal preferences to
+  recommend the best career path and generate a detailed 24-month roadmap.
+
+Data collected for analysis:
+  1. Resume (PDF upload) — text extracted using Google Gemini's PDF reading
+     capability. Extracts: skills, projects, education, CGPA, certifications,
+     experience
+  2. GitHub profile URL — fetched via GitHub public REST API (no auth needed
+     for public profiles). Fetches: bio, public repo count, followers, top
+     languages, recent projects with descriptions and topics, total stars
+  3. PrepHub platform data (optional toggle) — pulled from MongoDB:
+     - Quiz scores per topic (attempts, average score)
+     - Interview history (roles practiced, scores, types)
+     - Companies researched via Company Brain
+  4. MCQ Assessment — 8 conversational multiple-choice questions:
+     - Priority (salary vs expertise vs leadership vs research)
+     - 5-year vision
+     - Willingness to study more years
+     - Technical interest domain
+     - Abroad preference
+     - Academic performance
+     - Problem type preference
+     - Financial situation for education
+
+Career paths considered:
+  MS Abroad, M.Tech (IIT/NIT), Direct SWE Job, MBA (IIM/ISB),
+  Data Science/ML Specialist, PhD, Product Management
+
+Analysis (Gemini):
+  All data combined into a structured prompt. Gemini returns 4 career path
+  options with:
+  - Path name
+  - Match score (0-100, honestly assessed)
+  - Reasoning (references specific data points from their profile)
+  - Specialization recommendation (e.g., "Machine Learning" within MS Abroad)
+  - Pros (3-4 specific advantages)
+  - Cons (2-3 honest trade-offs)
+  - Sorted by score descending
+
+Roadmap Generation:
+  After user selects a path, Gemini generates a detailed 24-month roadmap:
+  - 4 phases: 0-3 months, 3-6 months, 6-12 months, 12-24 months
+  - Per phase: title, goals, specific action items, relevant exams
+  - Exam targets with scores (GATE/GRE/CAT/GMAT as applicable)
+  - College targets — Reach / Match / Safe
+    (MS: US/Canada/Europe universities; M.Tech: IITs/NITs/IIITs; MBA: IIMs/ISB)
+  - Key skills to build (6 most important, prioritized)
+
+Report UI:
+  Professional dark-themed report with:
+  - Hero header with circular score ring (SVG animated)
+  - Match score, timeline, phases, skills count as stat cards
+  - "Why this path" section with reasoning and pros
+  - Skills to build with priority tags (Must Have / Important / Good to Have)
+  - College targets with Reach/Match/Safe tiers
+  - 24-month timeline with vertical connecting line
+  - Phase-by-phase expandable cards (color-coded)
+  - Export as PDF (browser print with clean white print stylesheet)
+
+Storage:
+  - Every assessment creates a NEW document (not overwrite)
+  - All past assessments stored and shown as cards on /career-guide
+  - Each card shows: date, platform data toggle state, top match %, all paths
+  - Can generate new roadmap for any past assessment
+  - Can redo assessment anytime
+
+Platform data toggle:
+  Toggle switch on data collection page — user can choose whether to include
+  PrepHub quiz/interview data in the analysis or use only resume + GitHub +
+  MCQ answers
+
+Pages: /career-guide, /career-guide/new, /career-guide/roadmap
+API Routes: /api/career-guide (GET all guides),
+            /api/career-guide/analyze (POST — runs analysis, stores result),
+            /api/career-guide/roadmap (POST — generates roadmap for chosen path)
+
+Model: CareerGuide (userId, resumeText, githubUsername, githubData,
+       mcqAnswers, usedPlatformData, careerOptions[], roadmap, status)
+
+--------------------------------------------------------------------------------
+FEATURE 8 — ATS RESUME CHECKER & BUILDER
+--------------------------------------------------------------------------------
+
+What it does:
+  A two-part resume tool:
+  Part 1 — ATS Score Checker: analyzes the user's resume against ATS systems
+            and optionally against a specific job description
+  Part 2 — Resume Builder: generates a professionally formatted, single-page
+            ATS-optimized LaTeX resume using the user's data + AI patterns
+
+PART 1: ATS SCORE CHECKER
+
+  Input:
+  - Resume PDF upload
+  - Optional: Job description / company name / role details
+
+  PDF Parsing:
+  - User uploads PDF → sent to /api/career-guide/parse-resume
+  - Gemini reads the PDF via inline file data and extracts all text
+  - Works on any text-based PDF
+
+  ATS Analysis (Gemini):
+  Returns a comprehensive report with:
+
+  1. Overall ATS Score (0-100) with label:
+     - 80-100: Excellent
+     - 60-79: Good
+     - 40-59: Fair
+     - 0-39: Needs Work
+
+  2. Section Scores (0-100 each) with specific feedback:
+     - Contact Information
+     - Summary / Objective
+     - Skills
+     - Experience / Projects
+     - Education
+     - Formatting & Structure
+
+  3. Keyword Analysis:
+     - Keywords Found: technical/role keywords present in resume (up to 20)
+     - Missing Keywords: important keywords from JD absent from resume (up to 15)
+     - If no JD given: suggests common keywords for the detected role type
+
+  4. Formatting Checks (Pass/Fail with notes):
+     - Single page
+     - Clear section headings
+     - Bullet points used
+     - No tables or columns
+     - Standard fonts only
+     - Quantified achievements
+     - Action verbs used
+     - No special characters/graphics
+
+  5. Quick Wins: 5 specific, actionable improvements to boost score fast
+
+  6. Role Type Detection: automatically detects role category
+     (Frontend Developer, Backend Developer, Full Stack Developer,
+     AI/ML Engineer, Data Scientist, DevOps Engineer, etc.)
+
+  Score page UI:
+  - Circular animated SVG score ring with color coding
+  - Score summary stats (keywords found, missing, checks passed)
+  - Horizontal progress bars per section (animated)
+  - Color-coded keyword tags (green = found, orange = missing)
+  - Formatting checklist with pass/fail icons
+  - Quick wins numbered list
+
+  90+ Score Storage (RAG System):
+  If the resume scores 90 or above:
+  - PII is stripped (regex removes emails, phones, URLs + Gemini removes names,
+    institutions, companies)
+  - Anonymized content is embedded using Gemini Embedding-2 (3072-dim vectors)
+  - Stored in MongoDB TopResume collection for use as RAG examples
+  - Completely fire-and-forget — does not delay the user's response
+
+PART 2: SIMILAR RESUME FETCHING (RAG)
+
+  Immediately after the ATS score loads on screen, the app simultaneously
+  fetches top matching resumes from the knowledge base:
+
+  1. User's resume text is embedded using Gemini Embedding-2 (3072-dim)
+  2. MongoDB Atlas Vector Search runs cosine similarity search
+  3. Top 3 most semantically similar high-scoring resumes are returned
+  4. Matching is role-aware — frontend dev resume fetches frontend resumes,
+     ML resume fetches ML/AI resumes
+
+  UI shows while fetching:
+  - "Fetching top matching resumes from knowledge base..." with spinner
+  - 3 skeleton loading cards
+
+  After fetch:
+  - 3 cards shown with: ATS score badge, role type, skills list, content preview
+  - Note: "These patterns will be fed to Gemini when building your resume"
+
+  Knowledge Base (seed data):
+  - 10 pre-seeded high-quality anonymized resumes (5 SWE + 5 AI/Data)
+  - SWE: Full Stack (React/Node/AWS), Backend (Java/Spring), Frontend
+    (React/TypeScript), Systems (Go/Kubernetes), Full Stack (Python/Django)
+  - AI/Data: ML Engineer (PyTorch/MLOps), Data Scientist (XGBoost/A/B testing),
+    LLM/NLP Engineer (RAG/fine-tuning), Data Analyst (SQL/Tableau),
+    Computer Vision (YOLO/TensorRT)
+  - All scored 91-97 on ATS
+  - All embedded with Gemini Embedding-2 (3072-dim)
+  - Atlas Vector Search index: top_resumes_vector_index
+
+PART 3: RESUME BUILDER (LaTeX)
+
+  Trigger: User clicks "Build Resume" (with or without similar resumes fetched)
+
+  Input to Gemini:
+  - Full candidate resume text (all projects, certifications, education, skills)
+  - Job description / role / company (if provided, else "no data given by user")
+  - Top 3 similar high-scoring resumes as relevance references
+  - Any edit instruction from the user
+
+  Gemini prompt rules (strictly enforced):
+  - SINGLE PAGE ONLY — absolute maximum, no exceptions
+  - Include ALL candidate data (every project, certification, skill, contact info)
+  - Similar resumes used for writing style and structure ONLY — not copy-paste
+  - Every bullet starts with a strong past-tense action verb
+  - Quantify every achievement where possible
+  - Tailor keywords to JD naturally (no keyword stuffing)
+  - Follow the exact LaTeX template structure provided
+
+  LaTeX Template used:
+  - documentclass: letterpaper, 11pt
+  - Packages: sourcesanspro, fontawesome5, tabularx, hyperref, enumitem,
+    titlesec, tikz, graphicx
+  - Custom macros: \resumeItem, \resumeSubheading, \resumeProjectHeading,
+    \resumeSubHeadingListStart/End, \resumeItemListStart/End
+  - Sections: HEADING (with icons for phone/email/LinkedIn/GitHub), SUMMARY,
+    EDUCATION, SKILLS, PROJECT EXPERIENCE, CERTIFICATIONS
+
+  Output display:
+  - LaTeX code shown in a code block with syntax-style terminal header
+  - "Copy LaTeX" button — copies full code to clipboard
+  - "Open in Overleaf" button — form POST to overleaf.com/docs with code
+    pre-loaded (no Overleaf API key needed, free public feature)
+  - Overleaf opens in new tab, user clicks Compile → downloads PDF
+
+  Edit via prompt:
+  - Text input: "What changes do you want?"
+  - Quick suggestion chips: "Remove summary", "Add more keywords",
+    "Make it 1 page", "Stronger action verbs"
+  - On submit: previous LaTeX is discarded, fresh generation with instruction
+  - Back to report button available
+
+  No storage: Resume text and LaTeX live only in React state — nothing saved
+  to MongoDB for privacy
+
+Pages: /ats
+API Routes: /api/ats/analyze (POST — ATS scoring + 90+ storage trigger),
+            /api/ats/similar (POST — vector search for similar resumes),
+            /api/ats/build (POST — LaTeX resume generation),
+            /api/career-guide/parse-resume (POST — PDF text extraction)
+
+Model: TopResume (anonymizedContent, embedding[3072], score, roleType, skills[])
+
+--------------------------------------------------------------------------------
+PLATFORM-WIDE SYSTEMS
+--------------------------------------------------------------------------------
+
+DAY STREAK SYSTEM
+  - Implemented as a shared utility: lib/streak.ts
+  - updateStreak(userId) called fire-and-forget from:
+    * Quiz submission (/api/quiz/[topic]/submit)
+    * Interview submission (/api/interview/[id]/submit)
+  - Logic:
+    * Yesterday → streak + 1
+    * Today already → no change
+    * 2+ days ago → reset to 1
+  - Stored in User.streak and User.lastActive fields
+
+NAVIGATION (DashboardNav)
+  - Fixed top navbar present on all authenticated pages
+  - Logo: PrepHub with gradient icon
+  - Nav items: Learn, Quiz, Interview, Company Brain, Career Guide, ATS Checker
+  - Right side: Theme toggle + user avatar with dropdown (Dashboard, Sign out)
+  - Mobile: bottom tab bar with icons
+
+THEME SYSTEM
+  - Dark/light mode toggle using next-themes
+  - CSS custom properties for all colors
+  - Consistent design tokens: text, text-muted, bg-card, bg-border, primary,
+    accent-blue, accent-cyan, accent-green, accent-orange, accent-pink
+
+DESIGN SYSTEM
+  - Glass morphism cards (glass-card class)
+  - Gradient text (gradient-text class)
+  - Glow effects (shadow-glow-* variants)
+  - Noise overlay for texture
+  - Mesh gradient background
+  - Framer Motion for all page transitions and card animations
+
+--------------------------------------------------------------------------------
+DATABASE MODELS SUMMARY
+--------------------------------------------------------------------------------
+
+User
+  - name, email, password (bcrypt)
+  - streak, lastActive
+  - quizStats: { [topic]: { attempts, avgScore, lastScore, lastTaken } }
+
+Interview
+  - userId, role, type, level
+  - questions[]: { id, text, expectedKeyPoints[] }
+  - answers[]: { questionId, questionText, answerText }
+  - report: { overallScore, overallGrade, questionReports[], strengths[],
+              areasForImprovement[], recommendations[] }
+  - status: pending / completed
+
+CompanyBrain
+  - userId, companyName, role, description
+  - questions[]: { id, text, category, difficulty, sourceHint }
+  - sources[]
+  - status: generating / ready / error
+
+CareerGuide
+  - userId
+  - resumeText, githubUsername, githubData
+  - mcqAnswers[]: { question, answer }
+  - usedPlatformData (boolean)
+  - careerOptions[]: { path, score, reasoning, specialization, pros[], cons[] }
+  - roadmap: { chosenPath, specialization, phases[], collegeTargets, keySkills[],
+               generatedAt }
+  - status: analyzing / options_ready / roadmap_ready / error
+
+TopResume (ATS Knowledge Base)
+  - anonymizedContent (PII-stripped resume text)
+  - embedding ([Number] — 3072-dim Gemini vector)
+  - score (ATS score, always 90+)
+  - roleType (Frontend Developer, AI/ML Engineer, etc.)
+  - skills[]
+
+--------------------------------------------------------------------------------
+API ROUTES SUMMARY
+--------------------------------------------------------------------------------
+
+Authentication:
+  POST /api/auth/register         — Create new account
+  GET/POST /api/auth/[...nextauth] — NextAuth session management
+
+Dashboard:
+  GET /api/dashboard              — streak + quiz accuracy + interview stats
+
+Learn / Progress:
+  GET /api/content/learn/[topic]  — Load questions for a topic
+  GET /api/progress               — All topic progress for user
+  GET/POST /api/progress/[topicId] — Get/update learned questions per topic
+
+Quiz:
+  GET /api/quiz/[topic]           — Load shuffled MCQ questions + user stats
+  POST /api/quiz/[topic]/submit   — Submit score, update quizStats, update streak
+  GET /api/quiz/stats             — All topic stats for quiz dashboard
+
+Interview:
+  GET/POST /api/interview         — List interviews / create new interview
+  GET /api/interview/[id]         — Get interview details
+  POST /api/interview/[id]/submit — Submit answers/transcript, run evaluation
+
+Company Brain:
+  GET/POST /api/company-brain     — List sessions / create new session
+  GET /api/company-brain/[id]     — Get session details
+  POST /api/company-brain/generate — SSE streaming question generation
+
+Career Guide:
+  GET /api/career-guide           — Get all user's career guide assessments
+  POST /api/career-guide/analyze  — Analyze resume + data → career options
+  POST /api/career-guide/roadmap  — Generate 24-month roadmap for chosen path
+
+ATS Checker:
+  POST /api/career-guide/parse-resume — Extract text from PDF using Gemini
+  POST /api/ats/analyze           — ATS score analysis + 90+ resume storage
+  POST /api/ats/similar           — Vector search for top 3 similar resumes
+  POST /api/ats/build             — Generate LaTeX resume with RAG context
+
+--------------------------------------------------------------------------------
+FILE STRUCTURE
+--------------------------------------------------------------------------------
+
+app/
+  (auth)/
+    login/page.tsx
+    signup/page.tsx
+  (dashboard)/
+    dashboard/page.tsx
+    learn/page.tsx
+    learn/[topic]/page.tsx
+    quiz/page.tsx
+    quiz/[topic]/page.tsx
+    interview/page.tsx
+    interview/setup/page.tsx
+    interview/[id]/page.tsx
+    interview/[id]/report/page.tsx
+    company-brain/page.tsx
+    company-brain/new/page.tsx
+    company-brain/[id]/page.tsx
+    career-guide/page.tsx
+    career-guide/new/page.tsx
+    career-guide/roadmap/page.tsx
+    ats/page.tsx
+  api/
+    auth/[...nextauth]/route.ts
+    auth/register/route.ts
+    dashboard/route.ts
+    content/learn/[topic]/route.ts
+    progress/route.ts
+    progress/[topicId]/route.ts
+    quiz/[topic]/route.ts
+    quiz/[topic]/submit/route.ts
+    quiz/stats/route.ts
+    interview/route.ts
+    interview/[id]/route.ts
+    interview/[id]/submit/route.ts
+    company-brain/route.ts
+    company-brain/[id]/route.ts
+    company-brain/generate/route.ts
+    career-guide/route.ts
+    career-guide/analyze/route.ts
+    career-guide/roadmap/route.ts
+    career-guide/parse-resume/route.ts
+    ats/analyze/route.ts
+    ats/similar/route.ts
+    ats/build/route.ts
+
+components/
+  DashboardNav.tsx          — Top navigation bar
+  DashboardHome.tsx         — Dashboard home content
+  TopicPageContent.tsx      — Learn topic page layout
+  QuestionCard.tsx          — Individual Q&A card
+  QuizSession.tsx           — Quiz gameplay component
+  QuizTopicsClient.tsx      — Quiz topic selection
+  QuizTopicContent.tsx      — Quiz topic stats
+  InterviewSetupWizard.tsx  — Interview configuration form
+  InterviewSession.tsx      — Web speech interview
+  VapiInterviewSession.tsx  — Vapi voice interview
+  InterviewModeWrapper.tsx  — Selects Vapi or Web Speech
+  InterviewModeSelector.tsx — Mode selection UI
+  InterviewReport.tsx       — Evaluation report display
+  InterviewCard.tsx         — Interview history card
+  InterviewListClient.tsx   — Interview list page
+  CompanyBrainForm.tsx      — Company Brain input form
+  CompanyBrainList.tsx      — Company Brain history list
+  CompanyBrainCard.tsx      — Company Brain session card
+  CompanyBrainQuestionsClient.tsx — Questions display
+  CareerGuideLanding.tsx    — Career Guide home with past assessments
+  CareerGuideWizard.tsx     — Data collection + MCQ + options flow
+  CareerGuideRoadmap.tsx    — Roadmap display with PDF export
+  ATSChecker.tsx            — Full ATS checker UI (upload + report + builder)
+  ThemeToggle.tsx           — Dark/light mode switch
+  AuthProvider.tsx          — NextAuth session provider wrapper
+
+lib/
+  authOptions.ts            — NextAuth configuration
+  mongodb.ts                — MongoDB connection with caching
+  gemini.ts                 — Gemini API wrapper with retry logic
+  streak.ts                 — Day streak update utility
+  careerGuide.ts            — GitHub fetcher, MCQ questions, career analysis
+  ats.ts                    — ATS analysis, RAG system, LaTeX builder
+  companyBrainScraper.ts    — Multi-source web scraping for Company Brain
+
+models/
+  User.ts                   — User schema
+  Interview.ts              — Interview schema
+  CompanyBrain.ts           — Company Brain schema
+  CareerGuide.ts            — Career Guide schema
+  TopResume.ts              — ATS knowledge base schema (with embedding)
+
+content/
+  learn/{topic}/            — JSON files with Q&A for each topic
+  quiz/{topic}/mcq.json     — MCQ question banks
+
+scripts/
+  seedResumes.ts            — Seeds 10 high-quality resumes into TopResume collection
+
+--------------------------------------------------------------------------------
+AI / GEMINI USAGE SUMMARY
+--------------------------------------------------------------------------------
+
+Model used: gemini-2.5-flash (primary), gemini-2.5-pro (fallback via retry)
+Embedding model: gemini-embedding-2 (3072-dim vectors)
+Retry logic: Exponential backoff (2s, 4s, 8s) on 503/429 errors, up to 4 attempts
+
+Gemini is used for:
+  1. Interview question generation (role/type/level aware)
+  2. Interview answer evaluation (per question + overall)
+  3. Vapi transcript evaluation (mapping conversation to questions)
+  4. Company Brain question generation (from scraped content)
+  5. Career path analysis (resume + GitHub + MCQ → ranked paths)
+  6. Career roadmap generation (24-month plan)
+  7. ATS resume analysis (score + sections + keywords + formatting)
+  8. PII stripping from resumes (before storing in knowledge base)
+  9. Resume PDF text extraction (via inline PDF reading)
+  10. LaTeX resume generation (with RAG patterns from knowledge base)
+  11. Resume embeddings for RAG (Gemini Embedding-2, 3072-dim)
+
+--------------------------------------------------------------------------------
+DEPLOYMENT
+--------------------------------------------------------------------------------
+
+Platform: Vercel (serverless functions)
+Repository: GitHub (ASIFALI0001/PrepHub, main branch)
+Database: MongoDB Atlas (cloud, shared cluster)
+Environment variables (Vercel + .env.local):
+  MONGODB_URI           — MongoDB Atlas connection string
+  NEXTAUTH_URL          — App URL
+  NEXTAUTH_SECRET       — JWT signing secret
+  GEMINI_API_KEY        — Google Gemini API key
+  NEXT_PUBLIC_VAPI_ASSISTANT_ID — Vapi assistant ID
+  NEXT_PUBLIC_VAPI_PUBLIC_KEY   — Vapi public key
+  JINA_API_KEY          — Jina AI API key (available, not currently in use)
+
+Build configuration:
+  - Next.js 14.2.5
+  - All API routes are serverless (ƒ dynamic)
+  - Static pages: /login, /signup, /_not-found
+  - All dashboard and API routes: dynamic (server-rendered on demand)
+
+================================================================================
+                         END OF PREPHUB OVERVIEW
+================================================================================
