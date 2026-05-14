@@ -1,5 +1,11 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export interface IUserProfile {
+  semester: string;   // "1" – "8"
+  college: string;
+  branch: string;
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -8,6 +14,7 @@ export interface IUser extends Document {
   lastActive: Date;
   topicProgress: Record<string, string[]>;
   quizStats: Record<string, { attempts: number; avgScore: number; lastScore: number; lastTaken: Date }>;
+  profile: IUserProfile;
   createdAt: Date;
 }
 
@@ -20,6 +27,11 @@ const UserSchema = new Schema<IUser>(
     lastActive:    { type: Date, default: Date.now },
     topicProgress: { type: Schema.Types.Mixed, default: {} },
     quizStats:     { type: Schema.Types.Mixed, default: {} },
+    profile: {
+      semester: { type: String, default: "" },
+      college:  { type: String, default: "" },
+      branch:   { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

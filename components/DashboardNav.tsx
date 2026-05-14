@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-import { BookOpen, GraduationCap, Zap, Mic, LogOut, ChevronDown, Brain, Compass, ClipboardList } from "lucide-react";
+import { BookOpen, GraduationCap, Zap, Mic, LogOut, ChevronDown, Brain, Compass, ClipboardList, User, Star } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
@@ -83,19 +83,25 @@ export default function DashboardNav({ userName }: Props) {
                 <p className="text-xs text-text-muted">Signed in as</p>
                 <p className="text-sm font-medium text-text truncate">{userName}</p>
               </div>
-              <Link
-                href="/dashboard"
+              <Link href="/dashboard"
                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-muted hover:text-text hover:bg-bg-card transition-colors"
-                onClick={() => setMenuOpen(false)}
-              >
+                onClick={() => setMenuOpen(false)}>
                 Dashboard
+              </Link>
+              <Link href="/profile"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-muted hover:text-text hover:bg-bg-card transition-colors"
+                onClick={() => setMenuOpen(false)}>
+                <User className="w-4 h-4" /> Update Profile
+              </Link>
+              <Link href="/feedback"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-muted hover:text-text hover:bg-bg-card transition-colors"
+                onClick={() => setMenuOpen(false)}>
+                <Star className="w-4 h-4" /> Give Feedback
               </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign out
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                <LogOut className="w-4 h-4" /> Sign out
               </button>
             </div>
           )}
