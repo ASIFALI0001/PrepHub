@@ -185,7 +185,7 @@ export async function POST(req: NextRequest) {
       };
 
       try {
-        const TOTAL_SOURCES = 9;
+        const TOTAL_SOURCES = 8;
         let completedSources = 0;
 
         send({ type: "start", message: `Researching ${companyName}…`, total: TOTAL_SOURCES });
@@ -214,6 +214,9 @@ export async function POST(req: NextRequest) {
         if (filteredCount > 0) {
           console.log(`[generate] filtered ${filteredCount} noisy chunks, ${usefulChunks.length} remain`);
         }
+
+        // Send scraped data for client-side inspection (not stored in DB)
+        send({ type: "scraped_data", chunks: usefulChunks, sources: ctx.sources });
 
         send({ type: "gemini_start", percent: 75, message: `Analysing ${usefulChunks.length} relevant snippets with Gemini AI…` });
 
