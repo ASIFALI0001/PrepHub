@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { BookOpen, ShieldCheck } from "lucide-react";
+import { BookOpen, ShieldCheck, BarChart2 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function LandingNavbar() {
@@ -30,6 +30,11 @@ export default function LandingNavbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
+          <a href="http://localhost:3000/"
+            className="flex items-center gap-1.5 text-xs text-text-muted hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5">
+            <BarChart2 className="w-3.5 h-3.5" />
+            Visualizer
+          </a>
           <Link href="/admin/login"
             className="flex items-center gap-1.5 text-xs text-text-muted hover:text-primary transition-colors px-3 py-2 rounded-lg hover:bg-primary/5">
             <ShieldCheck className="w-3.5 h-3.5" />

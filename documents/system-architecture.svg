@@ -1,0 +1,317 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 780" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1a"/>
+      <stop offset="100%" style="stop-color:#1a1030"/>
+    </linearGradient>
+    <linearGradient id="purpleCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="purpleCyanV" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="layerClient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e1040;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1a2040;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="layerApp" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1a0f35;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1a1535;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="layerAI" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f1a30;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f2030;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="layerData" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f1f1a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f2020;stop-opacity:1"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#7c3aed" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrowCyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#06b6d4"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="780" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Title Bar -->
+  <rect x="0" y="0" width="1100" height="64" fill="url(#purpleCyan)" rx="16"/>
+  <rect x="0" y="48" width="1100" height="16" fill="url(#purpleCyan)"/>
+  <text x="550" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="white" letter-spacing="1">PrepHub — System Architecture</text>
+
+  <!-- ── LAYER LABELS (left side) ── -->
+  <!-- Client Layer label -->
+  <rect x="18" y="80" width="22" height="130" rx="4" fill="url(#purpleCyan)" opacity="0.85"/>
+  <text x="29" y="175" text-anchor="middle" font-size="11" font-weight="700" fill="white" letter-spacing="2" transform="rotate(-90,29,175)">CLIENT</text>
+
+  <!-- App Layer label -->
+  <rect x="18" y="222" width="22" height="200" rx="4" fill="#7c3aed" opacity="0.85"/>
+  <text x="29" y="340" text-anchor="middle" font-size="11" font-weight="700" fill="white" letter-spacing="2" transform="rotate(-90,29,340)">APPLICATION</text>
+
+  <!-- AI Layer label -->
+  <rect x="18" y="432" width="22" height="160" rx="4" fill="#06b6d4" opacity="0.85"/>
+  <text x="29" y="530" text-anchor="middle" font-size="11" font-weight="700" fill="white" letter-spacing="2" transform="rotate(-90,29,530)">AI / ML</text>
+
+  <!-- Data Layer label -->
+  <rect x="18" y="602" width="22" height="155" rx="4" fill="#10b981" opacity="0.85"/>
+  <text x="29" y="695" text-anchor="middle" font-size="11" font-weight="700" fill="white" letter-spacing="2" transform="rotate(-90,29,695)">DATA</text>
+
+  <!-- ══════════════════════════════════════════
+       LAYER 1 — CLIENT LAYER (y: 80–210)
+       ══════════════════════════════════════════ -->
+  <rect x="50" y="80" width="1032" height="130" rx="12" fill="url(#layerClient)" stroke="#7c3aed" stroke-width="1.5" stroke-opacity="0.5"/>
+
+  <!-- Browser Box -->
+  <rect x="80" y="100" width="160" height="90" rx="10" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5" filter="url(#softShadow)"/>
+  <rect x="80" y="100" width="160" height="28" rx="10" fill="#7c3aed" opacity="0.9"/>
+  <rect x="80" y="118" width="160" height="10" fill="#7c3aed" opacity="0.9"/>
+  <circle cx="95" cy="114" r="4" fill="#ef4444" opacity="0.8"/>
+  <circle cx="110" cy="114" r="4" fill="#f59e0b" opacity="0.8"/>
+  <circle cx="125" cy="114" r="4" fill="#10b981" opacity="0.8"/>
+  <text x="160" y="143" text-anchor="middle" font-size="12" font-weight="700" fill="white">Next.js Frontend</text>
+  <text x="160" y="160" text-anchor="middle" font-size="10" fill="#a5b4fc">React · App Router</text>
+  <text x="160" y="177" text-anchor="middle" font-size="10" fill="#a5b4fc">Framer Motion · TailwindCSS</text>
+
+  <!-- Auth box -->
+  <rect x="270" y="100" width="140" height="90" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="340" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="white">NextAuth.js</text>
+  <text x="340" y="150" text-anchor="middle" font-size="10" fill="#a5b4fc">Session · JWT</text>
+  <text x="340" y="168" text-anchor="middle" font-size="10" fill="#a5b4fc">Credentials Provider</text>
+
+  <!-- Theme box -->
+  <rect x="430" y="100" width="130" height="90" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="495" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="white">UI Components</text>
+  <text x="495" y="150" text-anchor="middle" font-size="10" fill="#a5b4fc">Dark / Light Theme</text>
+  <text x="495" y="168" text-anchor="middle" font-size="10" fill="#a5b4fc">Lucide Icons</text>
+
+  <!-- Vapi Client -->
+  <rect x="580" y="100" width="130" height="90" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="645" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="white">Vapi Client</text>
+  <text x="645" y="150" text-anchor="middle" font-size="10" fill="#a5b4fc">Voice SDK</text>
+  <text x="645" y="168" text-anchor="middle" font-size="10" fill="#a5b4fc">Real-time Audio</text>
+
+  <!-- Admin Panel -->
+  <rect x="730" y="100" width="140" height="90" rx="10" fill="#1e1b4b" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="800" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="white">Admin Panel</text>
+  <text x="800" y="150" text-anchor="middle" font-size="10" fill="#fcd34d">x-admin-token</text>
+  <text x="800" y="168" text-anchor="middle" font-size="10" fill="#fcd34d">Stats · Resumes · Feedback</text>
+
+  <!-- PDF/File Upload -->
+  <rect x="890" y="100" width="170" height="90" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="975" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="white">File Upload</text>
+  <text x="975" y="150" text-anchor="middle" font-size="10" fill="#a5b4fc">PDF Resume (ATS)</text>
+  <text x="975" y="168" text-anchor="middle" font-size="10" fill="#a5b4fc">Gemini File API</text>
+
+  <!-- ══════════════════════════════════════════
+       LAYER 2 — APPLICATION LAYER (y: 222–420)
+       ══════════════════════════════════════════ -->
+  <rect x="50" y="222" width="1032" height="200" rx="12" fill="url(#layerApp)" stroke="#7c3aed" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="566" y="244" text-anchor="middle" font-size="11" fill="#a5b4fc" letter-spacing="1">Next.js API Routes  (/api/*)</text>
+
+  <!-- API Route boxes -->
+  <rect x="70" y="252" width="120" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="130" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/learn</text>
+  <text x="130" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">Q&amp;A · RAG</text>
+  <text x="130" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">Topic Library</text>
+
+  <rect x="205" y="252" width="120" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="265" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/quiz</text>
+  <text x="265" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">MCQ Generate</text>
+  <text x="265" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">Timed Sessions</text>
+
+  <rect x="340" y="252" width="120" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="400" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/interview</text>
+  <text x="400" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">Vapi Webhook</text>
+  <text x="400" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">Grade · Feedback</text>
+
+  <rect x="475" y="252" width="130" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="540" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/company-brain</text>
+  <text x="540" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">Scrape · Deduplicate</text>
+  <text x="540" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">AI Summarise</text>
+
+  <rect x="620" y="252" width="120" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="680" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/ats</text>
+  <text x="680" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">Score · Embed</text>
+  <text x="680" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">LaTeX Builder</text>
+
+  <rect x="755" y="252" width="130" height="70" rx="8" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="820" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/career-guide</text>
+  <text x="820" y="294" text-anchor="middle" font-size="9" fill="#c4b5fd">Roadmap · Skills</text>
+  <text x="820" y="309" text-anchor="middle" font-size="9" fill="#c4b5fd">AI Recommendation</text>
+
+  <rect x="900" y="252" width="160" height="70" rx="8" fill="#2d1b69" stroke="#f59e0b" stroke-width="1"/>
+  <text x="980" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="white">/admin/*</text>
+  <text x="980" y="294" text-anchor="middle" font-size="9" fill="#fcd34d">users · top-resumes</text>
+  <text x="980" y="309" text-anchor="middle" font-size="9" fill="#fcd34d">feedback · login</text>
+
+  <!-- Shared services row -->
+  <rect x="70" y="338" width="990" height="68" rx="8" fill="#1a0f35" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="110" y="358" font-size="10" fill="#a5b4fc" font-weight="600">Shared Middleware &amp; Utilities</text>
+  <rect x="100" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="160" y="382" text-anchor="middle" font-size="9" fill="white">adminAuth.ts</text>
+  <rect x="235" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="295" y="382" text-anchor="middle" font-size="9" fill="white">authOptions.ts</text>
+  <rect x="370" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="430" y="382" text-anchor="middle" font-size="9" fill="white">mongoose.ts</text>
+  <rect x="505" y="365" width="135" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="572" y="382" text-anchor="middle" font-size="9" fill="white">companyBrainScraper.ts</text>
+  <rect x="655" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="715" y="382" text-anchor="middle" font-size="9" fill="white">ats.ts (RAG)</text>
+  <rect x="790" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="850" y="382" text-anchor="middle" font-size="9" fill="white">careerGuide.ts</text>
+  <rect x="925" y="365" width="120" height="26" rx="5" fill="#2d1b69" stroke="#7c3aed" stroke-width="1"/>
+  <text x="985" y="382" text-anchor="middle" font-size="9" fill="white">gemini.ts</text>
+
+  <!-- ══════════════════════════════════════════
+       LAYER 3 — AI / ML LAYER (y: 432–590)
+       ══════════════════════════════════════════ -->
+  <rect x="50" y="432" width="1032" height="158" rx="12" fill="url(#layerAI)" stroke="#06b6d4" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="566" y="452" text-anchor="middle" font-size="11" fill="#67e8f9" letter-spacing="1">External AI &amp; Web Services</text>
+
+  <!-- Gemini -->
+  <rect x="70" y="460" width="175" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="70" y="460" width="175" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="70" y="480" width="175" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="157" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">Google Gemini</text>
+  <text x="157" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">2.5 Flash — Generation</text>
+  <text x="157" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">2.5 Pro — Complex Tasks</text>
+  <text x="157" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">Embedding-2 (3072-dim)</text>
+  <text x="157" y="548" text-anchor="middle" font-size="10" fill="#a5f3fc">File API (PDF Parse)</text>
+  <text x="157" y="564" text-anchor="middle" font-size="10" fill="#a5f3fc">Gemini Live (Interview)</text>
+
+  <!-- Vapi -->
+  <rect x="262" y="460" width="150" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="262" y="460" width="150" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="262" y="480" width="150" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="337" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">Vapi</text>
+  <text x="337" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">Voice AI Platform</text>
+  <text x="337" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">Real-time STT/TTS</text>
+  <text x="337" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">AI Interviewer Agent</text>
+  <text x="337" y="548" text-anchor="middle" font-size="10" fill="#a5f3fc">Call Events Webhook</text>
+
+  <!-- TinyFish -->
+  <rect x="428" y="460" width="155" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="428" y="460" width="155" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="428" y="480" width="155" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="505" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">TinyFish API</text>
+  <text x="505" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">Web Search Engine</text>
+  <text x="505" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">Markdown Fetch</text>
+  <text x="505" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">Company Brain Scraper</text>
+  <text x="505" y="548" text-anchor="middle" font-size="10" fill="#a5f3fc">X-API-Key Auth</text>
+
+  <!-- Jina AI -->
+  <rect x="598" y="460" width="155" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="598" y="460" width="155" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="598" y="480" width="155" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="675" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">Jina AI</text>
+  <text x="675" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">Reader API (Fallback)</text>
+  <text x="675" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">URL → Markdown</text>
+  <text x="675" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">Embedding API</text>
+  <text x="675" y="548" text-anchor="middle" font-size="10" fill="#a5f3fc">ATS Similarity</text>
+
+  <!-- GitHub API -->
+  <rect x="768" y="460" width="140" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="768" y="460" width="140" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="768" y="480" width="140" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="838" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">GitHub API</text>
+  <text x="838" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">Trending Repos</text>
+  <text x="838" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">Career Guide</text>
+  <text x="838" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">Roadmap Resources</text>
+
+  <!-- Atlas Vector Search -->
+  <rect x="922" y="460" width="148" height="116" rx="10" fill="#0c2040" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="922" y="460" width="148" height="30" rx="10" fill="#06b6d4" opacity="0.3"/>
+  <rect x="922" y="480" width="148" height="10" fill="#06b6d4" opacity="0.3"/>
+  <text x="996" y="480" text-anchor="middle" font-size="12" font-weight="700" fill="#67e8f9">Atlas Vector Search</text>
+  <text x="996" y="500" text-anchor="middle" font-size="10" fill="#a5f3fc">Cosine Similarity</text>
+  <text x="996" y="516" text-anchor="middle" font-size="10" fill="#a5f3fc">ATS RAG Retrieval</text>
+  <text x="996" y="532" text-anchor="middle" font-size="10" fill="#a5f3fc">Top Resume Match</text>
+
+  <!-- ══════════════════════════════════════════
+       LAYER 4 — DATA LAYER (y: 602–756)
+       ══════════════════════════════════════════ -->
+  <rect x="50" y="602" width="1032" height="155" rx="12" fill="url(#layerData)" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="566" y="622" text-anchor="middle" font-size="11" fill="#6ee7b7" letter-spacing="1">MongoDB Atlas — Data Layer (Mongoose Models)</text>
+
+  <!-- Collections -->
+  <rect x="70" y="630" width="145" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="142" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">User</text>
+  <text x="142" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">name · email · password</text>
+  <text x="142" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">profile (semester/college/branch)</text>
+  <text x="142" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">streak · lastActivity</text>
+  <text x="142" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">createdAt</text>
+  <text x="142" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">Users Collection</text>
+
+  <rect x="228" y="630" width="145" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="300" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">QuizSession</text>
+  <text x="300" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">userId · topic</text>
+  <text x="300" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">questions · answers</text>
+  <text x="300" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">score · timeTaken</text>
+  <text x="300" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">createdAt</text>
+  <text x="300" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">QuizSessions Collection</text>
+
+  <rect x="386" y="630" width="150" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="461" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">InterviewSession</text>
+  <text x="461" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">userId · transcript</text>
+  <text x="461" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">grade · feedback</text>
+  <text x="461" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">duration · callId</text>
+  <text x="461" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">createdAt</text>
+  <text x="461" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">InterviewSessions Collection</text>
+
+  <rect x="549" y="630" width="145" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="621" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">TopResume</text>
+  <text x="621" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">title · content</text>
+  <text x="621" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">embedding (3072-dim)</text>
+  <text x="621" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">score · category</text>
+  <text x="621" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">skills · role</text>
+  <text x="621" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">TopResumes Collection</text>
+
+  <rect x="707" y="630" width="145" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="779" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">Feedback</text>
+  <text x="779" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">userId · ratings</text>
+  <text x="779" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">learn · quiz · interview</text>
+  <text x="779" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">companyBrain · ats</text>
+  <text x="779" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">careerGuide · text</text>
+  <text x="779" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">Feedbacks Collection</text>
+
+  <rect x="865" y="630" width="200" height="112" rx="10" fill="#052e16" stroke="#10b981" stroke-width="1.5"/>
+  <text x="965" y="652" text-anchor="middle" font-size="12" font-weight="700" fill="#6ee7b7">CareerGuideReport</text>
+  <text x="965" y="670" text-anchor="middle" font-size="9" fill="#a7f3d0">userId · roadmap</text>
+  <text x="965" y="685" text-anchor="middle" font-size="9" fill="#a7f3d0">skills · resources</text>
+  <text x="965" y="700" text-anchor="middle" font-size="9" fill="#a7f3d0">githubRepos · timeline</text>
+  <text x="965" y="715" text-anchor="middle" font-size="9" fill="#a7f3d0">targetRole · profile</text>
+  <text x="965" y="730" text-anchor="middle" font-size="9" fill="#6ee7b7" font-style="italic">CareerGuideReports Collection</text>
+
+  <!-- ── VERTICAL ARROWS between layers ── -->
+  <!-- Client → App -->
+  <line x1="300" y1="210" x2="300" y2="252" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4,2"/>
+  <line x1="566" y1="210" x2="566" y2="252" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4,2"/>
+  <line x1="800" y1="210" x2="800" y2="252" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4,2"/>
+
+  <!-- App → AI -->
+  <line x1="200" y1="421" x2="200" y2="460" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrowCyan)" stroke-dasharray="4,2"/>
+  <line x1="540" y1="421" x2="540" y2="460" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrowCyan)" stroke-dasharray="4,2"/>
+  <line x1="820" y1="421" x2="820" y2="460" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrowCyan)" stroke-dasharray="4,2"/>
+
+  <!-- App → Data -->
+  <line x1="400" y1="421" x2="400" y2="600" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrowGreen)" stroke-dasharray="4,2"/>
+  <line x1="700" y1="421" x2="700" y2="600" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrowGreen)" stroke-dasharray="4,2"/>
+
+  <!-- Footer -->
+  <text x="550" y="767" text-anchor="middle" font-size="10" fill="#4b5563">PrepHub © 2026 — Full-Stack AI Interview Preparation Platform</text>
+</svg>
