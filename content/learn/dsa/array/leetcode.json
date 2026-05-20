@@ -1,0 +1,55 @@
+{
+  "concept": "Arrays",
+  "problems": [
+    {
+      "id": 1,
+      "number": "LC #1",
+      "title": "Two Sum",
+      "difficulty": "Easy",
+      "link": "https://leetcode.com/problems/two-sum/",
+      "description": "Given an array of integers nums and an integer target, return indices of the two numbers that add up to target. Each input has exactly one solution.",
+      "code": "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            if (map.containsKey(complement)) {\n                return new int[]{map.get(complement), i};\n            }\n            map.put(nums[i], i);\n        }\n        return new int[]{};\n    }\n}",
+      "approach": "Store each number in a HashMap as we scan. For every element, check if (target - num) already exists in the map. Single pass — O(n) time, O(n) space."
+    },
+    {
+      "id": 2,
+      "number": "LC #121",
+      "title": "Best Time to Buy and Sell Stock",
+      "difficulty": "Easy",
+      "link": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+      "description": "Given an array prices where prices[i] is the price on day i, return the maximum profit you can achieve. You can only buy once and sell once.",
+      "code": "class Solution {\n    public int maxProfit(int[] prices) {\n        int minPrice = Integer.MAX_VALUE;\n        int maxProfit = 0;\n        for (int price : prices) {\n            if (price < minPrice) {\n                minPrice = price;\n            } else if (price - minPrice > maxProfit) {\n                maxProfit = price - minPrice;\n            }\n        }\n        return maxProfit;\n    }\n}",
+      "approach": "Track the minimum price seen so far. At each step compute profit = current - minPrice. Update max profit if it's higher. One pass — O(n) time, O(1) space."
+    },
+    {
+      "id": 3,
+      "number": "LC #53",
+      "title": "Maximum Subarray",
+      "difficulty": "Medium",
+      "link": "https://leetcode.com/problems/maximum-subarray/",
+      "description": "Find the contiguous subarray (containing at least one number) that has the largest sum and return its sum.",
+      "code": "class Solution {\n    public int maxSubArray(int[] nums) {\n        int maxSum = nums[0];\n        int currentSum = nums[0];\n        for (int i = 1; i < nums.length; i++) {\n            currentSum = Math.max(nums[i], currentSum + nums[i]);\n            maxSum = Math.max(maxSum, currentSum);\n        }\n        return maxSum;\n    }\n}",
+      "approach": "Kadane's Algorithm — at each element decide: extend the existing subarray OR start fresh from here (whichever is larger). Track global max. O(n) time, O(1) space."
+    },
+    {
+      "id": 4,
+      "number": "LC #217",
+      "title": "Contains Duplicate",
+      "difficulty": "Easy",
+      "link": "https://leetcode.com/problems/contains-duplicate/",
+      "description": "Return true if any value appears at least twice in the array. Return false if every element is distinct.",
+      "code": "class Solution {\n    public boolean containsDuplicate(int[] nums) {\n        Set<Integer> seen = new HashSet<>();\n        for (int num : nums) {\n            if (seen.contains(num)) {\n                return true;\n            }\n            seen.add(num);\n        }\n        return false;\n    }\n}",
+      "approach": "Use a HashSet to track seen numbers. If the current number is already in the set, return true immediately. O(n) time, O(n) space."
+    },
+    {
+      "id": 5,
+      "number": "LC #238",
+      "title": "Product of Array Except Self",
+      "difficulty": "Medium",
+      "link": "https://leetcode.com/problems/product-of-array-except-self/",
+      "description": "Return an array answer such that answer[i] equals the product of all elements except nums[i]. Must run in O(n) without using division.",
+      "code": "class Solution {\n    public int[] productExceptSelf(int[] nums) {\n        int n = nums.length;\n        int[] result = new int[n];\n        // Left pass: result[i] = product of all elements left of i\n        result[0] = 1;\n        for (int i = 1; i < n; i++) {\n            result[i] = result[i - 1] * nums[i - 1];\n        }\n        // Right pass: multiply with product of all elements right of i\n        int rightProduct = 1;\n        for (int i = n - 1; i >= 0; i--) {\n            result[i] *= rightProduct;\n            rightProduct *= nums[i];\n        }\n        return result;\n    }\n}",
+      "approach": "Two passes without division. Left pass: result[i] holds product of everything to the left. Right pass: multiply by the running product from the right. O(n) time, O(1) extra space."
+    }
+  ]
+}

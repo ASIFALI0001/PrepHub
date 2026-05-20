@@ -1,0 +1,165 @@
+{
+  "concept": "Arrays",
+  "language": "Java",
+  "sections": [
+    {
+      "title": "Declaration & Initialization",
+      "emoji": "📦",
+      "items": [
+        {
+          "name": "Declare an array",
+          "code": "int[] arr;",
+          "description": "Declares an integer array reference — no memory allocated yet."
+        },
+        {
+          "name": "Declare and allocate",
+          "code": "int[] arr = new int[5];",
+          "description": "Creates an array of size 5. All elements default to 0."
+        },
+        {
+          "name": "Declare with values",
+          "code": "int[] arr = {10, 20, 30, 40, 50};",
+          "description": "Inline initialization — size is inferred automatically."
+        },
+        {
+          "name": "2D array",
+          "code": "int[][] matrix = new int[3][4];",
+          "description": "3 rows, 4 columns. Each cell defaults to 0."
+        },
+        {
+          "name": "2D with values",
+          "code": "int[][] grid = {{1,2},{3,4},{5,6}};",
+          "description": "Inline 2D initialization."
+        }
+      ]
+    },
+    {
+      "title": "Access & Traversal",
+      "emoji": "🔁",
+      "items": [
+        {
+          "name": "Get element by index",
+          "code": "int x = arr[2];",
+          "description": "0-based indexing. Throws ArrayIndexOutOfBoundsException if out of range."
+        },
+        {
+          "name": "Set element",
+          "code": "arr[0] = 99;",
+          "description": "Assign a value to a specific index."
+        },
+        {
+          "name": "Array length",
+          "code": "int len = arr.length;",
+          "description": "length is a field, not a method — no parentheses."
+        },
+        {
+          "name": "For loop (indexed)",
+          "code": "for (int i = 0; i < arr.length; i++) {\n    System.out.println(arr[i]);\n}",
+          "description": "Classic loop — use when you need the index."
+        },
+        {
+          "name": "Enhanced for loop",
+          "code": "for (int x : arr) {\n    System.out.println(x);\n}",
+          "description": "Simpler syntax — can't modify elements by index."
+        },
+        {
+          "name": "Traverse 2D array",
+          "code": "for (int i = 0; i < matrix.length; i++) {\n    for (int j = 0; j < matrix[i].length; j++) {\n        System.out.print(matrix[i][j] + \" \");\n    }\n}",
+          "description": "Nested loops for 2D traversal."
+        }
+      ]
+    },
+    {
+      "title": "java.util.Arrays Methods",
+      "emoji": "🛠️",
+      "items": [
+        {
+          "name": "Sort ascending",
+          "code": "Arrays.sort(arr);",
+          "description": "In-place sort using Dual-Pivot Quicksort. Time: O(n log n)."
+        },
+        {
+          "name": "Sort a range",
+          "code": "Arrays.sort(arr, 1, 4);",
+          "description": "Sort from index 1 (inclusive) to 4 (exclusive)."
+        },
+        {
+          "name": "Sort descending (Integer[])",
+          "code": "Integer[] arr = {5, 2, 8};\nArrays.sort(arr, Collections.reverseOrder());",
+          "description": "Works only on Integer[] (not int[]). Needs Collections import."
+        },
+        {
+          "name": "Binary search",
+          "code": "int idx = Arrays.binarySearch(arr, 30);",
+          "description": "Array must be sorted first. Returns index, or negative if not found."
+        },
+        {
+          "name": "Fill with value",
+          "code": "Arrays.fill(arr, 0);",
+          "description": "Sets every element to the given value."
+        },
+        {
+          "name": "Copy full array",
+          "code": "int[] copy = Arrays.copyOf(arr, arr.length);",
+          "description": "Returns a new array. If new length > original, pads with 0."
+        },
+        {
+          "name": "Copy a range",
+          "code": "int[] part = Arrays.copyOfRange(arr, 1, 4);",
+          "description": "Copies index 1, 2, 3 (end index is exclusive)."
+        },
+        {
+          "name": "Check equality",
+          "code": "boolean eq = Arrays.equals(arr1, arr2);",
+          "description": "Returns true if same length and all elements match."
+        },
+        {
+          "name": "Print array",
+          "code": "System.out.println(Arrays.toString(arr));",
+          "description": "Outputs [10, 20, 30] — essential for debugging."
+        },
+        {
+          "name": "Print 2D array",
+          "code": "System.out.println(Arrays.deepToString(matrix));",
+          "description": "Outputs nested like [[1,2],[3,4]]."
+        }
+      ]
+    },
+    {
+      "title": "Common Interview Patterns",
+      "emoji": "⚡",
+      "items": [
+        {
+          "name": "Find max element",
+          "code": "int max = arr[0];\nfor (int x : arr) {\n    max = Math.max(max, x);\n}",
+          "description": "Linear scan O(n) — always initialize with arr[0], not 0."
+        },
+        {
+          "name": "Reverse in-place",
+          "code": "int l = 0, r = arr.length - 1;\nwhile (l < r) {\n    int tmp = arr[l];\n    arr[l] = arr[r];\n    arr[r] = tmp;\n    l++; r--;\n}",
+          "description": "Two-pointer swap — O(n) time, O(1) space."
+        },
+        {
+          "name": "Two-pointer template",
+          "code": "int l = 0, r = arr.length - 1;\nwhile (l < r) {\n    // process arr[l] and arr[r]\n    l++;\n    r--;\n}",
+          "description": "Used in pair-sum, container with most water, palindrome, etc."
+        },
+        {
+          "name": "Prefix sum",
+          "code": "int n = arr.length;\nint[] prefix = new int[n + 1];\nfor (int i = 0; i < n; i++) {\n    prefix[i + 1] = prefix[i] + arr[i];\n}\n// Range sum [l, r] = prefix[r+1] - prefix[l]",
+          "description": "Precompute cumulative sums. Range query in O(1) after O(n) build."
+        },
+        {
+          "name": "Sliding window (fixed size)",
+          "code": "int k = 3, sum = 0;\nfor (int i = 0; i < k; i++) sum += arr[i];\nint maxSum = sum;\nfor (int i = k; i < arr.length; i++) {\n    sum += arr[i] - arr[i - k];\n    maxSum = Math.max(maxSum, sum);\n}",
+          "description": "O(n) instead of O(n·k) for fixed window aggregation."
+        },
+        {
+          "name": "Frequency map",
+          "code": "Map<Integer, Integer> freq = new HashMap<>();\nfor (int x : arr) {\n    freq.put(x, freq.getOrDefault(x, 0) + 1);\n}",
+          "description": "Count occurrences. Used in duplicates, majority element, anagrams."
+        }
+      ]
+    }
+  ]
+}

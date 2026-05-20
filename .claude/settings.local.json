@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(npx tsx *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(Get-ChildItem -Recurse \"d:\\\\Projects 2026\\\\PrepHub\\\\Application\\\\app\\\\\\(dashboard\\)\\\\learn\\\\dsa\")",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Recurse \"d:\\\\Projects 2026\\\\PrepHub\\\\Application\\\\content\\\\learn\\\\dsa\")"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import {
   Code2, Brain, Database, Network, Cpu,
   BarChart3, LineChart, GitBranch, Layers,
-  Leaf, Table2,
+  Leaf, Table2, Binary,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -17,4 +17,5 @@ export const TOPIC_ICONS: Record<string, LucideIcon> = {
   rag:     Layers,
   mongodb: Leaf,
   sql:     Table2,
+  dsa:     Binary,
 };

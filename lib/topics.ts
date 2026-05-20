@@ -122,6 +122,23 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
+    id: "dsa",
+    label: "DSA",
+    accent: "text-violet-400",
+    topics: [
+      {
+        id: "dsa",
+        label: "Data Structures & Algorithms",
+        desc: "Arrays, Strings, Linked List, Stack, Queue, Trees, Graphs, DP — structured concept-by-concept prep.",
+        color: "text-violet-400",
+        iconBg: "bg-violet-500/10 group-hover:bg-violet-500/15",
+        border: "group-hover:border-violet-500/40",
+        glow: "hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]",
+        total: 0,
+      },
+    ],
+  },
+  {
     id: "tools",
     label: "Tools",
     accent: "text-accent-green",

@@ -25,7 +25,7 @@ export default async function LearnPage() {
 
   const totalCompleted = ALL_TOPICS.reduce((sum, t) => sum + Math.min(getCompleted(t.id), t.total), 0);
   const grandTotal = ALL_TOPICS.reduce((sum, t) => sum + t.total, 0);
-  const overallPct = Math.round((totalCompleted / grandTotal) * 100);
+  const overallPct = grandTotal > 0 ? Math.round((totalCompleted / grandTotal) * 100) : 0;
 
   return (
     <>
@@ -66,7 +66,7 @@ export default async function LearnPage() {
             {SECTIONS.map((section) => {
               const sectionCompleted = section.topics.reduce((sum, t) => sum + Math.min(getCompleted(t.id), t.total), 0);
               const sectionTotal = section.topics.reduce((sum, t) => sum + t.total, 0);
-              const sectionPct = Math.round((sectionCompleted / sectionTotal) * 100);
+              const sectionPct = sectionTotal > 0 ? Math.round((sectionCompleted / sectionTotal) * 100) : 0;
               const topicsStarted = section.topics.filter((t) => getCompleted(t.id) > 0).length;
 
               return (
