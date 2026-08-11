@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Mic, RotateCcw, Trash2, Clock, ChevronRight, Award } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Mic, RotateCcw, Trash2, Clock, ChevronRight, FileText } from "lucide-react";
+import { scoreTheme } from "@/lib/score";
 
 interface Interview {
   _id: string;
@@ -22,40 +24,32 @@ interface Props {
 }
 
 const TYPE_STYLE: Record<string, string> = {
-  technical: "text-accent-blue bg-accent-blue/10 border-accent-blue/25",
-  behavioral: "text-accent-green bg-accent-green/10 border-accent-green/25",
-  mixed: "text-primary-light bg-primary/10 border-primary/25",
+  technical: "text-accent-blue bg-accent-blue/10 border-accent-blue/20",
+  behavioral: "text-accent-green bg-accent-green/10 border-accent-green/20",
+  mixed: "text-accent-violet bg-accent-violet/10 border-accent-violet/20",
 };
-
-const LEVEL_STYLE: Record<string, string> = {
-  beginner: "text-accent-green bg-accent-green/10 border-accent-green/20",
-  intermediate: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
-  senior: "text-accent-orange bg-accent-orange/10 border-accent-orange/20",
-};
-
-function gradeColors(score: number) {
-  if (score >= 80) return { text: "text-accent-green", ring: "stroke-accent-green", bg: "bg-accent-green/10 border-accent-green/30" };
-  if (score >= 60) return { text: "text-yellow-400", ring: "stroke-yellow-400", bg: "bg-yellow-400/10 border-yellow-400/30" };
-  if (score >= 40) return { text: "text-accent-orange", ring: "stroke-accent-orange", bg: "bg-accent-orange/10 border-accent-orange/30" };
-  return { text: "text-red-400", ring: "stroke-red-400", bg: "bg-red-400/10 border-red-400/30" };
-}
 
 function GradeRing({ score, grade }: { score: number; grade: string }) {
-  const { text, ring } = gradeColors(score);
+  const t = scoreTheme(score);
   const r = 26;
   const circ = 2 * Math.PI * r;
   const dash = (score / 100) * circ;
   return (
     <div className="relative w-16 h-16 shrink-0">
       <svg className="w-full h-full -rotate-90" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r={r} fill="none" stroke="currentColor" strokeWidth="5" className="text-bg-border" />
-        <circle cx="30" cy="30" r={r} fill="none" strokeWidth="5"
-          strokeDasharray={`${dash} ${circ}`} strokeLinecap="round"
-          className={`${ring} transition-all duration-700`} />
+        <circle cx="30" cy="30" r={r} fill="none" stroke="currentColor" strokeWidth="4.5" className="text-bg-border" />
+        <motion.circle
+          cx="30" cy="30" r={r} fill="none" strokeWidth="4.5"
+          strokeLinecap="round" className={t.ring}
+          strokeDasharray={`${dash} ${circ}`}
+          initial={{ strokeDasharray: `0 ${circ}` }}
+          animate={{ strokeDasharray: `${dash} ${circ}` }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className={`text-lg font-black leading-none ${text}`}>{grade}</span>
-        <span className="text-[9px] text-text-muted font-medium">{score}%</span>
+        <span className={`text-lg font-bold leading-none ${t.text}`}>{grade}</span>
+        <span className="tnum text-[9px] text-text-muted font-medium mt-0.5">{score}%</span>
       </div>
     </div>
   );
@@ -81,70 +75,64 @@ export default function InterviewCard({ interview, onDelete }: Props) {
   const isCompleted = interview.status === "completed";
   const score = interview.report?.overallScore ?? 0;
   const grade = interview.report?.grade ?? "";
-  const { text: scoreText } = interview.report ? gradeColors(score) : { text: "" };
+  const t = interview.report ? scoreTheme(score) : null;
 
   return (
-    <div className={`glass-card rounded-2xl border flex flex-col gap-0 overflow-hidden transition-all duration-200 ${
-      isCompleted ? "border-bg-border hover:border-primary/30" : "border-bg-border hover:border-primary/20"
-    }`}>
-
-      {/* ── Top section ───────────────────────────────────────────── */}
-      <div className="p-6">
+    <motion.div
+      whileHover={{ y: -3 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="group glass-card rounded-2xl overflow-hidden h-full flex flex-col hover:border-text-dim/25 transition-colors"
+    >
+      <div className="p-5 sm:p-6 flex-1">
         <div className="flex items-start gap-4">
-          {/* Grade ring or mic icon */}
           {isCompleted && interview.report ? (
             <GradeRing score={score} grade={grade} />
           ) : (
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-              <Mic className="w-7 h-7 text-primary-light" />
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center shrink-0 text-primary">
+              <Mic className="w-6 h-6" />
             </div>
           )}
 
           <div className="flex-1 min-w-0">
-            {/* Role label */}
-            <div className="text-xs font-semibold text-text-muted uppercase tracking-widest mb-1">
-              {interview.role}
-            </div>
-            {/* Title */}
-            <h3 className="text-base font-bold text-text leading-snug mb-3">
+            <div className="eyebrow mb-1 truncate">{interview.role}</div>
+            <h3 className="text-base font-bold text-text leading-snug mb-3 line-clamp-2">
               {interview.title}
             </h3>
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              <span className={`text-xs px-2.5 py-1 rounded-lg border font-medium capitalize ${TYPE_STYLE[interview.type] ?? "text-text-muted border-bg-border"}`}>
+            <div className="flex flex-wrap gap-1.5">
+              <span className={`text-[11px] px-2 py-0.5 rounded-md border font-medium capitalize ${TYPE_STYLE[interview.type] ?? "text-text-muted border-bg-border"}`}>
                 {interview.type}
               </span>
-              <span className={`text-xs px-2.5 py-1 rounded-lg border font-medium capitalize ${LEVEL_STYLE[interview.level] ?? "text-text-muted border-bg-border"}`}>
+              <span className="text-[11px] px-2 py-0.5 rounded-md border border-bg-border text-text-muted font-medium capitalize">
                 {interview.level}
               </span>
-              <span className="text-xs px-2.5 py-1 rounded-lg border border-bg-border text-text-muted font-medium">
-                {interview.questionCount} questions
+              <span className="tnum text-[11px] px-2 py-0.5 rounded-md border border-bg-border text-text-muted font-medium">
+                {interview.questionCount} Qs
               </span>
             </div>
           </div>
         </div>
 
-        {/* Score bar for completed */}
-        {isCompleted && interview.report && (
+        {isCompleted && interview.report && t && (
           <div className="mt-5">
             <div className="flex justify-between text-xs mb-1.5">
-              <span className={`font-semibold ${scoreText}`}>
-                {score >= 80 ? "Excellent" : score >= 60 ? "Good" : score >= 40 ? "Fair" : "Needs Work"}
-              </span>
-              <span className="text-text-muted">{score}%</span>
+              <span className={`font-semibold ${t.text}`}>{t.label}</span>
+              <span className="tnum text-text-muted">{score}%</span>
             </div>
-            <div className="h-2 rounded-full bg-bg-border overflow-hidden">
-              <div className={`h-full rounded-full transition-all duration-700 ${
-                score >= 80 ? "bg-accent-green" : score >= 60 ? "bg-yellow-400" : score >= 40 ? "bg-accent-orange" : "bg-red-400"
-              }`} style={{ width: `${score}%` }} />
+            <div className="h-1.5 rounded-full bg-bg-surface overflow-hidden">
+              <motion.div
+                className={`h-full rounded-full ${t.bar}`}
+                initial={{ width: 0 }}
+                whileInView={{ width: `${score}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              />
             </div>
           </div>
         )}
 
-        {/* Status for pending */}
         {!isCompleted && (
           <div className="mt-4 flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${interview.status === "in_progress" ? "bg-yellow-400 animate-pulse" : "bg-bg-border"}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${interview.status === "in_progress" ? "bg-accent-orange animate-pulse" : "bg-text-dim"}`} />
             <span className="text-xs text-text-muted capitalize">
               {interview.status === "in_progress" ? "In progress" : "Not started"}
             </span>
@@ -152,56 +140,62 @@ export default function InterviewCard({ interview, onDelete }: Props) {
         )}
       </div>
 
-      {/* ── Divider + footer ─────────────────────────────────────── */}
-      <div className="border-t border-bg-border px-6 py-4 bg-bg-surface/30 space-y-3">
-        {/* Date */}
+      <div className="border-t border-bg-border px-5 sm:px-6 py-4 bg-bg-surface/40 space-y-3">
         <div className="flex items-center gap-1.5 text-xs text-text-muted">
-          <Clock className="w-3.5 h-3.5" />
-          {date}
+          <Clock className="w-3.5 h-3.5" /> {date}
         </div>
 
-        {/* Action buttons */}
-        <div className="flex gap-2.5">
+        <div className="flex gap-2">
           {isCompleted ? (
             <>
               <Link href={`/interview/${interview._id}/report`}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary/10 border border-primary/25 text-sm font-semibold text-primary hover:bg-primary/20 transition-colors">
-                <Award className="w-4 h-4" /> View Report
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-primary/10 border border-primary/20 text-sm font-semibold text-primary hover:bg-primary/15 transition-colors">
+                <FileText className="w-4 h-4" /> View report
               </Link>
               <Link href={`/interview/${interview._id}`}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-bg-border text-sm font-medium text-text-muted hover:text-text hover:border-primary/30 transition-colors">
+                className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-lg border border-bg-border text-sm font-medium text-text-muted hover:text-text hover:bg-bg-card transition-colors">
                 <RotateCcw className="w-3.5 h-3.5" /> Retake
               </Link>
             </>
           ) : (
             <Link href={`/interview/${interview._id}`}
-              className="flex-1 btn-primary flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm">
+              className="flex-1 btn-primary justify-center gap-2 group/btn">
               <Mic className="w-4 h-4" />
-              {interview.status === "in_progress" ? "Continue Interview" : "Start Interview"}
-              <ChevronRight className="w-4 h-4" />
+              {interview.status === "in_progress" ? "Continue" : "Start interview"}
+              <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
             </Link>
           )}
 
-          {/* Delete */}
-          {!confirmDelete ? (
-            <button onClick={() => setConfirmDelete(true)}
-              className="px-3 py-2.5 rounded-xl border border-bg-border text-text-muted hover:text-red-400 hover:border-red-400/30 transition-colors">
-              <Trash2 className="w-4 h-4" />
-            </button>
-          ) : (
-            <div className="flex gap-1.5">
-              <button onClick={handleDelete} disabled={deleting}
-                className="text-xs px-3 py-2 rounded-xl bg-red-500/15 text-red-400 hover:bg-red-500/25 font-semibold border border-red-500/20">
-                {deleting ? "…" : "Delete"}
-              </button>
-              <button onClick={() => setConfirmDelete(false)}
-                className="text-xs px-3 py-2 rounded-xl bg-bg-border text-text-muted hover:text-text">
-                Cancel
-              </button>
-            </div>
-          )}
+          <AnimatePresence mode="wait" initial={false}>
+            {!confirmDelete ? (
+              <motion.button
+                key="trash"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                onClick={() => setConfirmDelete(true)}
+                aria-label="Delete interview"
+                className="px-3 py-2.5 rounded-lg border border-bg-border text-text-muted hover:text-accent-pink hover:border-accent-pink/30 hover:bg-accent-pink/5 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+              </motion.button>
+            ) : (
+              <motion.div
+                key="confirm"
+                initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "auto" }} exit={{ opacity: 0, width: 0 }}
+                className="flex gap-1.5 overflow-hidden"
+              >
+                <button onClick={handleDelete} disabled={deleting}
+                  className="text-xs px-3 py-2 rounded-lg bg-accent-pink/15 text-accent-pink hover:bg-accent-pink/25 font-semibold border border-accent-pink/20 whitespace-nowrap">
+                  {deleting ? "…" : "Delete"}
+                </button>
+                <button onClick={() => setConfirmDelete(false)}
+                  className="text-xs px-3 py-2 rounded-lg border border-bg-border text-text-muted hover:text-text whitespace-nowrap">
+                  Cancel
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,0 +1,885 @@
+{
+  "metadata": {
+    "title": "Top 100 DBMS Interview Questions",
+    "description": "Most probable DBMS interview questions compiled from the highest-traffic interview-prep sources plus the LastMinuteNotes revision sheet. Weighted toward what actually gets asked in campus placements and SDE screens — normalization, keys, joins, transactions, locking and indexing — with theory-only trivia pushed to LOW. Each question is tagged with the sources it appears in and a frequency ranking based on how often it shows up across those sources.",
+    "total_questions": 100,
+    "last_updated": "2026-08-08",
+    "sources": {
+      "LastMinuteNotes": {
+        "full_name": "LastMinuteNotes — DBMS.md (anxkhn)",
+        "url": "https://github.com/anxkhn/LastMinuteNotes/blob/main/DBMS.md",
+        "strength": "Tight last-minute revision sheet; exactly the 17 topics that survive when you only have an hour before the interview (ACID, normal forms, keys, locks, joins, indexes)"
+      },
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks DBMS Interview Questions",
+        "url": "https://www.geeksforgeeks.org/dbms/commonly-asked-dbms-interview-questions/",
+        "strength": "Broadest coverage; separate deep-dive question banks for transactions/concurrency/recovery and storage/indexing, which is where 3+ YOE interviews go"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit DBMS Section",
+        "url": "https://www.interviewbit.com/dbms-interview-questions/",
+        "strength": "Clean basic → intermediate → advanced progression; strongest on the SQL-and-querying questions that follow the theory round"
+      },
+      "JavaTpoint": {
+        "full_name": "JavaTpoint / Tpoint Tech DBMS Questions",
+        "url": "https://www.tpointtech.com/dbms-interview-questions",
+        "strength": "Largest raw bank (80+ Q); the definitive source for university-style theory questions — relational algebra, ER terminology, checkpoints, data independence"
+      },
+      "DataCamp": {
+        "full_name": "DataCamp DBMS Interview Questions",
+        "url": "https://www.datacamp.com/blog/dbms-interview-questions",
+        "strength": "Industry-facing angle; isolation levels, MVCC, optimistic vs pessimistic locking, partitioning, sharding, CAP — the questions product companies actually ask"
+      },
+      "Hackr.io": {
+        "full_name": "Hackr.io DBMS Interview Questions",
+        "url": "https://hackr.io/blog/dbms-interview-questions",
+        "strength": "Placement-drive oriented; good on index hunting, query optimization, join algorithms, and the DBA/architecture questions in service-company interviews"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every DBMS interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is a DBMS?",
+      "answer": "A Database Management System is software that sits between the user and the stored data. It lets you define, store, retrieve, update and secure data through a query language, while handling concurrency, integrity and recovery for you. Examples: MySQL, PostgreSQL, Oracle, SQL Server.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "2",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is a database?",
+      "answer": "An organized collection of related data stored so it can be efficiently accessed and updated — typically as tables made of rows (records) and columns (fields). The database is the data itself; the DBMS is the software that manages it.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "3",
+      "section": "DBMS Basics & Architecture",
+      "question": "Difference between DBMS and RDBMS?",
+      "answer": "A DBMS stores data in files or a simple hierarchy and may not enforce relationships. An RDBMS stores data in tables (relations) linked by keys, enforces integrity constraints, supports normalization, and follows most of Codd's rules. All RDBMS are DBMS; not all DBMS are relational.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "4",
+      "section": "DBMS Basics & Architecture",
+      "question": "What are the disadvantages of a file processing system compared to a DBMS?",
+      "answer": "Data redundancy and inconsistency (same data copied in many files), difficulty accessing data (a new query means new code), data isolation across scattered file formats, integrity problems (constraints live in application code), atomicity problems (a crash mid-update leaves partial data), concurrent-access anomalies, and weak security. A DBMS solves all seven centrally.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "5",
+      "section": "DBMS Basics & Architecture",
+      "question": "What are the main advantages of using a DBMS?",
+      "answer": "Controlled redundancy, enforced consistency and integrity, shared and concurrent access with locking, a declarative query language instead of hand-written file code, backup and recovery, access control and security, and data independence — applications don't break when the physical storage changes.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp"]
+    },
+    {
+      "id": "6",
+      "section": "DBMS Basics & Architecture",
+      "question": "What are the three levels of data abstraction? (Three-schema architecture)",
+      "answer": "Physical/Internal level — how data is actually stored on disk (files, pages, indexes). Logical/Conceptual level — what data is stored and the relationships between it (tables, columns, constraints). View/External level — what a particular user sees, usually a subset via views. Abstraction hides the lower level from the one above it.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "7",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is data independence? Explain physical vs logical data independence.",
+      "answer": "The ability to change one schema level without changing the level above it. Physical data independence: changing storage structures or indexes doesn't affect the logical schema — easy to achieve. Logical data independence: changing the logical schema (adding a column, splitting a table) doesn't break existing views/applications — harder to achieve.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "8",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is a schema? How is it different from an instance?",
+      "answer": "The schema is the structure/blueprint of the database — tables, columns, data types, constraints, relationships. It changes rarely. An instance is the actual data present in the database at a given moment. Schema is like a class; the instance is like an object.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "9",
+      "section": "DBMS Basics & Architecture",
+      "question": "Difference between 2-tier and 3-tier architecture?",
+      "answer": "2-tier: the client application talks to the database server directly (client → DB). Simple and fast, but poor scalability and security since credentials sit on every client. 3-tier: client → application/business-logic server → database. The database is never exposed to the client, so it scales better and is far more secure. Most web apps are 3-tier.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "10",
+      "section": "DBMS Basics & Architecture",
+      "question": "What are the main components of a DBMS?",
+      "answer": "Storage manager (disk/file/buffer management), query processor (parser, optimizer, execution engine), transaction manager (concurrency control + recovery), the data dictionary/catalog holding metadata, and the query language interface.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "11",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is the role of a Database Administrator (DBA)?",
+      "answer": "Owns schema design and changes, storage/index strategy, user accounts and privileges (GRANT/REVOKE), backup and recovery planning, performance monitoring and tuning, and enforcing integrity and security policies.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "12",
+      "section": "DBMS Basics & Architecture",
+      "question": "What is a data dictionary (system catalog)?",
+      "answer": "The database's metadata store — it holds definitions of tables, columns, data types, constraints, indexes, views, users and privileges. The query optimizer and integrity checker read it on every query. It is data about data, not user data.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "13",
+      "section": "ER Model & Relational Model",
+      "question": "What is the ER model / an ER diagram?",
+      "answer": "The Entity-Relationship model is a conceptual design tool that represents the database as entities (rectangles), their attributes (ellipses) and the relationships between them (diamonds). It is drawn before creating tables, then mapped to a relational schema.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "14",
+      "section": "ER Model & Relational Model",
+      "question": "Difference between an entity, an entity type and an entity set?",
+      "answer": "An entity is a single real-world object (student Rahul). An entity type is the category/definition with its attributes (STUDENT). An entity set is the collection of all entities of that type currently in the database (all students). Entity type maps to a table; entity set maps to its rows.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "15",
+      "section": "ER Model & Relational Model",
+      "question": "What is a weak entity set?",
+      "answer": "An entity set with no primary key of its own — it can only be identified in combination with the primary key of an owner (strong) entity. It is drawn with a double rectangle and connected by an identifying relationship (double diamond). Example: a Dependent exists only with respect to an Employee.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "16",
+      "section": "ER Model & Relational Model",
+      "question": "What are the different types of attributes in the ER model?",
+      "answer": "Simple (atomic, e.g. age), Composite (splits further, e.g. name → first + last), Single-valued vs Multi-valued (phone numbers), Derived (computed, e.g. age from DOB), and Key attributes (uniquely identify the entity). Multi-valued attributes become separate tables when mapped to a relational schema.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "17",
+      "section": "ER Model & Relational Model",
+      "question": "What types of relationships exist between tables? What is cardinality?",
+      "answer": "One-to-One (put the FK on either side), One-to-Many (FK goes on the many side — the most common), and Many-to-Many (needs a third junction/bridge table holding both foreign keys). Cardinality is the number of entities on each side of the relationship.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "18",
+      "section": "ER Model & Relational Model",
+      "question": "Explain generalization, specialization and aggregation.",
+      "answer": "Generalization: bottom-up — combine common attributes of several entities into a higher-level parent entity (Car + Bike → Vehicle). Specialization: top-down — split a parent into more specific children (Employee → Manager, Engineer). Aggregation: treat an entire relationship set as a single higher-level entity so another relationship can connect to it.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "19",
+      "section": "ER Model & Relational Model",
+      "question": "In the relational model, what are a relation, tuple, attribute, degree and cardinality?",
+      "answer": "Relation = table. Tuple = a row/record. Attribute = a column. Degree = number of attributes (columns) in the relation. Cardinality = number of tuples (rows). Domain = the set of allowed values for an attribute.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "20",
+      "section": "ER Model & Relational Model",
+      "question": "Difference between intension and extension in a database?",
+      "answer": "Intension (schema) is the permanent definition of the database — table structures and constraints; it rarely changes. Extension is the set of tuples present at a given instant; it changes with every insert/update/delete. Intension is the description, extension is the snapshot.",
+      "frequency": "LOW",
+      "sources": ["InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "21",
+      "section": "ER Model & Relational Model",
+      "question": "Difference between relational algebra and relational calculus?",
+      "answer": "Relational algebra is procedural — you specify the sequence of operations (SELECT σ, PROJECT π, UNION, SET DIFFERENCE, CARTESIAN PRODUCT, RENAME, JOIN). Relational calculus is non-procedural — you describe what you want, not how to get it. SQL is closer to calculus; the query optimizer converts it to algebra internally.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "22",
+      "section": "Keys & Constraints",
+      "question": "What are the different types of keys in a database?",
+      "answer": "Super key (any attribute set that uniquely identifies a row), Candidate key (a minimal super key), Primary key (the chosen candidate key), Alternate key (the candidate keys not chosen), Composite key (a key made of 2+ columns), Foreign key (references another table's primary key), and Surrogate key (an artificial key like an auto-increment ID).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "23",
+      "section": "Keys & Constraints",
+      "question": "Difference between a super key and a candidate key?",
+      "answer": "A super key is any set of attributes that uniquely identifies a tuple — it may contain extra, unnecessary attributes. A candidate key is a minimal super key: remove any attribute and it stops being unique. Every candidate key is a super key; the reverse is not true. Example: {roll_no, name} is a super key, {roll_no} is the candidate key.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "24",
+      "section": "Keys & Constraints",
+      "question": "What is a primary key?",
+      "answer": "The candidate key chosen to uniquely identify every row in a table. It must be unique and NOT NULL, and a table can have only one. Most databases build a clustered index on it automatically.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "25",
+      "section": "Keys & Constraints",
+      "question": "Difference between a primary key and a unique key?",
+      "answer": "Both enforce uniqueness. Primary key: only one per table, cannot be NULL, usually clustered. Unique key: many allowed per table, permits NULL (typically one NULL in SQL Server, multiple in MySQL/Oracle), and creates a non-clustered index. Use the primary key for identity, unique keys for other business-unique fields like email.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp"]
+    },
+    {
+      "id": "26",
+      "section": "Keys & Constraints",
+      "question": "What is a foreign key and what does it enforce?",
+      "answer": "A column (or set of columns) in one table that references the primary/unique key of another table. It enforces referential integrity: you cannot insert a value that doesn't exist in the parent table, and you cannot delete a parent row that still has children (unless a cascade rule is set).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "27",
+      "section": "Keys & Constraints",
+      "question": "What is a composite key?",
+      "answer": "A primary key made up of two or more columns, used when no single column is unique on its own. Classic case: a junction table for a many-to-many relationship, where the key is (student_id, course_id).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "28",
+      "section": "Keys & Constraints",
+      "question": "What is referential integrity?",
+      "answer": "The rule that every foreign key value must either match an existing primary key value in the referenced table or be NULL. It prevents orphan records — you can't have an order pointing to a customer that doesn't exist. Enforced by the DBMS through foreign key constraints and cascade actions.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "29",
+      "section": "Keys & Constraints",
+      "question": "What are constraints in SQL? Name the types.",
+      "answer": "Rules that restrict what data can go into a column. NOT NULL (no empty value), UNIQUE (no duplicates), PRIMARY KEY (unique + not null), FOREIGN KEY (referential integrity), CHECK (a condition, e.g. `age >= 18`), and DEFAULT (a fallback value). They enforce integrity at the database level so a buggy application still can't corrupt data.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "JavaTpoint"]
+    },
+    {
+      "id": "30",
+      "section": "Keys & Constraints",
+      "question": "Can a foreign key be NULL? What does ON DELETE CASCADE do?",
+      "answer": "Yes — a NULL foreign key simply means the relationship is not set yet (an order with no assigned delivery agent). ON DELETE CASCADE automatically deletes child rows when the parent is deleted; alternatives are ON DELETE SET NULL and the default RESTRICT/NO ACTION, which blocks the delete.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "31",
+      "section": "Keys & Constraints",
+      "question": "Is a NULL value the same as zero or a blank space?",
+      "answer": "No. Zero is a number and a blank space is a character — both are actual values occupying space. NULL means the value is unknown or not applicable. NULL is never equal to anything, not even another NULL, so you must use `IS NULL` / `IS NOT NULL` instead of `= NULL`, and aggregate functions skip NULLs.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "32",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is normalization and why is it needed?",
+      "answer": "The process of organizing data into multiple related tables to reduce redundancy and eliminate insert, update and delete anomalies. Less duplicated data means less storage, no contradictory copies, and updates that only have to happen in one place.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "33",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What are insertion, update and deletion anomalies?",
+      "answer": "Insertion anomaly: you cannot add a fact without also inventing unrelated data (can't add a new department until a student enrolls in it). Update anomaly: the same fact stored in many rows must be updated everywhere, or the data becomes inconsistent. Deletion anomaly: deleting one row accidentally destroys unrelated information. Normalization exists to remove all three.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "34",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is a functional dependency?",
+      "answer": "A constraint written X → Y, meaning that for any two rows with the same value of X, the value of Y must also be the same — X determines Y. Example: `roll_no → student_name`. Functional dependencies are the input to the whole normalization process.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "35",
+      "section": "Normalization & Functional Dependencies",
+      "question": "Difference between a trivial and a non-trivial functional dependency?",
+      "answer": "X → Y is trivial if Y is a subset of X (e.g. {roll_no, name} → name) — it is always true and tells you nothing. It is non-trivial if Y is not a subset of X (roll_no → name). Only non-trivial dependencies matter for normalization.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "36",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What are Armstrong's axioms?",
+      "answer": "Three sound and complete inference rules used to derive all functional dependencies implied by a given set. Reflexivity: if Y ⊆ X then X → Y. Augmentation: if X → Y then XZ → YZ. Transitivity: if X → Y and Y → Z then X → Z. The derived rules — union, decomposition and pseudo-transitivity — follow from these.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "37",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is attribute closure and how do you find candidate keys with it?",
+      "answer": "The closure X+ is the set of all attributes functionally determined by X. Start with X, repeatedly add the right side of any dependency whose left side is already inside, until nothing changes. If X+ contains every attribute of the relation, X is a super key; if no proper subset of X has that property, X is a candidate key.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "38",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is First Normal Form (1NF)?",
+      "answer": "Every column holds only atomic (indivisible) values — no repeating groups, no comma-separated lists, no arrays inside a cell — and every row is uniquely identifiable. A `phone` column holding `9876,9812` violates 1NF; split those into separate rows or a separate table.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "39",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is Second Normal Form (2NF)? What is a partial dependency?",
+      "answer": "A table is in 2NF if it is in 1NF and no non-prime attribute depends on only part of a composite primary key — that partial dependency must be removed. Example: with key (student_id, course_id), storing `student_name` (which depends only on student_id) breaks 2NF, so it moves to a Student table. If the primary key is a single column, 1NF automatically implies 2NF.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "40",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is Third Normal Form (3NF)? What is a transitive dependency?",
+      "answer": "A table is in 3NF if it is in 2NF and no non-prime attribute depends on another non-prime attribute (no transitive dependency A → B → C). Example: student_id → dept_id → dept_name means dept_name is transitively dependent, so department details move to their own table. Formally: for every X → Y, either X is a super key or Y is a prime attribute.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "41",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is BCNF? How is it stricter than 3NF?",
+      "answer": "Boyce-Codd Normal Form requires that for every non-trivial dependency X → Y, X must be a super key — the 3NF escape clause allowing Y to be a prime attribute is removed. So every BCNF table is in 3NF, but not vice versa. A table with overlapping candidate keys can be in 3NF and still violate BCNF. BCNF is always achievable but may cost dependency preservation.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "42",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What are 4NF and 5NF?",
+      "answer": "4NF: in BCNF and free of non-trivial multivalued dependencies — one table shouldn't store two independent multi-valued facts (a person's skills and their languages) because that produces a meaningless cross-product of rows. 5NF (Project-Join Normal Form): the table cannot be decomposed further without losing information — every join dependency is implied by its candidate keys.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "43",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is denormalization and when would you use it?",
+      "answer": "Deliberately reintroducing redundancy — merging tables or duplicating columns — to avoid expensive JOINs. Used on read-heavy systems, reporting databases and data warehouses where query speed matters more than write cost. The trade-off is more storage, slower writes, and the burden of keeping duplicated copies consistent.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "44",
+      "section": "Normalization & Functional Dependencies",
+      "question": "What is lossless decomposition? What is dependency preservation?",
+      "answer": "A decomposition is lossless if joining the sub-tables back reproduces exactly the original rows with no spurious tuples — guaranteed when the common attribute of the two pieces is a super key of at least one of them. Dependency preserving means every original functional dependency can still be checked without a join. 3NF guarantees both; BCNF guarantees lossless but may sacrifice dependency preservation.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "45",
+      "section": "Normalization & Functional Dependencies",
+      "question": "How far should you normalize in practice?",
+      "answer": "3NF (occasionally BCNF) is the practical stopping point for OLTP systems — it removes almost all redundancy without exploding the number of joins. Higher forms are rarely worth it, and analytics/reporting systems often deliberately denormalize back into star schemas.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "InterviewBit"]
+    },
+    {
+      "id": "46",
+      "section": "SQL Languages & Commands",
+      "question": "What are the different SQL sub-languages (DDL, DML, DCL, TCL)?",
+      "answer": "DDL (definition): CREATE, ALTER, DROP, TRUNCATE, RENAME — changes structure, auto-committed. DML (manipulation): SELECT, INSERT, UPDATE, DELETE — changes data. DCL (control): GRANT, REVOKE — permissions. TCL (transaction control): COMMIT, ROLLBACK, SAVEPOINT. Some sources classify SELECT separately as DQL.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "47",
+      "section": "SQL Languages & Commands",
+      "question": "Difference between DELETE, TRUNCATE and DROP?",
+      "answer": "DELETE (DML) removes rows one at a time, supports a WHERE clause, fires triggers, is fully logged and can be rolled back. TRUNCATE (DDL) deallocates whole data pages — much faster, no WHERE clause, no triggers, minimally logged, resets identity, and generally cannot be rolled back. DROP (DDL) removes the table structure itself along with all data, indexes and constraints.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "48",
+      "section": "SQL Languages & Commands",
+      "question": "Difference between WHERE and HAVING?",
+      "answer": "WHERE filters individual rows before grouping and cannot use aggregate functions. HAVING filters groups after GROUP BY and is where aggregates belong. Filtering early with WHERE is faster because fewer rows reach the grouping stage. Example: `WHERE salary > 0 ... GROUP BY dept HAVING AVG(salary) > 50000`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "JavaTpoint"]
+    },
+    {
+      "id": "49",
+      "section": "SQL Languages & Commands",
+      "question": "What is GROUP BY and what are aggregate functions?",
+      "answer": "GROUP BY collapses rows sharing a value into one summary row per group. Aggregate functions compute a single value over the group: COUNT, SUM, AVG, MIN, MAX. Every non-aggregated column in the SELECT list must appear in the GROUP BY clause.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "50",
+      "section": "SQL Languages & Commands",
+      "question": "What is the logical order of execution of an SQL query?",
+      "answer": "FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT. This is why you can't reference a SELECT alias in WHERE (SELECT hasn't run yet) but you can in ORDER BY, and why aggregates are illegal in WHERE but legal in HAVING.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "51",
+      "section": "SQL Languages & Commands",
+      "question": "Difference between CHAR and VARCHAR?",
+      "answer": "CHAR(n) is fixed length — always stores n characters, padding with spaces, and is slightly faster for values of a constant size (country codes, Y/N flags). VARCHAR(n) is variable length — stores only what you put in plus a length byte or two, saving space for values of varying size like names and addresses.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "52",
+      "section": "SQL Languages & Commands",
+      "question": "Difference between COUNT(*), COUNT(column) and COUNT(DISTINCT column)?",
+      "answer": "COUNT(*) counts every row including those with NULLs. COUNT(column) counts only rows where that column is NOT NULL. COUNT(DISTINCT column) counts unique non-NULL values. This is a classic trap question — aggregate functions other than COUNT(*) always ignore NULLs.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "53",
+      "section": "SQL Languages & Commands",
+      "question": "Difference between static SQL and dynamic SQL?",
+      "answer": "Static SQL is written and compiled at build time — the execution plan is prepared in advance, so it is faster and safer. Dynamic SQL is built as a string at runtime, which allows flexible queries but costs re-parsing on every run and opens the door to SQL injection if inputs aren't parameterized.",
+      "frequency": "LOW",
+      "sources": ["Hackr.io", "JavaTpoint"]
+    },
+    {
+      "id": "54",
+      "section": "SQL Languages & Commands",
+      "question": "How do you find the Nth highest salary from an Employee table?",
+      "answer": "Standard approach with a window function: `SELECT DISTINCT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) rnk FROM Employee) t WHERE rnk = N;` Portable alternative without windows: `SELECT MAX(salary) FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);` for the 2nd highest. Use DENSE_RANK rather than ROW_NUMBER so tied salaries count as one rank.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Hackr.io", "DataCamp"]
+    },
+    {
+      "id": "55",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "What is a JOIN? What are the types?",
+      "answer": "A JOIN combines rows from two or more tables using a related column. Types: INNER JOIN (only matching rows), LEFT OUTER JOIN (all left rows + matches, NULLs otherwise), RIGHT OUTER JOIN (mirror image), FULL OUTER JOIN (all rows from both sides), CROSS JOIN (Cartesian product), and SELF JOIN (a table joined to itself).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "56",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "Difference between INNER JOIN and OUTER JOIN?",
+      "answer": "INNER JOIN returns only rows that have a match in both tables — unmatched rows are dropped. OUTER JOIN keeps the unmatched rows from one or both tables and fills the missing side with NULLs. Use INNER when you need confirmed pairs, OUTER when you need to see what's missing (e.g. customers with no orders).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "57",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "Difference between LEFT, RIGHT and FULL OUTER JOIN?",
+      "answer": "LEFT OUTER JOIN keeps every row from the left table plus matching right-table columns (NULL where there is no match). RIGHT OUTER JOIN does the same for the right table. FULL OUTER JOIN keeps unmatched rows from both sides. `A LEFT JOIN B` is equivalent to `B RIGHT JOIN A`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "58",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "What is a self join? Give a use case.",
+      "answer": "A join of a table with itself, using two different aliases. Used for hierarchical data inside one table — for example listing each employee alongside their manager: `SELECT e.name, m.name FROM Employee e JOIN Employee m ON e.manager_id = m.emp_id;` Use a LEFT JOIN if you also want employees with no manager.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "59",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "What is a cross join (Cartesian product)?",
+      "answer": "It pairs every row of the first table with every row of the second, producing m × n rows and no join condition. Usually a bug — it's what you get when you forget the WHERE/ON clause. Legitimate uses are generating all combinations, like every product in every store.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "60",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "Difference between a natural join and an equi join?",
+      "answer": "An equi join uses an explicit equality condition in ON and keeps both matching columns in the output. A natural join implicitly joins on all columns with the same name in both tables and returns each shared column only once. Natural joins are discouraged in production because adding a same-named column later silently changes the join.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "61",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "Difference between UNION and UNION ALL?",
+      "answer": "Both stack the result sets of two queries with identical column counts and compatible types. UNION removes duplicate rows, which requires a sort or hash pass and is therefore slower. UNION ALL returns everything including duplicates and is much faster — use it whenever you know the sets are disjoint.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "62",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "What is a subquery? What is a correlated subquery?",
+      "answer": "A subquery is a query nested inside another. A normal (non-correlated) subquery runs once and passes its result up. A correlated subquery references a column from the outer query, so it re-executes for every outer row — much slower, and usually rewritable as a JOIN or a window function. `SELECT name FROM Emp e WHERE salary > (SELECT AVG(salary) FROM Emp WHERE dept = e.dept)` is correlated.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "63",
+      "section": "Joins, Subqueries & Set Operations",
+      "question": "Why do duplicate rows appear after a JOIN, and how do you fix it?",
+      "answer": "Because the join column isn't unique on one side, so each left row matches several right rows — this is a real one-to-many fan-out, not a bug in the JOIN. Fix it by aggregating the many side first (a GROUP BY subquery), joining on a genuinely unique key, or using EXISTS instead of a JOIN when you only need existence. Blindly adding DISTINCT hides the problem and can produce wrong aggregates.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "64",
+      "section": "Transactions & ACID",
+      "question": "What is a transaction in DBMS?",
+      "answer": "A single logical unit of work made of one or more operations that must all succeed or all fail together. The classic example is a fund transfer: debit one account and credit another — if either half fails, both must be undone. It ends with COMMIT (make permanent) or ROLLBACK (undo).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "65",
+      "section": "Transactions & ACID",
+      "question": "Explain the ACID properties.",
+      "answer": "Atomicity — all operations happen or none do; a partial transaction is rolled back. Consistency — the database moves from one valid state to another, honouring all constraints. Isolation — concurrently running transactions don't see each other's intermediate state; the result matches some serial order. Durability — once committed, changes survive crashes and power loss, guaranteed by the write-ahead log.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "66",
+      "section": "Transactions & ACID",
+      "question": "What are the states of a transaction?",
+      "answer": "Active (executing), Partially Committed (final statement done, changes still in buffers), Committed (permanently written), Failed (an error made normal execution impossible), and Aborted/Terminated (rolled back to the state before it started — it can then be restarted or killed).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "67",
+      "section": "Transactions & ACID",
+      "question": "What do COMMIT, ROLLBACK and SAVEPOINT do?",
+      "answer": "COMMIT makes all changes in the current transaction permanent and releases its locks. ROLLBACK undoes every change since the transaction began (or since a savepoint). SAVEPOINT marks an intermediate point so you can `ROLLBACK TO savepoint_name` and undo only part of the work while keeping the rest.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "68",
+      "section": "Transactions & ACID",
+      "question": "What is a schedule? What is serializability?",
+      "answer": "A schedule is the interleaved order in which operations of concurrent transactions execute. A schedule is serializable if its result is equivalent to some serial (one-after-another) execution — this is the correctness criterion for concurrency. Conflict serializability is checked by drawing a precedence graph and confirming it has no cycle; view serializability is broader but NP-hard to test.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "69",
+      "section": "Transactions & ACID",
+      "question": "What is a cascading rollback? What are recoverable, cascadeless and strict schedules?",
+      "answer": "Cascading rollback is a chain reaction: T2 read uncommitted data from T1, so when T1 aborts, T2 must abort too, and so on. Recoverable: a transaction commits only after every transaction it read from has committed. Cascadeless: a transaction only reads committed data, so no cascading aborts. Strict: no other transaction may read or write an uncommitted value — the preferred choice because recovery becomes simple.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "70",
+      "section": "Transactions & ACID",
+      "question": "What are the four transaction isolation levels?",
+      "answer": "Read Uncommitted — allows dirty reads, fastest, almost never used. Read Committed — only reads committed data; the default in Oracle, PostgreSQL and SQL Server. Repeatable Read — rows you've read cannot change during the transaction; MySQL InnoDB's default. Serializable — full isolation, as if transactions ran one at a time; safest but the most contention. Higher isolation means fewer anomalies and less concurrency.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "71",
+      "section": "Transactions & ACID",
+      "question": "Explain dirty read, non-repeatable read and phantom read.",
+      "answer": "Dirty read: you read a row another transaction changed but hasn't committed — if it rolls back, you acted on data that never existed. Non-repeatable read: you read the same row twice and get different values because another transaction updated and committed in between. Phantom read: you re-run the same range query and new rows appear because another transaction inserted matching rows. Read Committed stops dirty reads, Repeatable Read stops non-repeatable reads, Serializable stops phantoms.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "72",
+      "section": "Transactions & ACID",
+      "question": "What is a checkpoint and when does it occur?",
+      "answer": "A checkpoint is a point where the DBMS flushes all dirty buffer pages to disk and writes a checkpoint record into the log. During recovery the system only needs to scan back to the last checkpoint instead of the entire log, which drastically shortens restart time. Checkpoints fire periodically, when the log grows past a threshold, and on a clean shutdown.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "73",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is concurrency control and why is it needed?",
+      "answer": "The set of techniques that let many transactions run simultaneously without corrupting data. Without it you get the lost update, dirty read, unrepeatable read and phantom problems. Main approaches: lock-based protocols (2PL), timestamp ordering, optimistic validation, and multi-version concurrency control.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "74",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is a lock? Difference between a shared and an exclusive lock.",
+      "answer": "A lock is a mechanism that controls concurrent access to a data item. A shared (S / read) lock lets many transactions read the same item at once but blocks writes. An exclusive (X / write) lock is granted to exactly one transaction and blocks all other readers and writers. S is compatible with S; X is compatible with nothing.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "75",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "Explain the Two-Phase Locking (2PL) protocol and Strict 2PL.",
+      "answer": "2PL splits a transaction into a growing phase (only acquire locks) and a shrinking phase (only release locks) — once you release your first lock you may never acquire another. This guarantees conflict serializability but can still cause cascading aborts and deadlocks. Strict 2PL holds all exclusive locks until commit/abort, which additionally guarantees recoverable, cascadeless schedules — this is what real databases implement.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "76",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is a deadlock? What are the four necessary conditions?",
+      "answer": "A deadlock is a circular wait where two or more transactions each hold a lock the other needs, so none can proceed. It requires all four Coffman conditions simultaneously: mutual exclusion, hold and wait, no preemption, and circular wait. Breaking any one of them prevents deadlock.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "77",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "How does a DBMS handle deadlocks — prevention vs detection?",
+      "answer": "Detection: the DBMS maintains a wait-for graph, looks for a cycle, and aborts the cheapest victim transaction, which is then restarted. Prevention uses timestamp schemes — Wait-Die (an older transaction waits, a younger one is killed) and Wound-Wait (an older transaction preempts the younger, a younger one waits). Practical systems also use lock timeouts and, at application level, always acquiring locks in a consistent order.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "JavaTpoint"]
+    },
+    {
+      "id": "78",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is starvation? What is a livelock?",
+      "answer": "Starvation happens when a transaction waits indefinitely because the scheduler keeps favouring others — fixed by aging or FIFO lock queues. A livelock is when transactions are not blocked but keep reacting to each other and repeatedly restarting, so they stay active yet make no progress. Deadlock means blocked forever; livelock means busy forever.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "79",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "Explain the timestamp ordering protocol.",
+      "answer": "Every transaction gets a unique timestamp at start, and every data item stores its last read and write timestamps. Operations are allowed only if they respect timestamp order; a transaction attempting an out-of-order read/write is aborted and restarted with a new timestamp. It is deadlock-free (no waiting at all) but can cause frequent restarts and starvation of long transactions.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "80",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is MVCC (Multi-Version Concurrency Control)?",
+      "answer": "Instead of locking on read, the database keeps multiple versions of each row. A reader sees a consistent snapshot as of its start time while writers create new versions — so readers never block writers and writers never block readers. Used by PostgreSQL, Oracle and MySQL InnoDB. Costs: storage for old versions and periodic cleanup (vacuum), and snapshot isolation can still allow write skew.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "81",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "Difference between optimistic and pessimistic locking?",
+      "answer": "Pessimistic locking takes the lock upfront assuming conflict is likely — safe under high contention but reduces concurrency and risks deadlocks. Optimistic locking takes no lock; it reads a version/timestamp column and, at write time, verifies nothing changed, retrying if it did. Optimistic wins when conflicts are rare (typical web workloads).",
+      "frequency": "MED",
+      "sources": ["DataCamp", "GeeksforGeeks"]
+    },
+    {
+      "id": "82",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What is a transaction log and what is Write-Ahead Logging (WAL)?",
+      "answer": "The transaction log records every change as (transaction id, data item, old value, new value). WAL is the rule that the log record must reach stable storage before the corresponding data page does. That single rule gives you both atomicity (undo using old values for uncommitted transactions) and durability (redo using new values for committed ones) after a crash.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "DataCamp"]
+    },
+    {
+      "id": "83",
+      "section": "Concurrency Control, Locking & Recovery",
+      "question": "What are the main database recovery techniques and backup types?",
+      "answer": "Log-based recovery with deferred update (write only at commit — redo only) or immediate update (write anytime — needs undo and redo), plus checkpoints to bound the log scan, and shadow paging as a no-log alternative. ARIES is the standard algorithm: analysis → redo → undo with compensation log records. Backups: full, incremental (changes since last backup), differential (changes since last full), and transaction-log backups for point-in-time recovery.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "DataCamp"]
+    },
+    {
+      "id": "84",
+      "section": "Indexing & Storage",
+      "question": "What is an index and how does it improve performance?",
+      "answer": "A separate data structure (usually a B+ tree) holding sorted key values with pointers to the matching rows. It turns a full table scan of O(n) into a tree lookup of roughly O(log n) disk reads, which is why an indexed WHERE, JOIN or ORDER BY can be orders of magnitude faster. The cost is extra storage and slower INSERT/UPDATE/DELETE, since every index must also be maintained.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "85",
+      "section": "Indexing & Storage",
+      "question": "Difference between a clustered and a non-clustered index?",
+      "answer": "A clustered index defines the physical order of rows on disk — the table itself is the index, so there can be only one per table (usually the primary key) and lookups need no extra hop. A non-clustered index is a separate structure holding the key plus a pointer/row-locator back to the data, so you can have many, but each lookup may need an extra fetch of the base row.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "86",
+      "section": "Indexing & Storage",
+      "question": "Why do databases use B+ trees rather than B-trees for indexing?",
+      "answer": "In a B+ tree all actual records/pointers live in the leaf nodes and the leaves are chained in a linked list, while internal nodes hold only keys. That gives higher fan-out (shallower tree, fewer disk I/Os) and makes range scans and ORDER BY trivial — walk to the first leaf and follow the chain. A B-tree stores data in internal nodes too, so range queries require repeated tree traversal.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "87",
+      "section": "Indexing & Storage",
+      "question": "Difference between a dense and a sparse index?",
+      "answer": "A dense index has an entry for every search-key value in the table — faster lookups, more space. A sparse index has an entry only for some values (typically one per data block), so it is smaller but requires scanning within the block after locating it. A sparse index only works when the data is sorted on that key, so it pairs with a clustered index.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "88",
+      "section": "Indexing & Storage",
+      "question": "What are primary, secondary, composite and covering indexes?",
+      "answer": "Primary index: built on the ordering key, usually clustered. Secondary index: on a non-ordering attribute, always non-clustered. Composite index: spans multiple columns and follows the leftmost-prefix rule. Covering index: includes every column the query needs, so the engine answers it from the index alone (index-only scan) without touching the table.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "89",
+      "section": "Indexing & Storage",
+      "question": "What is hash indexing and why is it unsuitable for range queries?",
+      "answer": "A hash function maps the key to a bucket address, giving O(1) equality lookups. But hashing deliberately scatters similar keys into unrelated buckets, so there is no order to walk — a `BETWEEN` or `>` query would have to probe every bucket, making a full scan cheaper. Use hash indexes for exact-match lookups only; use B+ trees for ranges and sorting.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Hackr.io"]
+    },
+    {
+      "id": "90",
+      "section": "Indexing & Storage",
+      "question": "When should you create an index, and when should you avoid one?",
+      "answer": "Index columns used in WHERE, JOIN, ORDER BY and GROUP BY, especially high-cardinality ones on large tables. Avoid indexes on small tables, on low-cardinality columns like a gender flag, on columns that change constantly, and on write-heavy tables where the maintenance cost outweighs read gains. Too many indexes slow down every INSERT/UPDATE and waste storage.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "91",
+      "section": "Indexing & Storage",
+      "question": "Why might a composite index be ignored even when all its columns appear in the WHERE clause?",
+      "answer": "Because of the leftmost-prefix rule: an index on (a, b, c) can be used for filters on a, on (a, b), or on (a, b, c) — but not for a filter on b or c alone, since the tree is sorted by a first. The optimizer may also skip the index if the leading column is not selective enough or if statistics estimate that a full scan is cheaper.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "92",
+      "section": "Indexing & Storage",
+      "question": "What is query optimization? How would you speed up a slow query?",
+      "answer": "Query optimization is the DBMS choosing the cheapest execution plan (join order, join algorithm, access path) using table statistics. To tune a slow query: read the EXPLAIN/execution plan, add or fix indexes for the filter and join columns, select only the columns you need instead of `SELECT *`, replace correlated subqueries with joins, filter early with WHERE, avoid functions on indexed columns (they kill index usage), and refresh stale statistics.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "93",
+      "section": "Indexing & Storage",
+      "question": "What is database partitioning? Explain horizontal vs vertical.",
+      "answer": "Splitting one large table into smaller physical pieces while it still looks like one table logically. Horizontal partitioning splits by rows (range, list or hash on a key — e.g. orders by year), which lets the optimizer skip whole partitions. Vertical partitioning splits by columns, keeping hot narrow columns separate from large blob columns. Benefits: faster scans, easier archiving and maintenance per partition.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "94",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "What is a view? What are its advantages? Can a view be updated?",
+      "answer": "A view is a virtual table defined by a stored SELECT query; it holds no data of its own and is computed when queried. Advantages: hides complex joins behind a simple name, restricts which columns/rows a user can see (security), and provides logical data independence. A view is updatable only if it maps unambiguously to one base table — no DISTINCT, GROUP BY, aggregates or multi-table joins.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "95",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "Difference between a view and a materialized view?",
+      "answer": "A normal view stores only the query and re-executes it every time, so results are always current but repeatedly expensive. A materialized view physically stores the computed result set on disk — reads are fast, but the data is stale until it is refreshed (on demand, on commit, or on a schedule) and it consumes storage. Use materialized views for heavy aggregations in reporting workloads.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "96",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "What is a stored procedure? How does it differ from a function?",
+      "answer": "A stored procedure is a named, precompiled set of SQL statements stored in the database and invoked with CALL/EXEC. Benefits: one network round trip instead of many, a cached execution plan, reusability and tighter security. Differences from a function: a function must return a value and can be used inside a SELECT expression; a procedure may return zero or many values via OUT parameters, can perform DML/transactions, and cannot be called inside a query.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "DataCamp"]
+    },
+    {
+      "id": "97",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "What is a trigger? How is it different from a stored procedure?",
+      "answer": "A trigger is a block of code that the database fires automatically in response to an event — BEFORE/AFTER INSERT, UPDATE or DELETE on a table. Used for audit trails, enforcing complex business rules and maintaining derived columns. A stored procedure must be called explicitly; a trigger can never be called and runs implicitly. Overusing triggers makes behaviour hard to trace and debug.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "98",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "What is a cursor? What is the difference between implicit and explicit cursors?",
+      "answer": "A cursor is a pointer to a result set that lets you process rows one at a time instead of as a set. Implicit cursors are created automatically by the DBMS for every single-row DML statement; explicit cursors are declared by the developer (DECLARE, OPEN, FETCH, CLOSE) for multi-row loops. Cursors are slow — prefer set-based SQL whenever possible.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "99",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "Difference between SQL and NoSQL databases? When would you choose each?",
+      "answer": "SQL databases are relational with a fixed schema, strong ACID guarantees and joins, and scale mainly vertically — ideal for transactional systems like banking or e-commerce orders. NoSQL databases (document, key-value, column-family, graph) have a flexible schema, scale horizontally across nodes, and often trade strict consistency for availability — ideal for huge volumes of semi-structured data, caching or real-time analytics. Choose SQL when relationships and correctness dominate, NoSQL when scale and schema flexibility do.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "Hackr.io"]
+    },
+    {
+      "id": "100",
+      "section": "Views, Procedures, Triggers & Advanced",
+      "question": "What is the CAP theorem? Explain sharding vs replication.",
+      "answer": "CAP says a distributed data store can guarantee at most two of Consistency, Availability and Partition tolerance — since network partitions are unavoidable in practice, the real choice is CP (reject requests to stay consistent) or AP (answer with possibly stale data). Replication copies the same data to multiple nodes for fault tolerance and read scaling. Sharding splits the data set into disjoint subsets across nodes for write scaling and capacity. Most production systems shard and replicate each shard.",
+      "frequency": "MOST_FREQ",
+      "sources": ["DataCamp", "GeeksforGeeks", "InterviewBit"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "DBMS Basics & Architecture": 12,
+      "ER Model & Relational Model": 9,
+      "Keys & Constraints": 10,
+      "Normalization & Functional Dependencies": 14,
+      "SQL Languages & Commands": 9,
+      "Joins, Subqueries & Set Operations": 9,
+      "Transactions & ACID": 9,
+      "Concurrency Control, Locking & Recovery": 11,
+      "Indexing & Storage": 10,
+      "Views, Procedures, Triggers & Advanced": 7
+    },
+    "by_frequency": {
+      "MOST_FREQ": 51,
+      "MED": 39,
+      "LOW": 10
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q63 (Basics, ER/Relational, Keys, Normalization, SQL commands, Joins) plus Q64–Q65 and Q76 (transactions, ACID, deadlock) and Q84–Q85 (indexes). That block is what campus and service-company rounds are made of — every MOST_FREQ here is must-know.",
+      "mid_level_2_to_5_yrs": "Add Q64–Q83 (full transaction, isolation and locking chapter) and Q86–Q93 (index internals, query optimization, partitioning). Be ready to defend a schema design and explain why a specific query is slow.",
+      "senior_5_plus_yrs": "All 100 + follow-ups on MVCC (Q80), WAL and ARIES recovery (Q82–Q83), leftmost-prefix and covering indexes (Q88, Q91), and Q99–Q100 on SQL vs NoSQL, CAP, sharding and replication — plus real war stories of a production deadlock or migration."
+    },
+    "highest_probability_topics": [
+      "ACID properties (Q65)",
+      "Normal forms 1NF/2NF/3NF/BCNF (Q38–Q41)",
+      "Types of keys + primary vs unique (Q22, Q25)",
+      "DELETE vs TRUNCATE vs DROP (Q47)",
+      "Types of JOIN + INNER vs OUTER (Q55, Q56)",
+      "Clustered vs non-clustered index (Q85)",
+      "Indexing and how it speeds up queries (Q84)",
+      "Deadlock and how the DBMS handles it (Q76, Q77)",
+      "Isolation levels + dirty/non-repeatable/phantom reads (Q70, Q71)",
+      "Normalization vs denormalization (Q32, Q43)",
+      "WHERE vs HAVING (Q48)",
+      "Nth highest salary query (Q54)"
+    ]
+  }
+}

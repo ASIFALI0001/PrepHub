@@ -164,12 +164,12 @@ export default function CompanyBrainForm() {
             <Brain className="w-4 h-4 text-accent-pink" /> Company Details
           </h2>
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-text-muted">Company Name <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-medium text-text-muted">Company Name <span className="text-accent-pink">*</span></label>
             <input className="w-full bg-bg-surface border border-bg-border rounded-xl px-4 py-3 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-primary/50"
               placeholder="e.g. Google, Stripe, Lume…" value={companyName} onChange={(e) => setCompanyName(e.target.value)} autoFocus />
           </div>
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-text-muted">Role / Position <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-medium text-text-muted">Role / Position <span className="text-accent-pink">*</span></label>
             <input className="w-full bg-bg-surface border border-bg-border rounded-xl px-4 py-3 text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-primary/50"
               placeholder="e.g. Software Engineer, SWE Intern, ML Engineer…" value={role} onChange={(e) => setRole(e.target.value)} />
           </div>
@@ -194,11 +194,11 @@ export default function CompanyBrainForm() {
             rows={4} placeholder="Paste full JD here…" value={jd} onChange={(e) => setJd(e.target.value)} />
         </div>
 
-        {error && <div className="text-xs text-red-400 bg-red-500/10 rounded-xl px-4 py-3 border border-red-500/20">{error}</div>}
+        {error && <div className="text-xs text-accent-pink bg-accent-pink/10 rounded-xl px-4 py-3 border border-accent-pink/20">{error}</div>}
 
         <button type="submit" disabled={!companyName.trim() || !role.trim()}
-          className="w-full btn-primary py-3 rounded-xl font-medium flex items-center justify-center gap-2 disabled:opacity-40 text-sm">
-          <Brain className="w-4 h-4" /> Generate 50 Interview Questions <ChevronRight className="w-4 h-4" />
+          className="w-full btn-primary py-3 gap-2 disabled:opacity-40">
+          <Brain className="w-4 h-4" /> Generate 50 interview questions <ChevronRight className="w-4 h-4" />
         </button>
       </form>
     );
@@ -216,10 +216,10 @@ export default function CompanyBrainForm() {
             <span className="text-sm font-semibold text-text">{companyName}</span>
             <span className="text-xs text-text-muted">· {role}</span>
           </div>
-          <span className="text-sm font-bold text-accent-pink">{percent}%</span>
+          <span className="tnum text-sm font-bold text-accent-pink">{percent}%</span>
         </div>
-        <div className="h-2 rounded-full bg-bg-border overflow-hidden mb-3">
-          <motion.div className="h-full rounded-full bg-gradient-to-r from-accent-pink to-primary"
+        <div className="h-2 rounded-full bg-bg-surface overflow-hidden mb-3">
+          <motion.div className="h-full rounded-full bg-accent-pink"
             initial={{ width: 0 }} animate={{ width: `${percent}%` }} transition={{ duration: 0.5 }} />
         </div>
         <p className="text-xs text-text-muted flex items-center gap-2">

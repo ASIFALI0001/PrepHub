@@ -5,7 +5,26 @@
       "Bash(npm install *)",
       "Bash(Get-ChildItem -Recurse \"d:\\\\Projects 2026\\\\PrepHub\\\\Application\\\\app\\\\\\(dashboard\\)\\\\learn\\\\dsa\")",
       "Bash(Select-Object FullName)",
-      "Bash(Get-ChildItem -Recurse \"d:\\\\Projects 2026\\\\PrepHub\\\\Application\\\\content\\\\learn\\\\dsa\")"
+      "Bash(Get-ChildItem -Recurse \"d:\\\\Projects 2026\\\\PrepHub\\\\Application\\\\content\\\\learn\\\\dsa\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:www.geeksforgeeks.org)",
+      "WebFetch(domain:www.interviewbit.com)",
+      "WebFetch(domain:www.tpointtech.com)",
+      "WebSearch",
+      "WebFetch(domain:hackr.io)",
+      "WebFetch(domain:www.guru99.com)",
+      "WebFetch(domain:www.golinuxcloud.com)",
+      "WebFetch(domain:www.simplilearn.com)",
+      "WebFetch(domain:www.placementpreparation.io)",
+      "Bash(cd /tmp)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://raw.githubusercontent.com/anxkhn/LastMinuteNotes/main/NumPy.md)",
+      "Bash(curl -s https://api.github.com/repos/anxkhn/LastMinuteNotes/contents/)",
+      "WebFetch(domain:www.datacamp.com)",
+      "WebFetch(domain:www.projectpro.io)",
+      "Bash(curl -sL https://raw.githubusercontent.com/Devinterview-io/pandas-interview-questions/main/README.md -o pd.md)",
+      "WebFetch(domain:www.upgrad.com)",
+      "Bash(python -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)"
     ]
   }
 }

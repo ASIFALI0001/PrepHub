@@ -1,41 +1,41 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BookOpen, Zap, Mic, BarChart3, Clock, Trophy } from "lucide-react";
+import {
+  BookOpen, Zap, Mic, BarChart3, Clock, Trophy, ArrowUpRight,
+} from "lucide-react";
+import { staggerContainer, fadeUp, revealOnScroll } from "@/lib/motion";
 
 const modes = [
   {
+    step: "01",
     icon: BookOpen,
-    color: "text-accent-blue",
-    glow: "shadow-glow-blue",
-    bg: "bg-accent-blue/10 group-hover:bg-accent-blue/15",
-    border: "group-hover:border-accent-blue/40",
+    accent: "text-accent-blue",
+    ring: "group-hover:border-accent-blue/40",
     title: "Learn",
     description:
-      "Curated Q&A banks across DSA, OOPS, DBMS, OS, CN, SQL, MongoDB, React, Next.js, and ML. 1,300+ DSA problems across 13 sub-topics.",
-    tags: ["DSA", "OOPS", "DBMS", "OS", "CN", "SQL", "ML"],
+      "Curated Q&A banks across DSA, OOPS, DBMS, OS, CN, SQL, MongoDB, React, Next.js & ML — 1,300+ DSA problems across 13 sub-topics.",
+    tags: ["DSA", "OOPS", "DBMS", "OS", "CN", "SQL"],
   },
   {
+    step: "02",
     icon: Zap,
-    color: "text-accent-cyan",
-    glow: "shadow-glow-cyan",
-    bg: "bg-accent-cyan/10 group-hover:bg-accent-cyan/15",
-    border: "group-hover:border-accent-cyan/40",
+    accent: "text-accent-cyan",
+    ring: "group-hover:border-accent-cyan/40",
     title: "Quiz",
     description:
-      "Timed MCQ sessions with configurable question counts. Persistent high-score tracking per topic — compete with your past self.",
-    tags: ["Timed", "MCQ", "High Scores", "Per Topic"],
+      "Timed MCQ sessions with configurable length and persistent high-scores per topic. Compete with your past self, one attempt at a time.",
+    tags: ["Timed", "MCQ", "High scores", "Per topic"],
   },
   {
+    step: "03",
     icon: Mic,
-    color: "text-primary-light",
-    glow: "shadow-glow",
-    bg: "bg-primary/10 group-hover:bg-primary/15",
-    border: "group-hover:border-primary/40",
+    accent: "text-primary",
+    ring: "group-hover:border-primary/40",
     title: "Live Interview",
     description:
-      "Google Gemini plays the interviewer. You answer via voice — the browser's Speech API keeps it free. Get scored answers and a full report.",
-    tags: ["AI Voice", "Gemini", "Scored", "Full Report"],
+      "Gemini plays the interviewer. Answer out loud — the browser Speech API keeps it free. Get scored answers and a full written report.",
+    tags: ["AI voice", "Gemini", "Scored", "Report"],
     badge: "Flagship",
   },
 ];
@@ -46,104 +46,96 @@ const perks = [
   { icon: Trophy, text: "Interview history & score reports" },
 ];
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.15 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
 export default function Features() {
   return (
-    <section className="relative py-24 px-6">
+    <section className="relative py-28 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-3">
-            Three ways to prep
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-text mb-4">
-            Everything you need, nothing you don't
+        <motion.div {...revealOnScroll} variants={fadeUp} className="max-w-2xl mb-16">
+          <p className="eyebrow mb-4">Three ways to prep</p>
+          <h2 className="text-4xl sm:text-5xl font-bold text-text tracking-tight mb-4">
+            Everything you need.
+            <br />
+            <span className="text-text-muted">Nothing you don&apos;t.</span>
           </h2>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto">
-            Each mode builds on the last — read to understand, quiz to retain, interview to perform.
+          <p className="text-text-muted text-lg leading-relaxed">
+            Each mode builds on the last — read to understand, quiz to retain,
+            interview to perform.
           </p>
         </motion.div>
 
         {/* Mode cards */}
         <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
+          variants={staggerContainer(0.1)}
+          {...revealOnScroll}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
         >
           {modes.map((mode) => {
             const Icon = mode.icon;
             return (
               <motion.div
                 key={mode.title}
-                variants={item}
-                className={`group relative glass-card rounded-2xl p-6 border border-bg-border ${mode.border} transition-all duration-300 hover:-translate-y-1 cursor-default`}
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                className={`group relative glass-card rounded-2xl p-6 border-bg-border ${mode.ring} transition-colors duration-300`}
               >
-                {mode.badge && (
-                  <span className="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/20 text-primary border border-primary/30">
-                    {mode.badge}
-                  </span>
-                )}
-                <div className={`w-12 h-12 rounded-xl ${mode.bg} flex items-center justify-center mb-5 transition-colors`}>
-                  <Icon className={`w-6 h-6 ${mode.color}`} />
+                <div className="flex items-start justify-between mb-8">
+                  <div className="w-11 h-11 rounded-xl bg-bg-surface border border-bg-border flex items-center justify-center">
+                    <Icon className={`w-5 h-5 ${mode.accent}`} />
+                  </div>
+                  <span className="tnum text-sm font-mono text-text-dim">{mode.step}</span>
                 </div>
-                <h3 className="text-xl font-bold text-text mb-3">{mode.title}</h3>
-                <p className="text-text-muted text-sm leading-relaxed mb-5">{mode.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {mode.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-2.5 py-1 rounded-md bg-bg-border/60 text-text-muted"
-                    >
-                      {tag}
+
+                <div className="flex items-center gap-2 mb-2.5">
+                  <h3 className="text-xl font-bold text-text">{mode.title}</h3>
+                  {mode.badge && (
+                    <span className="chip !text-primary !border-primary/30 !bg-primary/10">
+                      {mode.badge}
                     </span>
+                  )}
+                </div>
+                <p className="text-text-muted text-sm leading-relaxed mb-5">{mode.description}</p>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {mode.tags.map((tag) => (
+                    <span key={tag} className="chip">{tag}</span>
                   ))}
                 </div>
+
+                <ArrowUpRight className="absolute top-6 right-14 w-4 h-4 text-text-dim opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
               </motion.div>
             );
           })}
         </motion.div>
 
-        {/* Dashboard perks strip */}
+        {/* Dashboard strip */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="glass rounded-2xl border border-bg-border p-8"
+          {...revealOnScroll}
+          variants={fadeUp}
+          className="glass-card rounded-2xl p-8 sm:p-10 relative overflow-hidden"
         >
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-text mb-2">Personal Dashboard</h3>
-            <p className="text-text-muted">Your progress, at a glance.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {perks.map((perk) => {
-              const Icon = perk.icon;
-              return (
-                <div key={perk.text} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <p className="text-sm text-text-muted">{perk.text}</p>
-                </div>
-              );
-            })}
+          <div className="grid md:grid-cols-[1fr_auto] gap-8 items-center">
+            <div>
+              <p className="eyebrow mb-3">Your dashboard</p>
+              <h3 className="text-2xl font-bold text-text mb-2">Progress, at a glance</h3>
+              <p className="text-text-muted mb-6 max-w-md">
+                Everything you do flows into one focused view — no dashboards to configure.
+              </p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {perks.map((perk) => {
+                  const Icon = perk.icon;
+                  return (
+                    <div key={perk.text} className="flex items-start gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-bg-surface border border-bg-border flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <p className="text-sm text-text-muted pt-1">{perk.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

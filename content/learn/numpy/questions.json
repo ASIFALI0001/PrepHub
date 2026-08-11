@@ -1,0 +1,888 @@
+{
+  "metadata": {
+    "title": "Top 100 NumPy Interview Questions",
+    "description": "Most probable NumPy interview questions compiled from the highest-traffic data-science interview banks. Weighted toward what actually gets asked in data analyst, data science and ML engineer screens — ndarray vs list, broadcasting, vectorization, views vs copies, boolean indexing, reshaping and linear algebra — with rarely-used API trivia pushed to LOW. Answers include the exact NumPy calls you are expected to name. Note: the LastMinuteNotes repo has no NumPy sheet (it covers only CN, DBMS, OOPS, OS and SQL), so this bank is built from six library-specific sources instead.",
+    "total_questions": 100,
+    "last_updated": "2026-08-08",
+    "sources": {
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks NumPy Interview Questions",
+        "url": "https://www.geeksforgeeks.org/numpy/numpy-interview-questions/",
+        "strength": "By far the deepest bank (70+ Q); the only source that covers the querying API properly (np.where vs np.select vs np.nonzero vs np.argwhere vs np.extract), memory layout, masked arrays and structured arrays"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit NumPy Section",
+        "url": "https://www.interviewbit.com/numpy-interview-questions/",
+        "strength": "Fresher → experienced progression plus a dedicated coding-questions block; strongest on the write-a-program tasks (moving average, local maxima, zero border, axis interchange) that follow the theory round"
+      },
+      "DataCamp": {
+        "full_name": "DataCamp NumPy Interview Questions",
+        "url": "https://www.datacamp.com/blog/numpy-interview-questions",
+        "strength": "Data-scientist framing; the practical applied questions — feature scaling, MSE, rolling statistics, memory optimization on large arrays, handling missing/infinite values, implementing K-Means"
+      },
+      "ProjectPro": {
+        "full_name": "ProjectPro NumPy Interview Questions for Data Analysts",
+        "url": "https://www.projectpro.io/article/numpy-interview-questions-and-answers/980",
+        "strength": "Beginner → intermediate → advanced → coding split; good on the comparison questions (dot vs matmul, mean vs average, copy vs assignment, C-order vs F-order) and NumPy's role in feature engineering"
+      },
+      "Hirist": {
+        "full_name": "Hirist NumPy Interview Questions",
+        "url": "https://www.hirist.tech/blog/top-20-numpy-interview-questions-and-answers/",
+        "strength": "Hiring-platform list reflecting current job-post expectations; strong on advanced indexing, memory-mapping large datasets, normalization and applying functions across axes"
+      },
+      "Devinterview": {
+        "full_name": "Devinterview.io NumPy Interview Questions",
+        "url": "https://github.com/Devinterview-io/numpy-interview-questions",
+        "strength": "ML/data-science interview repo; precise on fundamentals — ndarray attributes, contiguous memory, the exact broadcasting rules, ufunc categories and the full dtype list"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every NumPy interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "NumPy Basics & ndarray",
+      "question": "What is NumPy and why is it used?",
+      "answer": "NumPy (Numerical Python) is the foundational library for numerical computing in Python. It provides the `ndarray` — a fast, memory-efficient N-dimensional array — plus vectorized mathematical operations, broadcasting, linear algebra, random number generation and Fourier transforms. Almost every data/ML library (pandas, scikit-learn, TensorFlow, PyTorch) is built on top of it or interoperates with its arrays.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "2",
+      "section": "NumPy Basics & ndarray",
+      "question": "What is an ndarray?",
+      "answer": "The N-dimensional array object at the core of NumPy. It is homogeneous (every element shares one dtype), fixed-size at creation, and stored in a contiguous block of memory. That uniformity is exactly what lets NumPy run operations in compiled C over the whole buffer instead of looping in Python.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "3",
+      "section": "NumPy Basics & ndarray",
+      "question": "How are NumPy arrays better than Python lists?",
+      "answer": "Arrays are homogeneous and stored contiguously, so they use far less memory than a list of boxed Python objects. They support vectorized element-wise operations (`a + b` adds arrays, whereas for lists it concatenates), broadcasting, and true multi-dimensional indexing like `arr[1, 2]`. They also carry a huge library of mathematical, statistical and linear-algebra functions. The trade-off: arrays are fixed-size and single-dtype, while lists can grow and hold anything.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "4",
+      "section": "NumPy Basics & ndarray",
+      "question": "Why is NumPy faster than Python lists?",
+      "answer": "Four reasons. Contiguous memory means better CPU cache locality. Homogeneous dtype means no per-element type checking or pointer dereferencing. The loops run in compiled C rather than the Python interpreter, avoiding per-element bytecode overhead. And heavy operations delegate to optimized BLAS/LAPACK libraries and SIMD instructions. Typical speedups over an equivalent Python loop are 10-100×.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Hirist", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "5",
+      "section": "NumPy Basics & ndarray",
+      "question": "What are the main attributes of an ndarray?",
+      "answer": "`ndim` — number of dimensions. `shape` — a tuple of the size along each axis. `size` — total number of elements (the product of shape). `dtype` — the data type of the elements. `itemsize` — bytes per element. `nbytes` — total bytes consumed (`size * itemsize`). `T` — the transposed view. `flags` — memory layout information such as C/F contiguity and whether the array owns its data.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Devinterview", "GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "6",
+      "section": "NumPy Basics & ndarray",
+      "question": "Difference between the shape and size attributes?",
+      "answer": "`shape` returns a tuple describing the dimensions — for a 3×4 array it is `(3, 4)`. `size` returns a single integer, the total element count — here `12`. Also note `len(arr)` gives only the length of the first axis (3), which is a common trip-up.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "7",
+      "section": "NumPy Basics & ndarray",
+      "question": "What are the main features of NumPy?",
+      "answer": "The N-dimensional array object, broadcasting for operating on differently-shaped arrays, vectorized ufuncs, sophisticated indexing (basic, fancy and boolean), linear algebra via `np.linalg`, random sampling via `np.random`, Fourier transforms, and C/C++/Fortran interoperability so it can wrap existing numerical code.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "8",
+      "section": "NumPy Basics & ndarray",
+      "question": "Difference between Python sequences, NumPy arrays and pandas objects?",
+      "answer": "Python lists/tuples are general-purpose, heterogeneous and dynamically sized, with no numeric operations. NumPy arrays are homogeneous, fixed-size, N-dimensional and built for fast numeric computation, but the axes carry no labels. Pandas Series/DataFrames wrap NumPy arrays and add labelled indexes, mixed column dtypes, and built-in handling of missing data — better for tabular analysis, at the cost of overhead.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "9",
+      "section": "NumPy Basics & ndarray",
+      "question": "How do you convert a pandas DataFrame to a NumPy array and back?",
+      "answer": "Use `df.to_numpy()` (the modern, preferred call) or the older `df.values`; both drop the index and column labels and force a single common dtype. To go back: `pd.DataFrame(arr, columns=[...])`. For a mixed-dtype DataFrame the result becomes `object` dtype, which kills performance — select numeric columns first.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "10",
+      "section": "NumPy Basics & ndarray",
+      "question": "Why is NumPy preferred over MATLAB or Octave?",
+      "answer": "It is free and open source, it lives inside a general-purpose language so array code sits alongside web servers, databases and ML pipelines without export steps, and it has an enormous ecosystem (pandas, scikit-learn, PyTorch). MATLAB has stronger built-in toolboxes and 1-based-index conventions some engineers prefer, but the licence cost and language isolation are why NumPy dominates data science.",
+      "frequency": "LOW",
+      "sources": ["InterviewBit", "Hirist"]
+    },
+    {
+      "id": "11",
+      "section": "NumPy Basics & ndarray",
+      "question": "How does NumPy integrate with the machine learning ecosystem?",
+      "answer": "The ndarray is the common data interchange format. scikit-learn takes and returns NumPy arrays directly; pandas is built on them; TensorFlow and PyTorch convert to and from them nearly free of cost (`torch.from_numpy(a)` and `t.numpy()` even share memory). NumPy also does the feature engineering work before modelling — scaling, encoding, reshaping, train/test splitting — and implements the metrics.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "12",
+      "section": "NumPy Basics & ndarray",
+      "question": "How do you check whether an array is empty?",
+      "answer": "Test the element count: `if arr.size == 0:`. Do not use `if not arr:` or `if arr:` — for any array with more than one element that raises `ValueError: The truth value of an array with more than one element is ambiguous`. Note also that `np.array([[]])` has size 0 but shape `(1, 0)`, so `size` is the reliable check.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "GeeksforGeeks"]
+    },
+    {
+      "id": "13",
+      "section": "Array Creation",
+      "question": "What are the ways to create a NumPy array?",
+      "answer": "From an existing sequence with `np.array([1, 2, 3])`; with filled constructors `np.zeros`, `np.ones`, `np.full`, `np.empty`, `np.eye`; from ranges with `np.arange` and `np.linspace`; randomly via `np.random.*`; from disk with `np.load`, `np.loadtxt`, `np.genfromtxt`; or shaped after an existing array with `np.zeros_like` and friends.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "14",
+      "section": "Array Creation",
+      "question": "How do you create 1D, 2D and 3D arrays?",
+      "answer": "Nest the lists one level deeper per dimension: `np.array([1,2,3])` is 1D with shape `(3,)`; `np.array([[1,2],[3,4]])` is 2D with shape `(2,2)`; `np.array([[[1,2],[3,4]],[[5,6],[7,8]]])` is 3D with shape `(2,2,2)`. Equivalently, build a flat array and reshape: `np.arange(8).reshape(2,2,2)`. Check with `arr.ndim`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["InterviewBit", "DataCamp", "ProjectPro", "GeeksforGeeks", "Hirist"]
+    },
+    {
+      "id": "15",
+      "section": "Array Creation",
+      "question": "What do np.zeros(), np.ones(), np.full() and np.empty() do?",
+      "answer": "`np.zeros((2,3))` fills with 0.0, `np.ones((2,3))` with 1.0, `np.full((2,3), 7)` with any constant. `np.empty((2,3))` allocates the memory without initializing it — marginally faster but the contents are arbitrary garbage, so only use it when you will overwrite every element. All accept a `dtype` argument.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "16",
+      "section": "Array Creation",
+      "question": "Difference between np.arange() and np.linspace()?",
+      "answer": "`np.arange(start, stop, step)` fixes the step size and excludes the stop value — `np.arange(0, 1, 0.25)` gives `[0, 0.25, 0.5, 0.75]`. `np.linspace(start, stop, num)` fixes the number of points and includes the stop by default — `np.linspace(0, 1, 5)` gives `[0, 0.25, 0.5, 0.75, 1.0]`. Prefer `linspace` for floats, because floating-point accumulation in `arange` can produce an unexpected element count.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "17",
+      "section": "Array Creation",
+      "question": "Difference between np.array() and np.asarray()?",
+      "answer": "`np.array()` copies the input by default (`copy=True`). `np.asarray()` returns the input unchanged if it is already an ndarray of the right dtype, and only copies otherwise. Use `asarray` inside functions that just need to accept both lists and arrays without paying for a needless copy — but remember the caller's array may then be modified in place.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "18",
+      "section": "Array Creation",
+      "question": "What do np.eye() and np.identity() do?",
+      "answer": "`np.identity(n)` returns an n×n identity matrix. `np.eye(N, M=None, k=0)` is more general — it can be non-square and can shift the diagonal with `k` (`k=1` is the superdiagonal, `k=-1` the subdiagonal). Identity matrices show up constantly in linear algebra checks such as verifying `A @ np.linalg.inv(A)` is the identity.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "19",
+      "section": "Array Creation",
+      "question": "How do you create an array filled with the same value?",
+      "answer": "`np.full(shape, value)` is the direct way. Equivalents: `np.ones(shape) * value` (slower, and gives a float dtype), or `np.empty(shape); arr.fill(value)`. For an existing array's shape, use `np.full_like(arr, value)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "20",
+      "section": "Array Creation",
+      "question": "What are np.zeros_like(), np.ones_like() and np.full_like()?",
+      "answer": "They create a new array matching the shape *and* dtype of an existing one — `np.zeros_like(a)` is equivalent to `np.zeros(a.shape, dtype=a.dtype)`. Useful when building an output buffer that must line up exactly with an input, without hardcoding dimensions.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "21",
+      "section": "Array Creation",
+      "question": "How do you save and load NumPy arrays to and from disk?",
+      "answer": "`np.save('a.npy', arr)` and `np.load('a.npy')` use a fast binary format that preserves dtype and shape exactly. `np.savez('data.npz', x=a, y=b)` stores several arrays in one file (`np.savez_compressed` compresses them). For human-readable text use `np.savetxt`/`np.loadtxt`, which is far slower and loses dtype precision. Avoid `pickle`-backed loading of untrusted `.npy` files (`allow_pickle=True` can execute code).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "22",
+      "section": "Array Creation",
+      "question": "How do you work with an array too large to fit in memory?",
+      "answer": "Use `np.memmap('big.dat', dtype='float32', mode='r', shape=(n, m))` — it maps the file on disk into the address space, so slices are paged in on demand and only the touched portion consumes RAM. Complementary tactics: pick a smaller dtype (`float32` instead of `float64` halves memory), process in chunks, use in-place operations (`arr *= 2`, or `out=` on ufuncs) to avoid temporaries, and reach for Dask or HDF5 when it outgrows one machine.",
+      "frequency": "MED",
+      "sources": ["Hirist", "DataCamp", "GeeksforGeeks"]
+    },
+    {
+      "id": "23",
+      "section": "Data Types & Memory",
+      "question": "What data types does NumPy support?",
+      "answer": "Fixed-width numeric types: `int8/16/32/64` and unsigned `uint8/16/32/64`, `float16/32/64`, `complex64/128`, and `bool_`. Also `str_`/`unicode_` for fixed-length strings, `datetime64` and `timedelta64` for time, `object` for arbitrary Python objects (which forfeits every performance benefit), and structured dtypes for record-style data.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "24",
+      "section": "Data Types & Memory",
+      "question": "Why must a NumPy array be homogeneous?",
+      "answer": "Because a single dtype means every element occupies the same number of bytes at a predictable offset, so NumPy can store them contiguously and let compiled C loops stride through the buffer with no type checks or pointer chasing. Mixing types would force an `object` array of Python pointers, which is exactly what a list already is — and just as slow.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "25",
+      "section": "Data Types & Memory",
+      "question": "How do you convert an array from one dtype to another?",
+      "answer": "`arr.astype(np.float32)` returns a new array with the converted dtype (it always copies unless you pass `copy=False` and no conversion is needed). Be careful: float-to-int truncates toward zero rather than rounding, and downcasting can silently overflow — `np.array([300], dtype=np.uint8)` wraps to 44. Specify dtype at creation when you can: `np.array([1,2], dtype=np.float64)`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "26",
+      "section": "Data Types & Memory",
+      "question": "How do you measure and reduce an array's memory footprint?",
+      "answer": "`arr.nbytes` gives total bytes and `arr.itemsize` bytes per element. To reduce it: downcast to the smallest sufficient dtype (`float32` over `float64`, `int8` for small categorical codes) — often halving or quartering memory; avoid `object` dtype; use views instead of copies; operate in place with `arr += 1` or `np.add(a, b, out=a)`; and memory-map when the data lives on disk.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "Hirist", "GeeksforGeeks"]
+    },
+    {
+      "id": "27",
+      "section": "Data Types & Memory",
+      "question": "Difference between C-order and F-order memory layout?",
+      "answer": "C-order (row-major, the NumPy default) stores each row contiguously, so iterating along the last axis is cache-friendly. F-order (column-major, as in Fortran/MATLAB/R) stores each column contiguously. The values are identical — only the traversal cost differs, which matters for large arrays and for handing data to Fortran-based libraries. Check with `arr.flags`; set with `np.array(x, order='F')`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "28",
+      "section": "Data Types & Memory",
+      "question": "What is the difference between np.copy(), .view() and plain assignment?",
+      "answer": "`b = a` binds another name to the *same* object — no new array at all. `b = a.view()` creates a new array object that shares the same data buffer, so writing to `b` changes `a` (basic slicing also returns views). `b = a.copy()` allocates a completely independent buffer. Check with `b.base is a` (a view) or `b.flags.owndata`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Hirist", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "29",
+      "section": "Data Types & Memory",
+      "question": "Difference between a shallow copy and a deep copy in NumPy?",
+      "answer": "A shallow copy (a view) duplicates the array metadata — shape, strides, dtype — but points at the original data buffer, so mutations propagate both ways. A deep copy (`arr.copy()` or `copy.deepcopy`) duplicates the data too, giving full independence at the cost of memory. The classic interview trap: `b = a[0:2]; b[0] = 99` also changes `a`, because slicing yields a view, not a copy — unlike Python list slicing.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Devinterview", "Hirist"]
+    },
+    {
+      "id": "30",
+      "section": "Data Types & Memory",
+      "question": "What are structured (record) arrays?",
+      "answer": "Arrays whose dtype defines several named fields of different types per element, like a database row: `np.array([('Ana', 25, 5.6)], dtype=[('name','U10'),('age','i4'),('ht','f8')])`. Access fields by name — `arr['age']`. Useful for heterogeneous fixed-schema data, though pandas is usually the better tool today.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "Devinterview"]
+    },
+    {
+      "id": "31",
+      "section": "Data Types & Memory",
+      "question": "What is a masked array?",
+      "answer": "`np.ma.masked_array(data, mask)` pairs data with a boolean mask marking invalid entries. Aggregations then skip masked elements automatically — `np.ma.masked_invalid(a).mean()` ignores NaNs without you filtering first. It keeps the original shape intact, unlike boolean filtering which drops elements.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "32",
+      "section": "Data Types & Memory",
+      "question": "What does arr.flags tell you, and what is np.ascontiguousarray()?",
+      "answer": "`arr.flags` reports memory properties: `C_CONTIGUOUS`, `F_CONTIGUOUS`, `OWNDATA` (does it own its buffer or is it a view), and `WRITEABLE`. Slicing with a step or transposing produces a non-contiguous array, which can slow down downstream operations or be rejected by C extensions — `np.ascontiguousarray(arr)` copies it into a fresh C-contiguous buffer.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "Devinterview"]
+    },
+    {
+      "id": "33",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is the difference between indexing and slicing? Does slicing copy the data?",
+      "answer": "Indexing retrieves individual elements — `arr[2]`, or `arr[1, 3]` in 2D. Slicing retrieves a range — `arr[1:4]`, `arr[:, 1:3]` — using `start:stop:step`. Crucially, basic slicing returns a **view**, not a copy, so modifying the slice modifies the original array. This differs from Python lists, where slicing copies. Call `.copy()` when you need independence.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Hirist", "DataCamp"]
+    },
+    {
+      "id": "34",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "How is arr[:, 0] different from arr[:, [0]]?",
+      "answer": "`arr[:, 0]` uses an integer index, which drops that axis — the result is 1D with shape `(n,)`, and it is a view. `arr[:, [0]]` uses a list, which is fancy indexing that preserves the axis — the result is 2D with shape `(n, 1)`, and it is a copy. The shape difference matters enormously when the result feeds into broadcasting or matrix multiplication.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "35",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is the difference between basic indexing and advanced (fancy) indexing?",
+      "answer": "Basic indexing uses integers and slices and always returns a **view**. Advanced (fancy) indexing uses integer arrays/lists or boolean arrays and always returns a **copy**. Example: `arr[[0, 2, 4]]` selects those three rows into a new array; `arr[[0,1],[2,3]]` picks the elements at (0,2) and (1,3). The view-vs-copy distinction is the single most common NumPy interview trap.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Hirist", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "36",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is boolean indexing (masking)?",
+      "answer": "Using a boolean array of the same shape to select elements where the mask is True: `arr[arr > 5]` returns a flat array of the qualifying values. Combine conditions with `&`, `|` and `~` — **not** `and`/`or`/`not` — and always parenthesize: `arr[(arr > 5) & (arr < 10)]`. It also works for assignment: `arr[arr < 0] = 0` clips negatives in place.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "37",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is np.where() and how is it used?",
+      "answer": "It has two forms. With one argument, `np.where(cond)` returns a tuple of index arrays where the condition is True. With three, `np.where(cond, x, y)` is a vectorized if-else, picking from `x` where True and `y` where False — for example `np.where(scores >= 40, 'pass', 'fail')`. The three-argument form is the standard way to conditionally label data without a loop.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "38",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "Difference between np.where() and boolean indexing?",
+      "answer": "Boolean indexing `arr[arr > 5]` extracts the matching values, so the result is shorter than the input. `np.where(arr > 5)` returns their positions instead, and `np.where(arr > 5, a, b)` returns an array of the *same shape* with replacements. Use boolean indexing to filter, `np.where` to locate or to transform while preserving shape.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "39",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is np.select() and when is it better than np.where()?",
+      "answer": "`np.select([cond1, cond2, cond3], [val1, val2, val3], default=0)` evaluates several conditions in order and picks the value for the first match. It replaces deeply nested `np.where(c1, a, np.where(c2, b, ...))` chains, which become unreadable past two levels — the natural choice for multi-band bucketing like grade boundaries.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "40",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What does np.nonzero() return?",
+      "answer": "A tuple of index arrays — one per dimension — giving the positions of all non-zero (or True) elements. For a 2D array it returns `(row_indices, col_indices)`, so you can do `arr[np.nonzero(arr)]`. `np.where(condition)` with a single argument is literally implemented as `np.nonzero(condition)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "41",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "How do you find the row and column positions of all elements greater than a value in a 2D array?",
+      "answer": "`np.argwhere(arr > 10)` returns an (N, 2) array where each row is an `[row, col]` coordinate pair — convenient for iterating over hits. `np.nonzero(arr > 10)` returns the same information transposed, as a tuple of two arrays, which is the form you need for direct fancy indexing.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "42",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What do np.take() and np.put() do?",
+      "answer": "`np.take(arr, [0, 3, 5])` gathers elements at the given indices into a new array — equivalent to `arr[[0,3,5]]` but it works on a flattened view by default and accepts an `axis` and out-of-bounds `mode`. `np.put(arr, [0, 3], [99, 88])` writes values at the given flat positions **in place**. Both are handy when indices are computed programmatically.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "43",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What do np.extract() and np.compress() do?",
+      "answer": "`np.extract(arr % 3 == 0, arr)` returns the elements satisfying a condition — the functional equivalent of `arr[arr % 3 == 0]`. `np.compress(condition, arr, axis=0)` selects whole slices along an axis where the condition holds, e.g. keeping only certain rows. Both are older API; boolean indexing is the idiomatic modern choice.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "44",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "What is np.searchsorted() used for?",
+      "answer": "It finds where a value should be inserted into a **sorted** array to keep it sorted — a binary search, so O(log n) instead of a linear scan. `np.searchsorted([1,3,5,7], 4)` returns `2`. It vectorizes over a list of values, and `side='left'/'right'` controls tie handling, which makes it the standard tool for bucketing continuous values into bins.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "45",
+      "section": "Indexing, Slicing & Boolean Masking",
+      "question": "How do you reverse a NumPy array? What is the difference between fliplr and flipud?",
+      "answer": "`arr[::-1]` reverses a 1D array (returning a view, not a copy). For multi-dimensional arrays, `np.flip(arr, axis=0)` reverses along a chosen axis. `np.flipud(arr)` flips up/down — reversing the row order, equivalent to `arr[::-1, :]`. `np.fliplr(arr)` flips left/right — reversing the column order, equivalent to `arr[:, ::-1]`. `fliplr` requires at least 2D.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "Hirist"]
+    },
+    {
+      "id": "46",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "How do you reshape an array? What does -1 mean in reshape?",
+      "answer": "`arr.reshape(3, 4)` or `np.reshape(arr, (3, 4))` — the total element count must stay the same, so a 12-element array can become (3,4), (2,6) or (2,2,3). Passing `-1` for one dimension tells NumPy to infer it: `arr.reshape(-1, 3)` means 3 columns and however many rows are needed, and `arr.reshape(-1)` flattens. Reshaping returns a view when possible, so it is essentially free.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "47",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "Difference between np.reshape() and np.resize()?",
+      "answer": "`reshape` requires the element count to match exactly and errors otherwise, returning a view where possible. `np.resize(arr, new_shape)` will change the total size — repeating the data cyclically if the new shape is larger, truncating if smaller — and always returns a copy. The in-place method `arr.resize()` behaves differently again, padding with zeros.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "48",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "Difference between flatten() and ravel()?",
+      "answer": "Both collapse an array to 1D. `flatten()` always returns a **copy**, so it is safe but allocates memory. `ravel()` returns a **view** whenever the data is contiguous, so it is faster and memory-free — but writing to the result then modifies the original. Use `ravel()` for read-only flattening in performance-sensitive code, `flatten()` when you need independence.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Hirist", "ProjectPro", "InterviewBit"]
+    },
+    {
+      "id": "49",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "What are np.newaxis, np.expand_dims() and np.squeeze()?",
+      "answer": "`np.newaxis` (an alias for `None`) inserts a length-1 axis via indexing: `arr[:, np.newaxis]` turns shape `(3,)` into `(3, 1)`. `np.expand_dims(arr, axis=1)` does the same as a function call. `np.squeeze(arr)` removes all length-1 axes, turning `(1, 3, 1)` into `(3,)`. Adding an axis is the standard trick for making broadcasting line up — for instance turning a row vector into a column vector.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Devinterview"]
+    },
+    {
+      "id": "50",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "What does the axis parameter mean? What is the difference between axis=0 and axis=1?",
+      "answer": "The axis is the dimension that gets **collapsed** by the operation. For a 2D array, `axis=0` runs down the rows and produces one result per column (a column-wise mean); `axis=1` runs across the columns and produces one result per row (a row-wise mean). Omitting `axis` aggregates over the entire flattened array. Remember it as: the axis you name is the one that disappears from the output shape.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "DataCamp", "ProjectPro", "Hirist"]
+    },
+    {
+      "id": "51",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "How do you transpose an array or interchange two axes?",
+      "answer": "`arr.T` or `np.transpose(arr)` reverses the axis order — for 2D this is the standard matrix transpose. For higher dimensions you can specify the permutation: `np.transpose(arr, (1, 0, 2))`. To swap exactly two axes, `np.swapaxes(arr, 0, 1)` is clearer, and `np.moveaxis(arr, 0, -1)` relocates one axis. All return views, so they are free.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "Hirist"]
+    },
+    {
+      "id": "52",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "Difference between np.vstack(), np.hstack() and np.concatenate()?",
+      "answer": "`np.vstack((a, b))` stacks vertically, adding rows — equivalent to `np.concatenate((a, b), axis=0)`. `np.hstack((a, b))` stacks horizontally, adding columns — equivalent to `axis=1` for 2D arrays. `np.concatenate` is the general form requiring an explicit axis. All need the non-joining dimensions to match, and none of them modify the inputs — they allocate a new array.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "53",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "Difference between np.stack() and np.concatenate()?",
+      "answer": "`np.concatenate` joins arrays along an **existing** axis, so the result has the same number of dimensions. `np.stack` joins them along a **new** axis, adding a dimension: stacking three arrays of shape `(4,)` with `np.stack` gives `(3, 4)`, while `np.concatenate` gives `(12,)`. Use `stack` when you are building a batch out of individual samples.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "54",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "How do you split an array? What is the difference between split() and array_split()?",
+      "answer": "`np.split(arr, 3)` divides into three equal parts and raises a `ValueError` if the array does not divide evenly. `np.array_split(arr, 3)` handles uneven division gracefully, making the earlier sections one element larger. Convenience wrappers: `np.vsplit` splits along rows (axis 0), `np.hsplit` along columns (axis 1). You can also pass a list of indices to cut at specific positions.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "55",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "Difference between np.tile() and np.repeat()?",
+      "answer": "`np.repeat([1,2,3], 2)` duplicates each element in place → `[1,1,2,2,3,3]`. `np.tile([1,2,3], 2)` repeats the whole array as a block → `[1,2,3,1,2,3]`. `tile` also accepts a shape tuple to replicate in 2D. The classic exam variant — repeat each element five times — is `np.repeat(arr, 5)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Hirist", "InterviewBit"]
+    },
+    {
+      "id": "56",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "What is np.pad() used for? How do you add a border of zeros around an array?",
+      "answer": "`np.pad(arr, pad_width=1, mode='constant', constant_values=0)` wraps the array in a one-element border of zeros — a 3×3 array becomes 5×5. Other modes include `edge` (repeat boundary values), `reflect` and `wrap`. It is standard preprocessing before convolution, so the output keeps the input's spatial dimensions.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Hirist"]
+    },
+    {
+      "id": "57",
+      "section": "Shape Manipulation & Reshaping",
+      "question": "What is np.meshgrid() used for?",
+      "answer": "It turns two 1D coordinate vectors into two 2D coordinate matrices covering the full grid: `X, Y = np.meshgrid(x, y)`. Every `(X[i,j], Y[i,j])` pair is one point on the plane, so you can evaluate a function over the whole surface in one vectorized expression — `Z = np.sin(X) + np.cos(Y)` — which is what contour plots, heatmaps and 3D surfaces need.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "58",
+      "section": "Broadcasting & Vectorization",
+      "question": "What is broadcasting in NumPy?",
+      "answer": "The mechanism that lets NumPy apply element-wise operations to arrays of different shapes by virtually stretching the smaller one to match the larger — without physically copying data. `np.array([1,2,3]) + 10` adds 10 to each element; a `(3,4)` array plus a `(4,)` array adds that row to every row. It saves both memory and the explicit loop.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "59",
+      "section": "Broadcasting & Vectorization",
+      "question": "What are the rules of broadcasting?",
+      "answer": "Compare shapes from the **trailing** (rightmost) dimension backwards. 1) If the arrays have different `ndim`, the smaller shape is left-padded with 1s. 2) Two dimensions are compatible if they are equal, or if one of them is 1 — in which case that array is stretched along it. 3) If any dimension pair is neither equal nor 1, broadcasting fails with a ValueError. Example: `(3,1)` with `(1,4)` broadcasts to `(3,4)`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "60",
+      "section": "Broadcasting & Vectorization",
+      "question": "Give an example of broadcasting a 2D array with a scalar and with a vector.",
+      "answer": "With a scalar: `arr * 2` — the scalar is treated as shape `()` and stretched across everything. With a row vector: a `(3,4)` array plus a `(4,)` array adds those four values to every row. With a column vector: `arr + col` where `col` has shape `(3,1)` adds one value per row. Mean-centering columns is the canonical use: `arr - arr.mean(axis=0)`.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "61",
+      "section": "Broadcasting & Vectorization",
+      "question": "When does broadcasting fail, and how do you fix it?",
+      "answer": "It fails when a dimension pair is neither equal nor 1 — a `(3,4)` array with a `(3,)` array raises `operands could not be broadcast together`, because the trailing dimensions 4 and 3 do not match. The fix is to add an explicit axis so the shapes align: `arr - col[:, np.newaxis]` turns `(3,)` into `(3,1)`, which then broadcasts across the four columns. Debug by printing `.shape` on both operands.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "62",
+      "section": "Broadcasting & Vectorization",
+      "question": "What is vectorization in NumPy?",
+      "answer": "Expressing an operation over an entire array at once — `c = a * b` — instead of writing a Python `for` loop over the elements. The loop still happens, but inside compiled C with no interpreter overhead, no per-element type checks, and often SIMD instructions. It is both dramatically faster (typically 10-100×) and shorter to read. The rule of thumb: if you are writing a Python loop over a NumPy array, there is almost certainly a vectorized alternative.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "Hirist", "Devinterview"]
+    },
+    {
+      "id": "63",
+      "section": "Broadcasting & Vectorization",
+      "question": "How is vectorization related to broadcasting?",
+      "answer": "They are complementary. Vectorization is *what* happens — an operation applied to whole arrays in compiled code. Broadcasting is *how* NumPy makes mismatched shapes compatible so the vectorized operation can run at all. Without broadcasting you would have to materialize a full-size copy of the smaller operand first, which wastes memory; broadcasting achieves the same result by manipulating strides.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "GeeksforGeeks"]
+    },
+    {
+      "id": "64",
+      "section": "Broadcasting & Vectorization",
+      "question": "What are ufuncs (universal functions)?",
+      "answer": "Functions that operate element-wise on ndarrays, implemented in compiled C, with automatic broadcasting, type casting and an optional `out` parameter for in-place results. Unary ufuncs take one array (`np.sqrt`, `np.exp`, `np.abs`, `np.sin`); binary ufuncs take two (`np.add`, `np.multiply`, `np.maximum`). The arithmetic operators are just syntactic sugar over them — `a + b` calls `np.add`. Ufuncs also expose `.reduce()`, `.accumulate()` and `.outer()`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "65",
+      "section": "Broadcasting & Vectorization",
+      "question": "What is np.vectorize() and why is it not actually fast?",
+      "answer": "`np.vectorize(f)` wraps a scalar Python function so it accepts arrays and broadcasts. But the documentation is explicit that it is provided for convenience, not performance — internally it still calls your Python function once per element, so it is essentially a loop with nicer syntax. For real speed you must express the logic with existing ufuncs, `np.where`, or reach for Numba/Cython.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Hirist", "DataCamp"]
+    },
+    {
+      "id": "66",
+      "section": "Broadcasting & Vectorization",
+      "question": "How do you apply a custom function to each row or column of a 2D array?",
+      "answer": "`np.apply_along_axis(func, axis=1, arr=data)` runs the function on each 1D row slice (`axis=0` for columns). It is readable but still loops in Python. Whenever the function can be written with array operations, prefer the vectorized form with an axis argument — `data.mean(axis=1)` is far faster than applying a mean function row by row.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Hirist", "DataCamp"]
+    },
+    {
+      "id": "67",
+      "section": "Broadcasting & Vectorization",
+      "question": "How do you perform element-wise operations on arrays?",
+      "answer": "Use the ordinary operators directly on arrays of compatible shapes: `a + b`, `a - b`, `a * b` (element-wise product, **not** matrix multiplication), `a / b`, `a ** 2`, `a > b`. Equivalent ufunc forms are `np.add(a, b)`, `np.multiply(a, b)` and so on, which additionally accept `out=` for in-place results. The trap to remember: `*` is element-wise; use `@` or `np.dot` for matrix multiplication.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "68",
+      "section": "Broadcasting & Vectorization",
+      "question": "How do you compute a moving average or rolling statistic in NumPy?",
+      "answer": "The simple approach is convolution: `np.convolve(arr, np.ones(w)/w, mode='valid')` gives a w-point moving average. A faster, allocation-free approach uses a cumulative sum: `c = np.cumsum(arr); (c[w:] - c[:-w]) / w`. The modern idiomatic way is `np.lib.stride_tricks.sliding_window_view(arr, w).mean(axis=1)`, which creates a strided view of every window with no copying.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "Hirist", "DataCamp"]
+    },
+    {
+      "id": "69",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you compute mean, median, standard deviation and variance?",
+      "answer": "`np.mean(arr)`, `np.median(arr)`, `np.std(arr)`, `np.var(arr)` — all accept an `axis` argument for row- or column-wise results. Important detail: NumPy defaults to the **population** standard deviation (`ddof=0`); pass `ddof=1` for the sample standard deviation, which is what pandas uses by default. That discrepancy is a favourite follow-up question.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro", "Hirist"]
+    },
+    {
+      "id": "70",
+      "section": "Math, Aggregation & Statistics",
+      "question": "Difference between np.mean() and np.average()?",
+      "answer": "`np.mean()` computes the plain arithmetic mean. `np.average()` can do the same but additionally accepts a `weights` argument for a weighted mean: `np.average(scores, weights=credits)` computes a GPA. Use `mean` unless you need weighting; `average` also has a `returned=True` option that gives back the sum of weights.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "GeeksforGeeks"]
+    },
+    {
+      "id": "71",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you find the maximum/minimum value and its index?",
+      "answer": "`np.max(arr)` and `np.min(arr)` return the values; `np.argmax(arr)` and `np.argmin(arr)` return the **flat index** of the first occurrence. For a 2D array pass `axis` for per-row/per-column results, and use `np.unravel_index(np.argmax(arr), arr.shape)` to convert the flat index back into `(row, col)` coordinates. Use `np.nanmax`/`np.nanargmax` when NaNs may be present.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Hirist", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "72",
+      "section": "Math, Aggregation & Statistics",
+      "question": "Difference between np.cumsum() and np.cumprod()?",
+      "answer": "`np.cumsum([1,2,3,4])` gives the running total `[1,3,6,10]`; `np.cumprod([1,2,3,4])` gives the running product `[1,2,6,24]`. Both preserve the input length, unlike `sum`/`prod` which collapse to a scalar. Cumulative sums are the trick behind fast sliding-window aggregates and empirical CDFs.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "73",
+      "section": "Math, Aggregation & Statistics",
+      "question": "What is np.clip() used for?",
+      "answer": "`np.clip(arr, 0, 255)` caps every value into the `[min, max]` range — anything below becomes 0, anything above becomes 255, and the array keeps its shape. It differs from filtering, which removes elements. Common uses: bounding pixel values, capping outliers without dropping rows, and preventing `log(0)` with `np.clip(p, 1e-9, 1)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "74",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you handle NaN and infinite values in a NumPy array?",
+      "answer": "Detect with `np.isnan(arr)`, `np.isinf(arr)` or `np.isfinite(arr)`. Remove with `arr[~np.isnan(arr)]`, or replace with `arr[np.isnan(arr)] = 0` / `np.nan_to_num(arr, nan=0.0, posinf=1e10)`. To aggregate while ignoring them, use the nan-aware variants: `np.nanmean`, `np.nansum`, `np.nanstd`, `np.nanmax`. Remember `np.nan == np.nan` is False — always test with `np.isnan`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "75",
+      "section": "Math, Aggregation & Statistics",
+      "question": "Why does dividing by zero in NumPy warn instead of raising an error?",
+      "answer": "NumPy follows IEEE 754 floating-point semantics: `1/0` yields `inf`, `-1/0` yields `-inf`, and `0/0` yields `nan`, with a RuntimeWarning. Halting on one bad element would be wrong for array-wide computation, so the invalid result is propagated and you clean it up afterwards. Control the behaviour with `np.errstate(divide='ignore', invalid='ignore')` as a context manager, or `np.seterr()` globally.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "76",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you count how many times a value appears in an array?",
+      "answer": "For one value: `np.count_nonzero(arr == 5)` or `(arr == 5).sum()`. For all values at once: `np.unique(arr, return_counts=True)` returns the distinct values with their frequencies — works for any dtype. `np.bincount(arr)` is faster but only accepts non-negative integers and returns counts indexed by value.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "Hirist"]
+    },
+    {
+      "id": "77",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you find the unique elements of an array?",
+      "answer": "`np.unique(arr)` returns the sorted distinct values. Its options do a lot of work: `return_counts=True` gives frequencies, `return_index=True` gives the first position of each unique value in the original array, and `return_inverse=True` gives the indices that reconstruct the original — which is exactly how you label-encode a categorical column.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "78",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you normalize or min-max scale data with NumPy?",
+      "answer": "Min-max scaling to [0,1]: `(arr - arr.min()) / (arr.max() - arr.min())`. Standardization (z-score): `(arr - arr.mean()) / arr.std()`. For a 2D feature matrix, scale per column with `axis=0` and keep the shape aligned via broadcasting: `(X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))`. Guard against a zero range, and in ML always fit the statistics on the training set only.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "79",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you compute Mean Squared Error with NumPy?",
+      "answer": "`mse = np.mean((y_true - y_pred) ** 2)` — one vectorized line, no loop. RMSE is `np.sqrt(mse)`, MAE is `np.mean(np.abs(y_true - y_pred))`. This question checks that you reach for broadcasting and aggregation rather than iterating over predictions.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "80",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you identify outliers in a NumPy array?",
+      "answer": "Standard-deviation method: flag points more than k (typically 3) standard deviations from the mean — `mask = np.abs(arr - arr.mean()) > 3 * arr.std()`. IQR method, which is robust to the outliers themselves: `q1, q3 = np.percentile(arr, [25, 75]); iqr = q3 - q1`, then flag anything outside `[q1 - 1.5*iqr, q3 + 1.5*iqr]`. Prefer IQR for skewed data, since extreme values inflate the mean and std.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "81",
+      "section": "Math, Aggregation & Statistics",
+      "question": "How do you compare two arrays? Why use np.allclose() instead of ==?",
+      "answer": "`arr1 == arr2` returns an element-wise boolean array, not a single verdict — reduce it with `.all()`. `np.array_equal(a, b)` checks shape and every element at once. For floats, exact equality is unreliable because binary representation makes `0.1 + 0.2 != 0.3`; use `np.allclose(a, b)` (or `np.isclose` element-wise), which compares within a relative and absolute tolerance.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "82",
+      "section": "Linear Algebra",
+      "question": "How do you compute the dot product of two arrays?",
+      "answer": "`np.dot(a, b)` or the `@` operator. For two 1D arrays it is the scalar inner product — `np.dot([1,2,3],[4,5,6])` gives 32. For 2D arrays it performs matrix multiplication. `np.inner` and `np.vdot` are related variants, and `np.cross(a, b)` gives the vector cross product.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "83",
+      "section": "Linear Algebra",
+      "question": "Difference between *, np.dot() and np.matmul() / @ ?",
+      "answer": "`a * b` is element-wise multiplication (the Hadamard product) and requires broadcast-compatible shapes. `np.dot` and `np.matmul`/`@` perform matrix multiplication and agree for 1D and 2D inputs. They diverge for higher dimensions: `matmul` broadcasts over the leading dimensions and treats the last two axes as the matrices (stacks of matrices), whereas `dot` computes a sum-product over the last axis of `a` and the second-to-last of `b`. `@` is the recommended modern form. Also, `np.dot` accepts scalars; `matmul` does not.",
+      "frequency": "MOST_FREQ",
+      "sources": ["ProjectPro", "GeeksforGeeks", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "84",
+      "section": "Linear Algebra",
+      "question": "How do you multiply two matrices in NumPy?",
+      "answer": "`A @ B`, `np.matmul(A, B)` or `np.dot(A, B)`. The inner dimensions must agree — an `(m, n)` matrix times an `(n, p)` matrix gives `(m, p)`. Remember `A * B` is **not** matrix multiplication; it multiplies element by element and will silently give you the wrong answer whenever the shapes happen to be broadcast-compatible.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "85",
+      "section": "Linear Algebra",
+      "question": "How do you invert a matrix?",
+      "answer": "`np.linalg.inv(A)` — the matrix must be square and non-singular (non-zero determinant), otherwise it raises `LinAlgError: Singular matrix`. Verify with `A @ np.linalg.inv(A)` being close to the identity (use `np.allclose`, not `==`). For solving equations, never invert explicitly — `np.linalg.solve` is faster and numerically more stable. `np.linalg.pinv` gives the pseudo-inverse for singular or non-square matrices.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "86",
+      "section": "Linear Algebra",
+      "question": "How do you compute the determinant of a matrix?",
+      "answer": "`np.linalg.det(A)` for a square matrix. A determinant of 0 means the matrix is singular and has no inverse. Because it is computed in floating point, a mathematically-zero determinant often comes back as something like `1e-17` — check with a tolerance rather than `== 0`, or better, use `np.linalg.matrix_rank` or `np.linalg.cond` to judge invertibility.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "ProjectPro"]
+    },
+    {
+      "id": "87",
+      "section": "Linear Algebra",
+      "question": "How do you find eigenvalues and eigenvectors?",
+      "answer": "`vals, vecs = np.linalg.eig(A)` returns both; `np.linalg.eigvals(A)` returns only the eigenvalues. The eigenvectors come back as **columns** of `vecs`, so the i-th eigenvector is `vecs[:, i]` — a very common indexing mistake. For symmetric or Hermitian matrices use `np.linalg.eigh`, which is faster and returns real, sorted eigenvalues. Eigen-decomposition underpins PCA.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Hirist", "DataCamp"]
+    },
+    {
+      "id": "88",
+      "section": "Linear Algebra",
+      "question": "How do you solve a system of linear equations?",
+      "answer": "`x = np.linalg.solve(A, b)` solves `Ax = b` directly using LU decomposition. Prefer it over `np.linalg.inv(A) @ b`, which is both slower and numerically less stable. For over-determined or inconsistent systems (more equations than unknowns), use `np.linalg.lstsq(A, b, rcond=None)` for the least-squares solution.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "89",
+      "section": "Linear Algebra",
+      "question": "What do np.trace() and np.diag() do?",
+      "answer": "`np.trace(A)` sums the main diagonal elements. `np.diag()` is overloaded by input rank: given a 2D matrix it **extracts** the diagonal as a 1D array; given a 1D array it **builds** a square matrix with those values on the diagonal and zeros elsewhere. `np.diagonal(A)` and `A.diagonal(offset=k)` extract shifted diagonals.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "90",
+      "section": "Linear Algebra",
+      "question": "What matrix decompositions does NumPy provide?",
+      "answer": "`np.linalg.qr(A)` gives the QR decomposition (orthogonal Q, upper-triangular R) used in least-squares solving. `np.linalg.svd(A)` gives the singular value decomposition U·Σ·Vᵀ, the backbone of PCA, dimensionality reduction, low-rank approximation and pseudo-inverses. `np.linalg.cholesky(A)` decomposes a positive-definite matrix and is the fastest option when it applies.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "91",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you generate random numbers in NumPy?",
+      "answer": "Modern API: `rng = np.random.default_rng(42)`, then `rng.random((3,3))` for uniform [0,1), `rng.integers(1, 100, size=10)` for integers, `rng.normal(loc=0, scale=1, size=100)` for a Gaussian, `rng.choice(arr, size=5, replace=False)` for sampling. The legacy equivalents are `np.random.rand`, `np.random.randint`, `np.random.randn` and `np.random.choice`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "92",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "Why set a random seed? Difference between np.random.seed() and np.random.default_rng()?",
+      "answer": "Seeding makes a pseudo-random sequence reproducible, which is essential for debugging, sharing results and fair model comparison. `np.random.seed(42)` sets one **global** state, so any library call can consume from it and change your results unpredictably. `np.random.default_rng(42)` returns an independent Generator object with its own state — no global side effects, better statistical quality, and safe for parallel work. Prefer the Generator API in new code.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "93",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you shuffle an array or draw a random sample?",
+      "answer": "`rng.shuffle(arr)` shuffles **in place** along the first axis (so it reorders rows of a 2D array, not individual elements). `rng.permutation(arr)` returns a shuffled copy and leaves the original alone. For sampling, `rng.choice(arr, size=k, replace=False)` draws without repetition. To shuffle features and labels together, permute an index array once and apply it to both: `p = rng.permutation(len(X)); X[p], y[p]`.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "94",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you sort an array in ascending and descending order?",
+      "answer": "`np.sort(arr)` returns a sorted copy in ascending order; `arr.sort()` sorts in place. There is no `reverse` parameter — for descending order use `np.sort(arr)[::-1]` or `-np.sort(-arr)`. For 2D arrays pass `axis` (`axis=1` sorts each row independently, `axis=None` flattens first), and `kind='stable'` when ties must preserve their original order.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist", "ProjectPro"]
+    },
+    {
+      "id": "95",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "What is np.argsort() and how do you sort a 2D array by one column?",
+      "answer": "`np.argsort(arr)` returns the **indices** that would sort the array, rather than the sorted values. That indirection is what lets you reorder a whole table by one column: `data[np.argsort(data[:, 2])]` sorts every row by the third column, keeping rows intact. For multi-key sorting use `np.lexsort((secondary, primary))` — note the last key is the primary one.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "Hirist"]
+    },
+    {
+      "id": "96",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you find the N largest or smallest elements efficiently?",
+      "answer": "`np.partition(arr, -N)` performs a partial sort in O(n) rather than O(n log n), guaranteeing the N largest end up in the last N slots (unordered among themselves) — `np.partition(arr, -3)[-3:]`. `np.argpartition` gives the corresponding indices, which is how you get the top-k predictions from a score vector without sorting the whole thing.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "97",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you perform set operations on NumPy arrays?",
+      "answer": "`np.union1d(a, b)` for the union, `np.intersect1d(a, b)` for common elements, `np.setdiff1d(a, b)` for elements in `a` but not `b`, and `np.setxor1d(a, b)` for the symmetric difference. All return sorted unique values. `np.isin(a, b)` is the element-wise membership test, returning a boolean mask the same shape as `a` — the vectorized equivalent of Python's `in`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "98",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you find local peaks (maxima) in a 1D array?",
+      "answer": "A peak is any element greater than both neighbours, so compare shifted slices: `peaks = np.where((arr[1:-1] > arr[:-2]) & (arr[1:-1] > arr[2:]))[0] + 1` — the `+1` corrects for the offset introduced by trimming the first element. An equivalent approach uses the sign of the first difference: `np.diff(np.sign(np.diff(arr)))` is negative exactly at a peak.",
+      "frequency": "LOW",
+      "sources": ["InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "99",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How do you extract a subarray, add a zero border, and repeat elements — the classic coding tasks?",
+      "answer": "Subarray: `arr[1:4, 2:5]` slices rows 1-3 and columns 2-4 (a view). Zero border: `np.pad(arr, 1, mode='constant', constant_values=0)`. Repeat each element five times: `np.repeat(arr, 5)`. Interchange two axes: `np.swapaxes(arr, 0, 1)`. Integer array in a range: `np.arange(10, 61)`. These recur verbatim as the written-round questions on most banks.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "Hirist"]
+    },
+    {
+      "id": "100",
+      "section": "Random, Sorting, Searching & Set Ops",
+      "question": "How would you implement K-Means using only NumPy?",
+      "answer": "Initialize k centroids by sampling rows: `C = X[rng.choice(len(X), k, replace=False)]`. Then loop: compute all point-to-centroid distances with broadcasting — `d = np.linalg.norm(X[:, None, :] - C[None, :, :], axis=2)` giving an (n, k) matrix; assign each point with `labels = d.argmin(axis=1)`; recompute each centroid as `X[labels == j].mean(axis=0)`; stop when the centroids stop moving (`np.allclose`). The interviewer is checking that you use broadcasting to avoid a double loop.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "Hirist"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "NumPy Basics & ndarray": 12,
+      "Array Creation": 10,
+      "Data Types & Memory": 10,
+      "Indexing, Slicing & Boolean Masking": 13,
+      "Shape Manipulation & Reshaping": 12,
+      "Broadcasting & Vectorization": 11,
+      "Math, Aggregation & Statistics": 13,
+      "Linear Algebra": 9,
+      "Random, Sorting, Searching & Set Ops": 10
+    },
+    "by_frequency": {
+      "MOST_FREQ": 40,
+      "MED": 52,
+      "LOW": 8
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q5 (what NumPy is, ndarray, why it beats lists), Q13–Q16 (array creation), Q33–Q37 (indexing, slicing, boolean masking, np.where), Q45–Q52 (reverse, reshape, flatten vs ravel, axis, stacking), Q58–Q59 and Q62 (broadcasting rules, vectorization), Q69–Q71 (statistics, argmax), and Q82–Q86 (dot, matmul, inverse, determinant). Every MOST_FREQ in that range is must-know — broadcasting and view-vs-copy are near-guaranteed.",
+      "mid_level_2_to_5_yrs": "Add Q23–Q32 (dtypes, memory layout, views, masked arrays), Q38–Q44 (the full querying API), Q53–Q57 (stack vs concatenate, split, tile vs repeat, pad, meshgrid), Q65–Q68 (np.vectorize's limits, apply_along_axis, moving averages), Q74–Q81 (NaN handling, normalization, outliers, allclose) and Q91–Q97. Be ready to explain *why* a vectorized version is faster, not just that it is.",
+      "senior_5_plus_yrs": "All 100 + follow-ups on memory-mapping and large-array strategy (Q22, Q26), C vs F contiguity and stride tricks (Q27, Q32, Q68), matmul vs dot in >2 dimensions (Q83), numerical stability in linear algebra (Q85, Q86, Q88), decompositions and PCA (Q87, Q90), and implementing an algorithm like K-Means with pure broadcasting (Q100)."
+    },
+    "highest_probability_topics": [
+      "NumPy array vs Python list, and why NumPy is faster (Q3, Q4)",
+      "Broadcasting and its rules (Q58, Q59)",
+      "Vectorization (Q62)",
+      "View vs copy — np.copy() vs .view() vs = (Q28, Q29)",
+      "Basic vs fancy indexing, and which one copies (Q35)",
+      "Boolean indexing / masking (Q36)",
+      "np.where() (Q37)",
+      "reshape() and the -1 trick (Q46)",
+      "flatten() vs ravel() (Q48)",
+      "The axis parameter — axis=0 vs axis=1 (Q50)",
+      "vstack vs hstack vs concatenate (Q52)",
+      "ufuncs (Q64)",
+      "arange() vs linspace() (Q16)",
+      "* vs np.dot() vs @ / matmul (Q83)",
+      "Handling NaN and inf (Q74)",
+      "Random seeding and reproducibility (Q92)"
+    ]
+  }
+}

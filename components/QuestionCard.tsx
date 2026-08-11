@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, CheckCircle2, Circle } from "lucide-react";
+import { easeOutExpo } from "@/lib/motion";
 
 export interface Question {
   id: string;
@@ -21,9 +23,9 @@ interface Props {
 }
 
 const FREQ_CONFIG = {
-  MOST_FREQ: { label: "Must Know", className: "bg-orange-500/15 text-orange-400 border-orange-500/30" },
-  MED:       { label: "Expected",  className: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30" },
-  LOW:       { label: "Deep Dive", className: "bg-accent-blue/15 text-accent-blue border-accent-blue/30" },
+  MOST_FREQ: { label: "Must know", className: "bg-accent-orange/10 text-accent-orange border-accent-orange/25" },
+  MED: { label: "Expected", className: "bg-accent-violet/10 text-accent-violet border-accent-violet/25" },
+  LOW: { label: "Deep dive", className: "bg-accent-blue/10 text-accent-blue border-accent-blue/25" },
 };
 
 export default function QuestionCard({ question, index, isLearned, onToggle, toggling }: Props) {
@@ -31,83 +33,69 @@ export default function QuestionCard({ question, index, isLearned, onToggle, tog
   const freq = FREQ_CONFIG[question.frequency];
 
   return (
-    <div className={`glass-card rounded-2xl border transition-all duration-200 overflow-hidden ${
-      isLearned ? "border-accent-green/35 bg-accent-green/[0.02]" : "border-bg-border hover:border-primary/20"
+    <div className={`glass-card rounded-2xl overflow-hidden transition-colors ${
+      isLearned ? "border-accent-green/35 bg-accent-green/[0.03]" : "hover:border-text-dim/25"
     }`}>
+      <div className="flex items-start gap-4 px-5 py-4 cursor-pointer hover:bg-bg-surface/40 transition-colors select-none" onClick={() => setOpen((o) => !o)}>
+        <span className="tnum text-sm text-text-dim w-6 shrink-0 text-right font-mono pt-1">{index}</span>
 
-      {/* ── Question row ──────────────────────────────────────────── */}
-      <div
-        className="flex items-start gap-4 px-5 py-5 cursor-pointer hover:bg-bg-border/10 transition-colors select-none"
-        onClick={() => setOpen((o) => !o)}
-      >
-        {/* Index number */}
-        <span className="text-sm text-text-muted w-7 shrink-0 text-right font-mono pt-0.5">{index}.</span>
-
-        {/* Middle: badge + question */}
         <div className="flex-1 min-w-0">
-          <div className="mb-2">
-            <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border ${freq.className}`}>
-              {freq.label}
-            </span>
-          </div>
-          <p className="text-base font-semibold text-text leading-relaxed">{question.question}</p>
+          <span className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-md border mb-2 ${freq.className}`}>
+            {freq.label}
+          </span>
+          <p className="text-[15px] font-semibold text-text leading-relaxed">{question.question}</p>
         </div>
 
-        {/* Right: learned toggle + chevron */}
         <div className="flex items-center gap-2 shrink-0 pt-0.5">
           <button
             onClick={(e) => { e.stopPropagation(); onToggle(question.id); }}
             disabled={toggling}
             title={isLearned ? "Mark as not learned" : "Mark as learned"}
-            className="transition-colors disabled:opacity-40"
+            className="transition-transform active:scale-90 disabled:opacity-40"
           >
             {isLearned
               ? <CheckCircle2 className="w-6 h-6 text-accent-green" />
-              : <Circle className="w-6 h-6 text-text-muted hover:text-accent-green" />
-            }
+              : <Circle className="w-6 h-6 text-text-dim hover:text-accent-green transition-colors" />}
           </button>
-
-          <ChevronDown className={`w-5 h-5 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+          <ChevronDown className={`w-5 h-5 text-text-muted transition-transform ${open ? "rotate-180" : ""}`} />
         </div>
       </div>
 
-      {/* ── Answer panel ─────────────────────────────────────────── */}
-      {open && (
-        <div className="border-t border-bg-border bg-bg-surface/40">
-          <div className="px-5 py-5 space-y-4">
-            {/* Answer text */}
-            <p className="text-sm text-text leading-relaxed">{question.answer}</p>
-
-            {/* Sources */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="text-xs text-text-muted font-medium">Sources:</span>
-              {question.sources.map((src) => (
-                <span key={src} className="text-xs px-2.5 py-1 rounded-lg bg-bg-border text-text-muted font-medium">
-                  {src}
-                </span>
-              ))}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: easeOutExpo }} className="overflow-hidden"
+          >
+            <div className="border-t border-bg-border bg-bg-surface/40">
+              <div className="px-5 py-5 space-y-4">
+                <p className="text-sm text-text leading-relaxed">{question.answer}</p>
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-xs text-text-muted font-medium">Sources:</span>
+                  {question.sources.map((src) => (
+                    <span key={src} className="chip">{src}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="border-t border-bg-border px-5 py-3.5">
+                <button
+                  onClick={() => onToggle(question.id)}
+                  disabled={toggling}
+                  className={`inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg transition-all disabled:opacity-50 ${
+                    isLearned
+                      ? "bg-accent-green/10 text-accent-green border border-accent-green/25 hover:bg-accent-green/20"
+                      : "border border-bg-border text-text-muted hover:bg-primary/10 hover:text-primary hover:border-primary/25"
+                  }`}
+                >
+                  {isLearned
+                    ? <><CheckCircle2 className="w-4 h-4" /> Marked as learned</>
+                    : <><Circle className="w-4 h-4" /> Mark as learned</>}
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Mark as learned footer */}
-          <div className="border-t border-bg-border px-5 py-3.5">
-            <button
-              onClick={() => onToggle(question.id)}
-              disabled={toggling}
-              className={`flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl transition-all disabled:opacity-50 ${
-                isLearned
-                  ? "bg-accent-green/10 text-accent-green border border-accent-green/25 hover:bg-accent-green/20"
-                  : "bg-bg-border text-text-muted border border-bg-border hover:bg-primary/10 hover:text-primary hover:border-primary/25"
-              }`}
-            >
-              {isLearned
-                ? <><CheckCircle2 className="w-4 h-4" /> Marked as Learned</>
-                : <><Circle className="w-4 h-4" /> Mark as Learned</>
-              }
-            </button>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

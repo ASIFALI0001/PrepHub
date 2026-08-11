@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User, GraduationCap, BookOpen, Loader2, CheckCircle, Save } from "lucide-react";
+import PageHeader from "@/components/ui/PageHeader";
 
 const SEMESTERS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
@@ -70,8 +71,8 @@ export default function ProfilePage() {
   }
 
   if (loading) return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
+      <div className="mesh-gradient fixed inset-0 pointer-events-none" />
       <div className="relative z-10 flex items-center justify-center min-h-[60vh]">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
@@ -79,21 +80,16 @@ export default function ProfilePage() {
   );
 
   return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
+      <div className="mesh-gradient fixed inset-0 pointer-events-none" />
       <div className="relative z-10 max-w-2xl mx-auto">
 
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-              <User className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-text">Update Profile</h1>
-              <p className="text-sm text-text-muted">Keep your academic information up to date</p>
-            </div>
-          </div>
-        </motion.div>
+        <PageHeader
+          eyebrow="Your account"
+          icon={<User />}
+          title="Update profile"
+          description="Keep your academic information up to date."
+        />
 
         {/* Account info (read-only) */}
         {data && (
@@ -128,7 +124,7 @@ export default function ProfilePage() {
 
             {/* College */}
             <div>
-              <label className="block text-xs font-medium text-text-muted mb-1.5 flex items-center gap-1.5">
+              <label className="text-xs font-medium text-text-muted mb-1.5 flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5" /> College / University
               </label>
               <input
@@ -156,17 +152,17 @@ export default function ProfilePage() {
               <div className="grid grid-cols-8 gap-2">
                 {SEMESTERS.map(s => (
                   <button key={s} type="button" onClick={() => setSemester(s)}
-                    className={`py-2.5 rounded-xl text-sm font-bold transition-all ${semester === s ? "bg-primary text-white shadow-glow" : "glass border border-bg-border text-text-muted hover:border-primary/40 hover:text-text"}`}>
+                    className={`tnum py-2.5 rounded-lg text-sm font-bold transition-all ${semester === s ? "bg-primary text-white shadow-accent" : "border border-bg-border bg-bg-surface text-text-muted hover:border-text-dim/40 hover:text-text"}`}>
                     {s}
                   </button>
                 ))}
               </div>
             </div>
 
-            {error && <p className="text-xs text-red-400">{error}</p>}
+            {error && <p className="text-xs text-accent-pink">{error}</p>}
 
             <button type="submit" disabled={saving}
-              className="w-full btn-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50">
+              className="w-full btn-primary py-3 justify-center gap-2 disabled:opacity-50">
               {saving ? (
                 <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</>
               ) : saved ? (

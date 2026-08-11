@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { ArrowRight, RotateCcw, CheckCircle2 } from "lucide-react";
 import { TOPIC_ICONS } from "@/lib/topicIcons";
 import type { Topic } from "@/lib/topics";
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export default function TopicCard({ topic, completed }: Props) {
-  const { id, label, desc, color, iconBg, border, glow } = topic;
+  const { id, label, desc, accent } = topic;
   const Icon = TOPIC_ICONS[id];
 
   const pct = topic.total > 0 ? Math.round((completed / topic.total) * 100) : 0;
@@ -33,57 +34,53 @@ export default function TopicCard({ topic, completed }: Props) {
   };
 
   return (
-    <Link
-      href={`/learn/${id}`}
-      className={`group relative flex flex-col glass-card rounded-2xl border border-bg-border ${border} ${glow} p-5 transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden`}
-    >
-      {/* Subtle bg glow on hover */}
-      <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-500 ${iconBg}`} />
+    <motion.div whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 400, damping: 30 }} className="h-full">
+      <Link
+        href={`/learn/${id}`}
+        className="group relative flex flex-col h-full glass-card rounded-2xl p-5 hover:border-text-dim/25 transition-colors cursor-pointer"
+      >
+        <div className="flex items-start justify-between mb-4">
+          <div className={`w-11 h-11 rounded-xl bg-bg-surface border border-bg-border flex items-center justify-center shrink-0 ${accent}`}>
+            {Icon && <Icon className="w-5 h-5" />}
+          </div>
+          <div className="flex items-center gap-1">
+            {hasStarted && localPct > 0 && (
+              <button
+                onClick={handleReset}
+                title="Reset progress"
+                className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg text-text-dim hover:text-accent-pink hover:bg-accent-pink/10"
+              >
+                <RotateCcw className={`w-3.5 h-3.5 ${resetting ? "animate-spin" : ""}`} />
+              </button>
+            )}
+            {isComplete ? (
+              <CheckCircle2 className="w-5 h-5 text-accent-green" />
+            ) : (
+              <ArrowRight className="w-4 h-4 text-text-dim group-hover:text-text group-hover:translate-x-0.5 transition-all" />
+            )}
+          </div>
+        </div>
 
-      {/* Header row */}
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${iconBg}`}>
-          {Icon && <Icon className={`w-5 h-5 ${color}`} />}
-        </div>
-        <div className="flex items-center gap-1.5">
-          {hasStarted && (
-            <button
-              onClick={handleReset}
-              title="Reset progress"
-              className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg text-text-muted hover:text-red-400 hover:bg-red-500/10"
-            >
-              <RotateCcw className={`w-3.5 h-3.5 ${resetting ? "animate-spin" : ""}`} />
-            </button>
-          )}
-          {isComplete ? (
-            <CheckCircle2 className="w-5 h-5 text-accent-green" />
-          ) : (
-            <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-text group-hover:translate-x-0.5 transition-all" />
-          )}
-        </div>
-      </div>
+        <h3 className="font-semibold text-text mb-1 text-[15px]">{label}</h3>
+        <p className="text-xs text-text-muted leading-relaxed mb-5 flex-1">{desc}</p>
 
-      {/* Text */}
-      <h3 className="font-semibold text-text mb-1 text-[15px]">{label}</h3>
-      <p className="text-xs text-text-muted leading-relaxed mb-5 flex-1">{desc}</p>
-
-      {/* Progress */}
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-text-muted">
-            {localPct === 0 ? "Not started" : isComplete ? "Complete" : "In progress"}
-          </span>
-          <span className={`text-xs font-semibold ${localPct > 0 ? color : "text-text-muted"}`}>
-            {localPct}%
-          </span>
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs text-text-muted">
+              {localPct === 0 ? "Not started" : isComplete ? "Complete" : "In progress"}
+            </span>
+            <span className={`tnum text-xs font-semibold ${localPct > 0 ? accent : "text-text-dim"}`}>{localPct}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-bg-surface overflow-hidden">
+            <motion.div
+              className={`h-full rounded-full ${isComplete ? "bg-accent-green" : "bg-primary"}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${localPct}%` }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </div>
         </div>
-        <div className="h-1.5 rounded-full bg-bg-border overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-primary to-primary-light"
-            style={{ width: `${localPct}%` }}
-          />
-        </div>
-      </div>
-    </Link>
+      </Link>
+    </motion.div>
   );
 }

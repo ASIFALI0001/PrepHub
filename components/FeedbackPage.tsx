@@ -87,8 +87,8 @@ export default function FeedbackPage() {
   const totalRated = Object.values(ratings).filter(v => v > 0).length;
 
   if (loading) return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
+      <div className="mesh-gradient fixed inset-0 pointer-events-none" />
       <div className="relative z-10 flex items-center justify-center min-h-[60vh]">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
@@ -96,8 +96,8 @@ export default function FeedbackPage() {
   );
 
   return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
+      <div className="mesh-gradient fixed inset-0 pointer-events-none" />
       <div className="relative z-10 max-w-2xl mx-auto">
 
         {/* Header */}
@@ -171,17 +171,16 @@ export default function FeedbackPage() {
             </motion.div>
 
             {error && (
-              <p className="text-xs text-red-400 mb-4">{error}</p>
+              <p className="text-xs text-accent-pink mb-4">{error}</p>
             )}
 
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
               className="flex flex-col sm:flex-row gap-3">
-              <button type="button" onClick={() => router.back()}
-                className="flex-1 py-3.5 text-sm font-semibold glass border border-bg-border rounded-2xl hover:border-primary/40 text-text-muted hover:text-primary transition-all">
+              <button type="button" onClick={() => router.back()} className="btn-ghost flex-1 justify-center py-3.5">
                 Cancel
               </button>
               <button type="submit" disabled={saving || totalRated === 0}
-                className="flex-1 btn-primary py-3.5 rounded-2xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                className="flex-1 btn-primary py-3.5 justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                 {saving
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting…</>
                   : <><Send className="w-4 h-4" /> Submit Feedback</>

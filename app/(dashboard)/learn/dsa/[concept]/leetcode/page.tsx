@@ -24,9 +24,9 @@ interface LeetcodeData {
 }
 
 const DIFFICULTY_STYLE: Record<string, string> = {
-  Easy:   "text-emerald-400 bg-emerald-400/10 border-emerald-400/30",
-  Medium: "text-amber-400   bg-amber-400/10   border-amber-400/30",
-  Hard:   "text-red-400     bg-red-400/10     border-red-400/30",
+  Easy:   "text-accent-green  bg-accent-green/10  border-accent-green/30",
+  Medium: "text-accent-orange bg-accent-orange/10 border-accent-orange/30",
+  Hard:   "text-accent-pink   bg-accent-pink/10   border-accent-pink/30",
 };
 
 function loadLeetcode(concept: string): LeetcodeData | null {
@@ -46,8 +46,7 @@ export default async function LeetcodePage({ params }: { params: { concept: stri
     <>
       <DashboardNav userName={session.user.name} />
 
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
+      <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto">
@@ -55,10 +54,10 @@ export default async function LeetcodePage({ params }: { params: { concept: stri
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-text-muted mb-8">
             <Link href="/learn/dsa" className="hover:text-text transition-colors">DSA</Link>
-            <span>/</span>
+            <span className="text-text-dim">/</span>
             <Link href={`/learn/dsa/${params.concept}`} className="hover:text-text transition-colors capitalize">{params.concept}</Link>
-            <span>/</span>
-            <span className="text-amber-400">LeetCode</span>
+            <span className="text-text-dim">/</span>
+            <span className="text-accent-orange">LeetCode</span>
           </div>
 
           {/* Title */}
@@ -77,10 +76,10 @@ export default async function LeetcodePage({ params }: { params: { concept: stri
                 className="glass-card rounded-2xl border border-bg-border overflow-hidden"
               >
                 {/* Problem header */}
-                <div className="px-6 py-4 border-b border-bg-border bg-bg-card/40 flex items-start justify-between gap-4">
+                <div className="px-6 py-4 border-b border-bg-border bg-bg-surface/50 flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
                     {/* Number badge */}
-                    <div className="w-8 h-8 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-xs font-bold text-amber-400 shrink-0">
+                    <div className="tnum w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary shrink-0">
                       {idx + 1}
                     </div>
                     <div>
@@ -101,7 +100,7 @@ export default async function LeetcodePage({ params }: { params: { concept: stri
                     href={problem.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 flex items-center gap-1 text-xs text-text-muted hover:text-amber-400 transition-colors mt-1"
+                    className="shrink-0 flex items-center gap-1 text-xs text-text-muted hover:text-primary transition-colors mt-1"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">LeetCode</span>
@@ -115,9 +114,9 @@ export default async function LeetcodePage({ params }: { params: { concept: stri
 
                 {/* Approach summary */}
                 <div className="px-5 pb-5">
-                  <div className="rounded-xl bg-amber-400/5 border border-amber-400/20 px-4 py-3">
+                  <div className="rounded-xl bg-primary/5 border border-primary/15 px-4 py-3">
                     <p className="text-xs text-text-muted leading-relaxed">
-                      <span className="text-amber-400 font-bold">⚡ Approach — </span>
+                      <span className="text-primary font-bold">Approach — </span>
                       {problem.approach}
                     </p>
                   </div>

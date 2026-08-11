@@ -4,7 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import DashboardNav from "@/components/DashboardNav";
 import DSACodeBlock from "@/components/DSACodeBlock";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ArrowRight } from "lucide-react";
 import path from "path";
 import fs from "fs";
 
@@ -41,8 +41,7 @@ export default async function BasicsPage({ params }: { params: { concept: string
     <>
       <DashboardNav userName={session.user.name} />
 
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
+      <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto">
@@ -50,10 +49,10 @@ export default async function BasicsPage({ params }: { params: { concept: string
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-text-muted mb-8">
             <Link href="/learn/dsa" className="hover:text-text transition-colors">DSA</Link>
-            <span>/</span>
+            <span className="text-text-dim">/</span>
             <Link href={`/learn/dsa/${params.concept}`} className="hover:text-text transition-colors capitalize">{params.concept}</Link>
-            <span>/</span>
-            <span className="text-violet-400">Basics</span>
+            <span className="text-text-dim">/</span>
+            <span className="text-accent-violet">Basics</span>
           </div>
 
           {/* Title */}
@@ -73,20 +72,15 @@ export default async function BasicsPage({ params }: { params: { concept: string
                 <div className="flex items-center gap-2.5 mb-5">
                   <span className="text-xl">{section.emoji}</span>
                   <h2 className="text-base font-bold text-text">{section.title}</h2>
-                  <span className="text-xs text-text-muted px-2 py-0.5 rounded-full bg-bg-card border border-bg-border">
-                    {section.items.length} items
-                  </span>
+                  <span className="chip">{section.items.length} items</span>
                 </div>
 
                 {/* Items */}
                 <div className="space-y-4">
                   {section.items.map((item) => (
-                    <div
-                      key={item.name}
-                      className="glass-card rounded-2xl border border-bg-border overflow-hidden"
-                    >
+                    <div key={item.name} className="glass-card rounded-2xl overflow-hidden">
                       {/* Item header */}
-                      <div className="px-5 py-3 border-b border-bg-border bg-bg-card/50 flex items-center justify-between">
+                      <div className="px-5 py-3 border-b border-bg-border bg-bg-surface/50 flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-text">{item.name}</h3>
                       </div>
 
@@ -96,9 +90,9 @@ export default async function BasicsPage({ params }: { params: { concept: string
                       </div>
 
                       {/* Description */}
-                      <div className="px-5 py-3 border-t border-bg-border bg-violet-500/5">
+                      <div className="px-5 py-3 border-t border-bg-border bg-primary/5">
                         <p className="text-xs text-text-muted leading-relaxed">
-                          <span className="text-violet-400 font-semibold">💡 </span>
+                          <span className="text-primary font-semibold">Tip · </span>
                           {item.description}
                         </p>
                       </div>
@@ -116,9 +110,8 @@ export default async function BasicsPage({ params }: { params: { concept: string
               className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors">
               <ChevronLeft className="w-4 h-4" /> Back
             </Link>
-            <Link href={`/learn/dsa/${params.concept}/leetcode`}
-              className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold">
-              Next: LeetCode Questions →
+            <Link href={`/learn/dsa/${params.concept}/leetcode`} className="btn-primary gap-1.5">
+              Next: LeetCode questions <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 

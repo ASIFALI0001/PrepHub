@@ -1,0 +1,886 @@
+{
+  "metadata": {
+    "title": "Top 100 Operating System Interview Questions",
+    "description": "Most probable Operating System interview questions compiled from the highest-traffic interview-prep sources plus the LastMinuteNotes revision sheet. Weighted toward what actually gets asked in campus placements and SDE screens — process vs thread, scheduling, synchronization, deadlock, paging and virtual memory — with theory-only trivia pushed to LOW. Each question is tagged with the sources it appears in and a frequency ranking based on how often it shows up across those sources.",
+    "total_questions": 100,
+    "last_updated": "2026-08-08",
+    "sources": {
+      "LastMinuteNotes": {
+        "full_name": "LastMinuteNotes — OS.md (anxkhn)",
+        "url": "https://github.com/anxkhn/LastMinuteNotes/blob/main/OS.md",
+        "strength": "Tight last-minute revision sheet; the 29 concepts that survive when you only have an hour left — kernel types, process vs thread, scheduling, semaphores, paging, thrashing, Belady's anomaly"
+      },
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks OS Interview Questions",
+        "url": "https://www.geeksforgeeks.org/operating-systems/operating-systems-interview-questions/",
+        "strength": "Largest bank (100+ Q) plus the companion Last Minute Notes page; the only source that covers synchronization internals, address binding and free-space management properly"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit Operating System Section",
+        "url": "https://www.interviewbit.com/operating-system-interview-questions/",
+        "strength": "Clean basic → intermediate → advanced progression; strongest on the modern follow-ups product companies ask — copy-on-write, priority inversion, TLB, MLFQ, inodes, NUMA"
+      },
+      "JavaTpoint": {
+        "full_name": "JavaTpoint / Tpoint Tech OS Questions",
+        "url": "https://www.tpointtech.com/operating-system-interview-questions",
+        "strength": "90-question university-style bank; the definitive source for the theory-round questions — PCB fields, thread types, Peterson's solution, deadlock handling methods, disk scheduling"
+      },
+      "Guru99": {
+        "full_name": "Guru99 Operating System Interview Questions",
+        "url": "https://www.guru99.com/operating-systems-interview-questions.html",
+        "strength": "Practical systems angle; good on kernel vs shell, IPC, swapping, hard vs soft links, virtualization, hypervisors vs containers"
+      },
+      "PlacementPreparation": {
+        "full_name": "PlacementPreparation — OS Questions for Freshers",
+        "url": "https://www.placementpreparation.io/blog/operating-system-interview-questions-for-freshers/",
+        "strength": "Fresher/campus-drive oriented; confirms which subset of OS actually gets asked at entry level and adds the security, RAID and bootloader questions"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every OS interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "OS Basics & Types",
+      "question": "What is an operating system and what are its main functions?",
+      "answer": "System software that sits between the user/applications and the hardware, managing all resources so programs don't have to talk to hardware directly. Main functions: process management, memory management, file management, device/IO management, storage management, security and protection, and providing a user interface.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "2",
+      "section": "OS Basics & Types",
+      "question": "What are the different types of operating systems?",
+      "answer": "Batch (jobs grouped, no interaction), Multiprogramming (several jobs in memory to keep the CPU busy), Time-sharing/Multitasking (rapid switching gives each user the illusion of a dedicated machine), Multiprocessing (multiple CPUs), Distributed (many machines acting as one), Network, Real-Time (guaranteed deadlines), and Embedded/Mobile.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "3",
+      "section": "OS Basics & Types",
+      "question": "What is a real-time operating system (RTOS)? Hard vs soft real-time?",
+      "answer": "An OS that guarantees a response within a strict time bound, not just fast on average. Hard real-time: missing a deadline is a system failure (pacemakers, airbags, flight control). Soft real-time: missing a deadline degrades quality but is tolerable (video streaming, VoIP).",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "Guru99", "GeeksforGeeks"]
+    },
+    {
+      "id": "4",
+      "section": "OS Basics & Types",
+      "question": "What is multiprogramming and what is its main objective?",
+      "answer": "Keeping several jobs in main memory at once so that when one blocks on I/O, the CPU immediately switches to another. The objective is maximizing CPU utilization and throughput — the CPU should never sit idle waiting for a slow device.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "5",
+      "section": "OS Basics & Types",
+      "question": "Difference between multiprogramming, multitasking, multiprocessing and multithreading?",
+      "answer": "Multiprogramming: many programs in memory, one CPU, switch on I/O wait. Multitasking: time-sharing extension of it — switch on a time quantum so users get interactivity. Multiprocessing: more than one physical CPU/core executing simultaneously. Multithreading: one process split into multiple threads sharing its memory. The first two are about scheduling; the third is about hardware; the fourth is about program structure.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "6",
+      "section": "OS Basics & Types",
+      "question": "What is a time-sharing system?",
+      "answer": "A system where the CPU is switched between users/processes so rapidly (every few milliseconds) that each one feels they have the machine to themselves. It needs preemptive scheduling and a short time quantum, and it optimizes response time rather than raw throughput.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "7",
+      "section": "OS Basics & Types",
+      "question": "What is a batch operating system? What are its drawbacks?",
+      "answer": "Jobs with similar requirements are grouped into batches and executed one after another with no user interaction; an operator or job scheduler feeds them in. Advantages: high throughput for long jobs, no idle operator time. Drawbacks: no interactivity, hard to debug, CPU sits idle during I/O, and one long job starves the rest.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "8",
+      "section": "OS Basics & Types",
+      "question": "What is spooling?",
+      "answer": "Simultaneous Peripheral Operation On-Line — output for a slow device is buffered to disk first, and the device consumes it at its own pace. The printer queue is the classic example: your process finishes immediately instead of blocking for the printer, so the CPU and the device overlap.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "9",
+      "section": "OS Basics & Types",
+      "question": "What is a bootstrap program (bootloader)?",
+      "answer": "A small program stored in ROM/firmware that runs the moment the machine powers on. It runs hardware diagnostics (POST), initializes registers and devices, then locates the OS kernel on disk, loads it into RAM and transfers control to it.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "PlacementPreparation"]
+    },
+    {
+      "id": "10",
+      "section": "OS Basics & Types",
+      "question": "What is SMP? How does it differ from AMP and NUMA?",
+      "answer": "Symmetric Multiprocessing: all CPUs are peers, share one main memory, and any CPU can run any task including kernel code. Asymmetric Multiprocessing: one master CPU controls the system and assigns work to slaves. NUMA: each CPU has its own local memory that it accesses faster than another CPU's memory, so the scheduler must keep a process near its memory.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "PlacementPreparation"]
+    },
+    {
+      "id": "11",
+      "section": "Kernel, System Calls & Modes",
+      "question": "What is a kernel and what are its main functions?",
+      "answer": "The core of the OS, always resident in memory, running in privileged mode. It manages processes and scheduling, memory allocation, device drivers and I/O, file systems, and system calls. It is the only layer allowed to touch hardware directly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "12",
+      "section": "Kernel, System Calls & Modes",
+      "question": "Difference between the kernel and the operating system?",
+      "answer": "The kernel is one component of the OS — the resident core that manages hardware and resources. The operating system is the whole package: kernel plus shell, utilities, libraries, GUI and system programs. Every OS has a kernel; the kernel alone is not a usable OS.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "Guru99"]
+    },
+    {
+      "id": "13",
+      "section": "Kernel, System Calls & Modes",
+      "question": "Difference between a monolithic kernel and a microkernel?",
+      "answer": "Monolithic: all services (file system, drivers, memory, IPC) run together in kernel space — fast, because calls are simple function calls, but large and less stable since one driver bug can crash the system (Linux, Unix). Microkernel: only the bare minimum (IPC, scheduling, basic memory) stays in kernel space and the rest runs as user-space servers — more stable and modular, but slower due to message-passing overhead (QNX, macOS's Mach core). Hybrid kernels sit in between (Windows NT).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "14",
+      "section": "Kernel, System Calls & Modes",
+      "question": "Difference between a shell and a kernel?",
+      "answer": "The shell is the outer interface (CLI like bash or a GUI) that reads your commands and asks the kernel to carry them out. The kernel does the actual work on the hardware. The shell is a replaceable user-space program; the kernel is not.",
+      "frequency": "MED",
+      "sources": ["Guru99", "PlacementPreparation", "GeeksforGeeks"]
+    },
+    {
+      "id": "15",
+      "section": "Kernel, System Calls & Modes",
+      "question": "What is a system call and why is it needed? What are the types?",
+      "answer": "A programmatic request from a user-space process asking the kernel to perform a privileged operation — user code cannot touch hardware directly, so this is the only door into the kernel. Categories: process control (fork, exec, exit, wait), file management (open, read, write, close), device management (ioctl, read, write), information maintenance (getpid, time), and communication (pipe, shmget, send).",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "16",
+      "section": "Kernel, System Calls & Modes",
+      "question": "Difference between user mode and kernel mode?",
+      "answer": "Two hardware-enforced privilege levels. In user mode the process can only run non-privileged instructions and access its own memory. In kernel mode all instructions and all memory are available. A mode bit in the CPU tracks which one is active; a system call, interrupt or trap flips it to kernel mode and returning flips it back. This separation is what keeps one buggy program from taking down the machine.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "17",
+      "section": "Kernel, System Calls & Modes",
+      "question": "Difference between a system call and a library call?",
+      "answer": "A library call is an ordinary function inside your process's address space (e.g. `printf`, `strlen`) — no privilege change, cheap. A system call crosses into the kernel with a mode switch, so it costs far more. Library functions often wrap system calls: `printf` buffers in user space and eventually invokes the `write` system call.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "18",
+      "section": "Kernel, System Calls & Modes",
+      "question": "What are interrupts? Difference between an interrupt, a trap and an exception?",
+      "answer": "An interrupt is a signal that makes the CPU pause its current work, save context, and run an interrupt handler. Hardware interrupts are asynchronous and come from devices (keyboard, timer, disk). A trap is a synchronous, intentional software interrupt — how a system call enters the kernel. An exception is a synchronous but unintended error condition (divide by zero, page fault, invalid opcode).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "PlacementPreparation"]
+    },
+    {
+      "id": "19",
+      "section": "Kernel, System Calls & Modes",
+      "question": "What is DMA (Direct Memory Access)? What is cycle stealing?",
+      "answer": "DMA lets a device controller transfer a whole block of data to or from main memory without the CPU copying each byte — the CPU sets up the transfer and gets interrupted only when it is done, freeing it for other work. Cycle stealing is how the DMA controller takes over the memory bus for occasional cycles while the CPU is not using it.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "20",
+      "section": "Kernel, System Calls & Modes",
+      "question": "What is virtualization? Difference between a hypervisor and a container?",
+      "answer": "Running multiple isolated systems on one physical machine. A hypervisor virtualizes the hardware so each VM runs a full guest OS — Type 1 runs on bare metal (ESXi, Hyper-V), Type 2 runs on a host OS (VirtualBox). A container virtualizes the OS instead: all containers share the host kernel and are isolated by namespaces and cgroups (Docker). Containers are far lighter and start in milliseconds; VMs give stronger isolation and can run a different OS.",
+      "frequency": "MED",
+      "sources": ["Guru99", "PlacementPreparation", "InterviewBit"]
+    },
+    {
+      "id": "21",
+      "section": "Processes & Threads",
+      "question": "What is a process? Difference between a program and a process?",
+      "answer": "A program is a passive set of instructions sitting on disk. A process is a program in execution — it has been loaded into memory and owns resources: a program counter, registers, a stack, a heap, open files and a PCB. One program can be running as many processes at once.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "22",
+      "section": "Processes & Threads",
+      "question": "What are the different states of a process?",
+      "answer": "New (being created), Ready (in memory, waiting for the CPU), Running (executing on the CPU), Waiting/Blocked (waiting for I/O or an event), and Terminated. Transitions: Ready → Running is dispatch, Running → Ready is preemption/timeout, Running → Waiting is an I/O request, Waiting → Ready is I/O completion. Some systems add Suspended-Ready and Suspended-Blocked for swapped-out processes.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "23",
+      "section": "Processes & Threads",
+      "question": "What is a Process Control Block (PCB)?",
+      "answer": "The kernel data structure holding everything the OS knows about a process: process ID, current state, program counter, CPU registers, scheduling info (priority, quantum), memory management info (page tables, base/limit), accounting info, and the list of open files and I/O devices. It is what gets saved and restored during a context switch.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "24",
+      "section": "Processes & Threads",
+      "question": "What are the different sections of a process in memory?",
+      "answer": "Text/Code (the compiled instructions, read-only), Data (initialized globals and statics), BSS (uninitialized globals), Heap (dynamically allocated memory, grows upward), and Stack (local variables, parameters, return addresses; grows downward). Heap and stack grow toward each other into the free gap between them.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "25",
+      "section": "Processes & Threads",
+      "question": "What is a thread?",
+      "answer": "The smallest unit of CPU scheduling — a single sequential flow of control inside a process. It is called a lightweight process because it has its own program counter, register set and stack, but shares the code, data, heap and open files with every other thread in the same process.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "26",
+      "section": "Processes & Threads",
+      "question": "Difference between a process and a thread?",
+      "answer": "A process is heavyweight with its own isolated address space; a thread is lightweight and shares its parent's address space. Creating and switching processes is expensive (full memory map change); threads are cheap. Processes need explicit IPC to communicate; threads just read shared variables — which is why threads need synchronization. One crashing process doesn't kill others; one crashing thread can bring down the whole process.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "27",
+      "section": "Processes & Threads",
+      "question": "What are the benefits of multithreading?",
+      "answer": "Responsiveness — the UI thread stays alive while another thread does slow work. Resource sharing — threads share memory for free, no IPC needed. Economy — creating and context-switching a thread is far cheaper than a process. Scalability — threads can genuinely run in parallel on multiple cores. The cost is synchronization complexity, race conditions and harder debugging.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "28",
+      "section": "Processes & Threads",
+      "question": "Difference between user-level threads and kernel-level threads?",
+      "answer": "User-level threads are managed by a library in user space — the kernel doesn't know they exist, so switching is extremely fast, but one blocking system call blocks every thread in the process and they can't use multiple cores. Kernel-level threads are scheduled by the OS — heavier to create and switch, but a blocked thread doesn't stall the others and they run truly in parallel. Mapping models: many-to-one, one-to-one, many-to-many.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "PlacementPreparation"]
+    },
+    {
+      "id": "29",
+      "section": "Processes & Threads",
+      "question": "What is context switching?",
+      "answer": "Saving the state of the currently running process into its PCB and loading the saved state of the next one, so the CPU can be shared. It is triggered by a timer interrupt, an I/O request, or a higher-priority process arriving. Context switching is pure overhead — no useful work happens during it — which is why a too-small time quantum destroys performance.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "30",
+      "section": "Processes & Threads",
+      "question": "Difference between a process context switch and a thread context switch?",
+      "answer": "A thread switch within the same process only swaps registers, the program counter and the stack pointer — the address space, page tables and TLB stay valid. A process switch must additionally change the memory map, which flushes the TLB and often invalidates cache, making it several times more expensive.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "31",
+      "section": "Processes & Threads",
+      "question": "What is a zombie process? What is an orphan process?",
+      "answer": "A zombie has finished executing but its entry stays in the process table because the parent hasn't called `wait()` to read its exit status — it holds no memory, just a table slot. An orphan is still running but its parent died; `init`/`systemd` (PID 1) adopts it and reaps it when it finishes. Cascading termination is when killing a parent kills all its descendants.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Guru99"]
+    },
+    {
+      "id": "32",
+      "section": "Processes & Threads",
+      "question": "What is IPC? What are the different IPC mechanisms?",
+      "answer": "Inter-Process Communication lets isolated processes exchange data and synchronize. Two models: shared memory (fastest — the kernel sets it up once and processes read/write directly, but you must synchronize yourself) and message passing (kernel-mediated, safer, easier across machines). Mechanisms: pipes, named pipes (FIFOs), message queues, shared memory, semaphores, signals and sockets.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "33",
+      "section": "Processes & Threads",
+      "question": "What is a pipe? What is a socket?",
+      "answer": "A pipe is a unidirectional IPC channel where one process's output becomes another's input (`ls | grep txt`); an ordinary pipe only works between related processes, while a named pipe (FIFO) exists in the file system and works between unrelated ones. A socket is a bidirectional endpoint identified by IP address + port, and unlike a pipe it works across machines over a network.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "34",
+      "section": "Processes & Threads",
+      "question": "What does fork() do? What is copy-on-write?",
+      "answer": "`fork()` creates a child process that is a duplicate of the parent; it returns 0 in the child and the child's PID in the parent. Copy-on-write means the two processes initially share the same physical pages marked read-only — a private copy is made only when one of them actually writes. That makes fork nearly free, which matters because the child usually calls `exec()` and throws the old image away anyway.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "35",
+      "section": "CPU Scheduling",
+      "question": "What is CPU scheduling and what are its goals?",
+      "answer": "Choosing which ready process gets the CPU next. Goals: maximize CPU utilization and throughput, minimize turnaround time, waiting time and response time, and keep allocation fair with no starvation. Some of these conflict — optimizing throughput can hurt response time — so different algorithms pick different trade-offs.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "36",
+      "section": "CPU Scheduling",
+      "question": "What are long-term, short-term and medium-term schedulers?",
+      "answer": "Long-term (job scheduler): decides which jobs are admitted into memory, controlling the degree of multiprogramming; runs rarely. Short-term (CPU scheduler): picks which ready process runs next; runs every few milliseconds so it must be fast. Medium-term: swaps processes out of memory and back in to relieve memory pressure.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "37",
+      "section": "CPU Scheduling",
+      "question": "Difference between preemptive and non-preemptive scheduling?",
+      "answer": "Preemptive: the OS can forcibly take the CPU away from a running process (time quantum expiry, higher-priority arrival) — better response time and needed for time-sharing, but requires context-switch overhead and synchronization for shared data. Non-preemptive: once a process gets the CPU it keeps it until it finishes or blocks on I/O — simpler and no switch overhead, but one long job makes everything else wait. FCFS and plain SJF are non-preemptive; Round Robin and SRTF are preemptive.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "38",
+      "section": "CPU Scheduling",
+      "question": "Difference between a scheduler and a dispatcher? What is dispatch latency?",
+      "answer": "The scheduler decides which process should run next (the policy). The dispatcher actually hands the CPU over (the mechanism): it performs the context switch, switches to user mode, and jumps to the right instruction. Dispatch latency is the time the dispatcher takes to stop one process and start another — pure overhead that should be minimal.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "39",
+      "section": "CPU Scheduling",
+      "question": "Explain FCFS scheduling. What is the convoy effect?",
+      "answer": "First Come First Serve runs processes in arrival order, non-preemptively — trivially simple and fair in intent, but average waiting time is poor. The convoy effect is its main flaw: one long CPU-bound process at the head makes all the short I/O-bound processes queue behind it, leaving devices idle and tanking overall throughput.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "40",
+      "section": "CPU Scheduling",
+      "question": "Explain SJF and SRTF scheduling.",
+      "answer": "Shortest Job First picks the process with the smallest CPU burst — provably optimal for minimum average waiting time. SRTF (Shortest Remaining Time First) is its preemptive version: an arriving process with a shorter remaining time preempts the running one. Both are impossible to implement perfectly because burst length must be predicted (usually by exponential averaging of past bursts), and both can starve long processes.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "41",
+      "section": "CPU Scheduling",
+      "question": "Explain Round Robin scheduling. How does the time quantum affect performance?",
+      "answer": "Each process gets the CPU for a fixed time quantum, then goes to the back of the ready queue — preemptive FCFS. It guarantees no starvation and gives good response time, which is why time-sharing systems use it. Quantum too large: it degenerates into FCFS. Quantum too small: context-switch overhead dominates and real work stops. Rule of thumb — the quantum should exceed about 80% of CPU bursts.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "42",
+      "section": "CPU Scheduling",
+      "question": "Explain priority scheduling.",
+      "answer": "Each process gets a priority number and the CPU goes to the highest-priority ready process; it exists in preemptive and non-preemptive forms. Priorities may be internal (based on memory needs, burst time) or external (importance, funds). Its fatal flaw is indefinite blocking — low-priority processes can starve — which is fixed by aging.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "43",
+      "section": "CPU Scheduling",
+      "question": "What is starvation and what is aging?",
+      "answer": "Starvation (indefinite blocking) is when a process never gets the CPU or a resource because higher-priority ones keep arriving. Aging is the standard fix: gradually increase the priority of a process the longer it waits, so even the lowest-priority job eventually reaches the top and runs.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "44",
+      "section": "CPU Scheduling",
+      "question": "What is Multilevel Queue and Multilevel Feedback Queue (MLFQ) scheduling?",
+      "answer": "Multilevel Queue splits the ready queue into several fixed queues (system, interactive, batch), each with its own algorithm; a process never changes queue, so lower queues can starve. MLFQ allows movement between queues: a process starts in the highest-priority short-quantum queue and is demoted when it uses its full quantum (marking it CPU-bound), while aging promotes it back. This automatically favours short, interactive jobs without knowing burst times in advance.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "45",
+      "section": "CPU Scheduling",
+      "question": "Define arrival time, burst time, completion time, turnaround time, waiting time and response time.",
+      "answer": "Arrival time: when the process enters the ready queue. Burst time: CPU time it needs. Completion time: when it finishes. Turnaround time = Completion − Arrival. Waiting time = Turnaround − Burst. Response time = first time it gets the CPU − Arrival. These are the exact formulas every Gantt-chart numerical is built on.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "46",
+      "section": "CPU Scheduling",
+      "question": "What is HRRN (Highest Response Ratio Next) scheduling?",
+      "answer": "A non-preemptive algorithm that picks the process with the highest response ratio = (waiting time + burst time) / burst time. Short jobs get a high ratio immediately, but a long job's ratio keeps rising as it waits — so it gets the throughput benefit of SJF while structurally preventing starvation.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "47",
+      "section": "Process Synchronization",
+      "question": "What is process synchronization and why is it needed?",
+      "answer": "Coordinating concurrent processes/threads that share data so that their interleaving cannot corrupt it. Without it, the final result depends on the unpredictable order of execution — the classic lost-update on a shared counter. Synchronization enforces that shared data is touched by one thread at a time.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "48",
+      "section": "Process Synchronization",
+      "question": "What is a race condition?",
+      "answer": "When two or more processes access shared data concurrently and the outcome depends on the timing of their interleaving. Example: `count++` is really load-increment-store; if two threads interleave those three steps, one increment is silently lost. Fixed by making the critical section mutually exclusive.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "49",
+      "section": "Process Synchronization",
+      "question": "What is the critical section problem? What three requirements must a solution satisfy?",
+      "answer": "The critical section is the part of code that accesses shared resources; the problem is designing a protocol so processes cooperate safely. Any valid solution needs: Mutual Exclusion (at most one process inside at a time), Progress (if no one is inside, the choice of who enters next cannot be postponed indefinitely), and Bounded Waiting (a limit on how many others can enter before a waiting process gets its turn — this is what prevents starvation).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "50",
+      "section": "Process Synchronization",
+      "question": "What is a semaphore? Difference between binary and counting semaphores.",
+      "answer": "An integer variable accessed only through two atomic operations, wait() and signal(), used to control access to a shared resource. A binary semaphore takes only 0 or 1 and acts like a lock for a single resource. A counting semaphore can go above 1 and tracks a pool of N identical resources — it is decremented on acquire and incremented on release, blocking when it hits 0.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "51",
+      "section": "Process Synchronization",
+      "question": "What do the wait() and signal() (P and V) operations do?",
+      "answer": "`wait(S)` (P, from Dutch proberen) decrements S; if S becomes negative the process blocks and is put on S's waiting queue. `signal(S)` (V, verhogen) increments S; if processes are waiting, one is woken and moved to ready. Both must execute atomically — otherwise the semaphore itself becomes a race condition.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "52",
+      "section": "Process Synchronization",
+      "question": "Difference between a mutex and a semaphore?",
+      "answer": "A mutex is a locking mechanism with ownership — only the thread that locked it may unlock it, and it always protects exactly one resource. A semaphore is a signalling mechanism with no ownership — any process can signal it, and a counting semaphore can admit N processes. Use a mutex for mutual exclusion over a shared variable; use a semaphore to signal between processes or manage a resource pool.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "PlacementPreparation"]
+    },
+    {
+      "id": "53",
+      "section": "Process Synchronization",
+      "question": "What is a monitor?",
+      "answer": "A high-level synchronization construct built into the language (Java's `synchronized`, C#'s `lock`) that bundles shared data with the procedures that operate on it, and guarantees only one process is active inside the monitor at a time. Condition variables with wait/signal handle blocking inside it. Safer than raw semaphores because the compiler enforces the mutual exclusion — you cannot forget to release.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "54",
+      "section": "Process Synchronization",
+      "question": "What is Peterson's solution?",
+      "answer": "A pure software solution to the critical-section problem for two processes, using a shared boolean array `flag[2]` (I want to enter) and an integer `turn` (whose turn it is). A process sets its flag, sets turn to the other process, then waits while the other's flag is set and it is the other's turn. It satisfies all three requirements but relies on atomic loads/stores and doesn't survive modern instruction reordering without memory barriers.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "55",
+      "section": "Process Synchronization",
+      "question": "What is bounded waiting?",
+      "answer": "The guarantee that once a process requests entry to its critical section, only a bounded number of other processes may enter before it does. Without it a process could wait forever even though the algorithm is technically making progress — bounded waiting is exactly what rules out starvation.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "56",
+      "section": "Process Synchronization",
+      "question": "What is busy waiting? What is a spinlock?",
+      "answer": "Busy waiting is looping continuously to test a condition, burning CPU cycles while achieving nothing. A spinlock is a lock implemented this way. It is wasteful on a single CPU, but genuinely useful on multiprocessors when the expected wait is shorter than the cost of two context switches — which is why kernels use spinlocks for very short critical sections.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "57",
+      "section": "Process Synchronization",
+      "question": "What are the classical synchronization problems?",
+      "answer": "Producer-Consumer (bounded buffer): producers must not write to a full buffer, consumers must not read an empty one — solved with two counting semaphores plus a mutex. Readers-Writers: many readers may read together, but a writer needs exclusive access — variants prioritize readers or writers. Dining Philosophers: five philosophers, five forks — the textbook illustration of deadlock and starvation. Sleeping Barber: a barber and a waiting room, modelling limited-capacity queues.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "LastMinuteNotes"]
+    },
+    {
+      "id": "58",
+      "section": "Process Synchronization",
+      "question": "What is priority inversion and how is it solved?",
+      "answer": "A high-priority task is blocked waiting on a lock held by a low-priority task, and a medium-priority task preempts the low one — so effectively the medium task outranks the high one. Fixes: priority inheritance (the lock holder temporarily inherits the waiter's priority) or priority ceiling (a lock carries the max priority of anyone who can take it). This famously nearly killed the Mars Pathfinder mission.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "59",
+      "section": "Deadlocks",
+      "question": "What is a deadlock?",
+      "answer": "A state where a set of processes are each blocked forever, waiting for a resource held by another process in the same set, so none can ever proceed. Classic example: P1 holds the printer and wants the scanner, P2 holds the scanner and wants the printer.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "60",
+      "section": "Deadlocks",
+      "question": "What are the four necessary conditions for a deadlock?",
+      "answer": "All four must hold simultaneously (Coffman conditions): Mutual Exclusion — at least one resource is non-shareable. Hold and Wait — a process holding a resource requests another. No Preemption — a resource can only be released voluntarily. Circular Wait — a closed chain of processes each waiting on the next. Break any single one and deadlock becomes impossible.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "61",
+      "section": "Deadlocks",
+      "question": "What are the four methods of handling deadlock?",
+      "answer": "Prevention (structurally deny one of the four conditions), Avoidance (allow the conditions but grant requests only when the state stays safe — Banker's algorithm), Detection and Recovery (let it happen, find it with a wait-for graph, then kill or roll back a victim), and Ignoring it — the Ostrich algorithm, which is what Windows and Linux actually do because deadlocks are rare and prevention is expensive.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint", "InterviewBit"]
+    },
+    {
+      "id": "62",
+      "section": "Deadlocks",
+      "question": "How is deadlock prevention done?",
+      "answer": "Attack one condition. Mutual exclusion: make resources shareable where possible (spooling). Hold and wait: require a process to request everything up front, or release all before requesting more — causes low utilization and starvation. No preemption: forcibly take resources from a waiting process. Circular wait: impose a global ordering on resource types and require requests in increasing order — the most practical technique in real code.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Guru99", "InterviewBit"]
+    },
+    {
+      "id": "63",
+      "section": "Deadlocks",
+      "question": "What is deadlock avoidance? Explain Banker's algorithm.",
+      "answer": "Avoidance uses advance knowledge of each process's maximum resource claim to grant a request only if the resulting state is still safe. Banker's algorithm maintains Available, Max, Allocation and Need matrices; on a request it pretends to grant it and runs the safety algorithm to find a sequence in which every process can finish. If no such sequence exists, the request is denied and the process waits. It's called Banker's because a bank never allocates cash such that it can't satisfy all its customers.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "64",
+      "section": "Deadlocks",
+      "question": "When is a system in a safe state?",
+      "answer": "When there exists at least one safe sequence — an ordering of all processes such that each one's remaining need can be met by the currently available resources plus everything held by the processes before it in the sequence. A safe state guarantees no deadlock; an unsafe state does not guarantee deadlock, it just means the OS can no longer prevent it.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "65",
+      "section": "Deadlocks",
+      "question": "What is a resource allocation graph?",
+      "answer": "A directed graph with processes and resources as vertices: a request edge points from a process to a resource, an assignment edge from a resource instance to a process. With one instance per resource type, a cycle means deadlock. With multiple instances, a cycle is only a necessary condition — deadlock may or may not exist, so you need the detection algorithm.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "66",
+      "section": "Deadlocks",
+      "question": "How does deadlock detection and recovery work?",
+      "answer": "Detection runs a wait-for graph (single-instance) or a Banker's-style detection algorithm (multi-instance) periodically or when CPU utilization drops suspiciously. Recovery options: abort all deadlocked processes, abort them one at a time until the cycle breaks, or preempt resources from a victim and roll it back. Victim selection considers priority, how long it has run, and how many resources it holds — and must avoid always picking the same process, which causes starvation.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "67",
+      "section": "Deadlocks",
+      "question": "Difference between deadlock, starvation and livelock?",
+      "answer": "Deadlock: processes are blocked forever in a circular wait — nothing runs. Starvation: a process is runnable but the scheduler keeps passing it over — others progress, it doesn't. Livelock: processes are not blocked and keep changing state in response to each other, but make no progress — like two people repeatedly stepping aside in the same direction.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "68",
+      "section": "Deadlocks",
+      "question": "What is the Ostrich algorithm?",
+      "answer": "Deliberately ignoring the deadlock problem — sticking your head in the sand. Used by most general-purpose OSes (Unix, Linux, Windows) because deadlocks are infrequent, the cost of prevention or avoidance in performance and flexibility is high, and rebooting or killing a hung process is acceptable to users.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes"]
+    },
+    {
+      "id": "69",
+      "section": "Memory Management & Fragmentation",
+      "question": "What are the goals of memory management?",
+      "answer": "Relocation (a process may be swapped out and back to a different address), Protection (a process must not touch another's memory), Sharing (controlled access to common code/data), Logical organization (modules with different permissions), and Physical organization (moving data between main and secondary memory). It also maximizes the degree of multiprogramming for a given amount of RAM.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "70",
+      "section": "Memory Management & Fragmentation",
+      "question": "Difference between logical and physical address space? What does the MMU do?",
+      "answer": "A logical (virtual) address is generated by the CPU and is what the program sees; a physical address is the real location in the memory unit. The Memory Management Unit is the hardware that translates one to the other at run time — in the simplest scheme by adding a relocation-register value, in real systems by walking the page table. The program never sees a physical address, which is what makes relocation and protection possible.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "71",
+      "section": "Memory Management & Fragmentation",
+      "question": "What is address binding? What are its three types?",
+      "answer": "Mapping program instructions and data to actual memory addresses. Compile-time binding: absolute addresses are baked in, so the program must load at a known location. Load-time binding: relocatable code is bound when loaded. Execution-time binding: binding is deferred until run time, so the process can move around in memory — this needs MMU hardware and is what modern systems use.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "72",
+      "section": "Memory Management & Fragmentation",
+      "question": "Explain first fit, best fit and worst fit allocation.",
+      "answer": "Strategies for choosing a hole in contiguous allocation. First fit: take the first hole big enough — fastest. Best fit: take the smallest adequate hole — least wasted space per allocation but leaves many tiny unusable fragments. Worst fit: take the largest hole — leaves a big usable remainder but performs worst in practice. First fit and best fit both beat worst fit on speed and utilization.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "73",
+      "section": "Memory Management & Fragmentation",
+      "question": "Difference between internal and external fragmentation?",
+      "answer": "Internal fragmentation is wasted space inside an allocated block — you asked for 5 KB, the system gave a 8 KB fixed-size frame, 3 KB is unusable. It is caused by fixed-size allocation (paging). External fragmentation is free memory that exists but is split into scattered small holes, so a large request fails despite enough total free memory — caused by variable-size allocation (segmentation). Paging eliminates external fragmentation; compaction fixes it in segmented systems.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "74",
+      "section": "Memory Management & Fragmentation",
+      "question": "What is compaction?",
+      "answer": "Shuffling allocated memory blocks so all free holes merge into one large contiguous block, curing external fragmentation. It is expensive (everything must be copied) and only possible when address binding happens at execution time, since processes change their physical location.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "75",
+      "section": "Memory Management & Fragmentation",
+      "question": "What is swapping?",
+      "answer": "Temporarily moving an entire process out of main memory to a backing store (swap space on disk) and bringing it back later. It lets the total memory demand of all processes exceed physical RAM and raises the degree of multiprogramming, at the cost of high transfer time. Modern systems swap pages rather than whole processes.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "JavaTpoint"]
+    },
+    {
+      "id": "76",
+      "section": "Memory Management & Fragmentation",
+      "question": "What is paging?",
+      "answer": "A non-contiguous memory allocation scheme: physical memory is split into fixed-size frames and logical memory into pages of the same size. Any page can go into any free frame, and a per-process page table maps page numbers to frame numbers. This completely eliminates external fragmentation and removes the need for contiguous allocation; the cost is internal fragmentation in the last page and the extra memory access for the page table.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "77",
+      "section": "Memory Management & Fragmentation",
+      "question": "What is segmentation? Difference between paging and segmentation?",
+      "answer": "Segmentation divides a process by its logical parts — code, stack, heap, each a variable-size segment with a base and limit. Paging uses fixed-size blocks; segmentation uses variable-size ones. Paging is invisible to the programmer and managed by the OS; segments correspond to the programmer's view and are set up by the compiler. Paging suffers internal fragmentation, segmentation suffers external fragmentation. Paging needs a page table, segmentation a segment table. Many systems combine both (segmented paging).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "78",
+      "section": "Memory Management & Fragmentation",
+      "question": "What are overlays? What is dynamic loading and dynamic linking?",
+      "answer": "Overlays keep only the currently needed instructions and data in memory, swapping program sections in and out — an old technique for running a program larger than available RAM, managed manually by the programmer. Dynamic loading defers loading a routine until it is actually called, so unused code (like rare error handlers) never consumes memory. Dynamic linking defers library binding to run time, so one shared library copy serves all processes.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "79",
+      "section": "Virtual Memory & Paging",
+      "question": "What is virtual memory and what are its advantages?",
+      "answer": "A technique that lets a process execute even when it is not entirely in main memory, by keeping the rest on disk and using the logical address space as an abstraction over physical RAM. Advantages: programs can be larger than physical memory, more processes fit in memory so the degree of multiprogramming and CPU utilization rise, less I/O is needed to load or swap a process, and processes are isolated from each other.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "80",
+      "section": "Virtual Memory & Paging",
+      "question": "What is demand paging?",
+      "answer": "The lazy-loading implementation of virtual memory: a page is brought into memory only when it is actually referenced, never in advance. Pages not in memory are marked invalid in the page table, and touching one triggers a page fault that fetches it. This cuts startup time and memory usage dramatically, since most programs never touch most of their code.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "81",
+      "section": "Virtual Memory & Paging",
+      "question": "What is a page fault and how is it handled?",
+      "answer": "A trap raised when a process references a page whose page-table entry is marked invalid (not in memory). Handling: the OS checks the reference is legal, finds a free frame (or evicts one via the page replacement algorithm), schedules a disk read of the page, updates the page table to valid, and restarts the faulting instruction. A page fault costs milliseconds against nanoseconds for a memory access, which is why fault rate dominates virtual-memory performance.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "PlacementPreparation"]
+    },
+    {
+      "id": "82",
+      "section": "Virtual Memory & Paging",
+      "question": "What is a page table? What is a TLB and how does it improve performance?",
+      "answer": "The page table maps each page number to a frame number, plus valid/invalid, dirty and protection bits. Naively, every memory reference then needs two accesses — one for the table, one for the data. The Translation Lookaside Buffer is a small, fast, fully-associative hardware cache of recent page-to-frame translations; on a TLB hit the physical address is formed with no extra memory access. Because of locality of reference, hit rates of 90-99% are normal, so effective access time stays close to a single memory access.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "LastMinuteNotes"]
+    },
+    {
+      "id": "83",
+      "section": "Virtual Memory & Paging",
+      "question": "How do you calculate effective access time with page faults?",
+      "answer": "EAT = (1 − p) × memory_access_time + p × page_fault_service_time, where p is the page fault rate. Because a fault costs milliseconds and a memory access nanoseconds, even a tiny p wrecks performance — with 100 ns access and 8 ms fault service, a fault rate of just 1 in 1000 makes the effective access time roughly 8 microseconds, about 80× slower. Same idea for the TLB: EAT = hit_ratio × (TLB + memory) + miss_ratio × (TLB + 2 × memory).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "84",
+      "section": "Virtual Memory & Paging",
+      "question": "What is thrashing? What causes it and how is it fixed?",
+      "answer": "A state where the system spends more time servicing page faults than executing processes, so CPU utilization collapses. Cause: too high a degree of multiprogramming means each process has too few frames to hold its working set, so every process constantly faults. The trap is that the OS sees low CPU utilization and admits *more* processes, making it worse. Fixes: the working set model, page-fault frequency control, reducing the degree of multiprogramming, or adding physical memory.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "85",
+      "section": "Virtual Memory & Paging",
+      "question": "What is the working set model?",
+      "answer": "The working set is the set of pages a process has referenced in the most recent Δ (delta) references — an approximation of its locality. The OS sums the working set sizes of all processes; if that total exceeds the available frames, it suspends a process to prevent thrashing. It is the principled way to decide how many frames each process actually needs.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "86",
+      "section": "Virtual Memory & Paging",
+      "question": "Compare FIFO, Optimal and LRU page replacement algorithms.",
+      "answer": "FIFO evicts the oldest-loaded page — trivial to implement but ignores usage, and suffers Belady's anomaly. Optimal (OPT/MIN) evicts the page that will not be used for the longest time in the future — provably the lowest fault rate, but impossible to implement since it needs the future; it is used as a benchmark. LRU evicts the least recently used page — a good practical approximation of Optimal based on locality, but needs counters or a stack, so real systems use cheap approximations like the second-chance/clock algorithm with reference bits.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "87",
+      "section": "Virtual Memory & Paging",
+      "question": "What is Belady's anomaly and why does it occur?",
+      "answer": "The counter-intuitive phenomenon where increasing the number of page frames *increases* the number of page faults. It occurs in FIFO because FIFO is not a stack algorithm — the set of pages in memory with n frames is not guaranteed to be a subset of the set with n+1 frames. Stack algorithms like LRU and Optimal have that subset property, so they can never exhibit the anomaly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "88",
+      "section": "Virtual Memory & Paging",
+      "question": "Difference between a page and a frame? What are the trade-offs of page size?",
+      "answer": "A page is a fixed-size block of logical/virtual memory; a frame is a physical memory block of exactly the same size. Pages are loaded into frames. Larger pages: smaller page table, better TLB coverage, fewer faults for sequential access — but more internal fragmentation and more wasted I/O. Smaller pages: less internal fragmentation and finer-grained resolution — but a huge page table and more faults. There is no universally best size; typical is 4 KB.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "89",
+      "section": "Virtual Memory & Paging",
+      "question": "What is locality of reference?",
+      "answer": "The empirical observation that programs access a small, clustered subset of their address space at any moment. Temporal locality: a recently used location is likely to be used again soon (loop counters). Spatial locality: locations near a used one are likely next (array traversal, sequential code). Every cache, TLB and page replacement policy exists because locality holds.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "90",
+      "section": "Virtual Memory & Paging",
+      "question": "What are multilevel, hashed and inverted page tables?",
+      "answer": "A flat page table for a 32/64-bit address space would itself be enormous, so: Multilevel (hierarchical) paging pages the page table itself, so only the needed portions stay in memory. Hashed page tables hash the virtual page number into a chain of entries — used for large address spaces. Inverted page tables keep one entry per physical frame instead of per page, so table size depends on RAM, not on the number of processes — but searching is slower and sharing is hard.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "91",
+      "section": "Virtual Memory & Paging",
+      "question": "How does the OS ensure memory protection between processes?",
+      "answer": "Each process gets its own page table, so its virtual addresses simply cannot name another process's frames — isolation is structural. Base and limit registers bound the accessible range in simpler schemes; page table entries carry read/write/execute permission bits and a valid bit, and any violation raises a hardware trap the kernel turns into a segmentation fault. Only kernel mode can modify these tables.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "Guru99", "GeeksforGeeks"]
+    },
+    {
+      "id": "92",
+      "section": "File Systems, Disk & I/O",
+      "question": "What is a file system? What are the basic file operations?",
+      "answer": "The OS component that organizes data on secondary storage into named files and directories, and defines how they are stored, accessed and protected (NTFS, ext4, FAT32, APFS). Basic operations: create, open, read, write, append, seek/reposition, truncate, rename, close and delete. It also tracks metadata — size, timestamps, owner, permissions — and manages free space.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Guru99", "PlacementPreparation", "JavaTpoint"]
+    },
+    {
+      "id": "93",
+      "section": "File Systems, Disk & I/O",
+      "question": "What is an inode?",
+      "answer": "In Unix-like file systems, a data structure holding all the metadata about a file — size, permissions, owner, timestamps, link count and pointers to its data blocks — but not its name. The filename lives in the directory entry, which just maps a name to an inode number. This separation is exactly what makes hard links possible.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "PlacementPreparation", "Guru99"]
+    },
+    {
+      "id": "94",
+      "section": "File Systems, Disk & I/O",
+      "question": "Difference between a hard link and a soft (symbolic) link?",
+      "answer": "A hard link is another directory entry pointing to the same inode — the file survives until the last hard link is deleted, and links cannot cross file systems or point to directories. A soft link is a separate small file containing a path string — it can cross file systems and link directories, but breaks into a dangling link if the target is deleted or moved.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "Guru99", "PlacementPreparation"]
+    },
+    {
+      "id": "95",
+      "section": "File Systems, Disk & I/O",
+      "question": "What are the file allocation methods?",
+      "answer": "Contiguous: the file occupies consecutive blocks — excellent sequential and direct access, but causes external fragmentation and the file can't grow easily. Linked: each block points to the next — no fragmentation and easy growth, but direct access is impossible and one bad pointer loses the rest. Indexed: an index block holds all block pointers — supports direct access without external fragmentation, at the cost of index-block overhead for small files.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "96",
+      "section": "File Systems, Disk & I/O",
+      "question": "How does the OS manage free disk space?",
+      "answer": "Bit vector (bitmap): one bit per block, 1 = free — simple and easy to find contiguous runs, but the whole map must stay in memory for speed. Linked list of free blocks: no waste, but traversal is slow. Grouping and counting are optimizations that store several free-block addresses or a run length per entry.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "97",
+      "section": "File Systems, Disk & I/O",
+      "question": "What are the file access methods?",
+      "answer": "Sequential access: read/write in order, one record after another — the most common and what tapes forced. Direct/random access: jump straight to any block number, needed by databases. Indexed access: an index file maps keys to block locations, so you search the index first and then jump — used by ISAM-style systems.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "98",
+      "section": "File Systems, Disk & I/O",
+      "question": "What is disk scheduling? Explain FCFS, SSTF, SCAN, C-SCAN, LOOK and C-LOOK.",
+      "answer": "Choosing the order to service pending disk I/O requests to minimize total head movement (seek time). FCFS: service in arrival order — fair, poor performance. SSTF: pick the closest request — good throughput but can starve far requests. SCAN (elevator): sweep to one end servicing everything, then reverse. C-SCAN: sweep in one direction only, then jump back to the start without servicing — gives more uniform wait times. LOOK/C-LOOK: same as SCAN/C-SCAN but reverse at the last request instead of the physical end of the disk, saving pointless travel.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "PlacementPreparation", "LastMinuteNotes"]
+    },
+    {
+      "id": "99",
+      "section": "File Systems, Disk & I/O",
+      "question": "What are seek time, rotational latency and transfer time?",
+      "answer": "Seek time: how long the disk arm takes to move to the correct track — the largest and the only component disk scheduling can reduce. Rotational latency: the wait for the required sector to rotate under the head (on average, half a rotation). Transfer time: the time to actually move the bytes. Total disk access time is the sum of all three. SSDs have no moving parts, so seek and rotational latency vanish and disk scheduling matters far less.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "100",
+      "section": "File Systems, Disk & I/O",
+      "question": "What is RAID? Explain the common levels.",
+      "answer": "Redundant Array of Independent Disks — combining multiple physical disks for performance, redundancy or both. RAID 0: striping, fastest, zero redundancy (one disk dies, everything is lost). RAID 1: mirroring, full redundancy at 50% capacity cost. RAID 5: striping with distributed parity, survives one disk failure, good read performance, write penalty from parity updates. RAID 6: two parity blocks, survives two failures. RAID 10: mirrored stripes — best performance plus redundancy, most expensive. RAID is not a backup: it protects against disk failure, not deletion or corruption.",
+      "frequency": "MOST_FREQ",
+      "sources": ["InterviewBit", "JavaTpoint", "Guru99", "PlacementPreparation"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "OS Basics & Types": 10,
+      "Kernel, System Calls & Modes": 10,
+      "Processes & Threads": 14,
+      "CPU Scheduling": 12,
+      "Process Synchronization": 12,
+      "Deadlocks": 10,
+      "Memory Management & Fragmentation": 10,
+      "Virtual Memory & Paging": 13,
+      "File Systems, Disk & I/O": 9
+    },
+    "by_frequency": {
+      "MOST_FREQ": 49,
+      "MED": 42,
+      "LOW": 9
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q21–Q34 (processes and threads), Q35–Q45 (scheduling), Q47–Q52 (synchronization basics), Q59–Q63 (deadlock), Q70–Q80 (memory, paging, virtual memory) and Q84–Q87 (thrashing, page replacement, Belady). Plus Q1–Q2, Q11–Q16 for the opening theory questions. Every MOST_FREQ in that range is must-know — process vs thread and deadlock conditions are near-guaranteed.",
+      "mid_level_2_to_5_yrs": "Add Q53–Q58 (monitors, Peterson, priority inversion), Q64–Q68 (safe state, RAG, detection/recovery), Q82–Q83 and Q88–Q91 (TLB, effective access time, page size, memory protection), and Q92–Q100 (file systems, inodes, disk scheduling, RAID). Be able to solve Gantt-chart and page-replacement numericals on the spot.",
+      "senior_5_plus_yrs": "All 100 + follow-ups on MLFQ (Q44), copy-on-write and fork internals (Q34), NUMA vs SMP (Q10), virtualization and containers (Q20), inverted page tables (Q90), and real war stories — a production deadlock, a memory leak, or a thrashing incident you diagnosed."
+    },
+    "highest_probability_topics": [
+      "Process vs Thread (Q26)",
+      "Process states + PCB (Q22, Q23)",
+      "Deadlock and its four conditions (Q59, Q60)",
+      "CPU scheduling algorithms — FCFS/SJF/RR/Priority (Q39–Q42)",
+      "Preemptive vs non-preemptive scheduling (Q37)",
+      "Paging vs Segmentation (Q76, Q77)",
+      "Virtual memory + demand paging (Q79, Q80)",
+      "Thrashing (Q84)",
+      "Page replacement — FIFO vs LRU vs Optimal (Q86)",
+      "Belady's anomaly (Q87)",
+      "Semaphore vs Mutex (Q50, Q52)",
+      "Internal vs external fragmentation (Q73)",
+      "Context switching (Q29)",
+      "Banker's algorithm (Q63)"
+    ]
+  }
+}

@@ -35,16 +35,15 @@ export default async function CompanyBrainDetailPage({ params }: Props) {
   return (
     <>
       <DashboardNav userName={session.user.name} />
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
+      <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto">
           <Link
             href="/company-brain"
-            className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
+            className="group inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Company Brain
           </Link>
 

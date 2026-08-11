@@ -5,15 +5,15 @@ import DashboardNav from "@/components/DashboardNav";
 import Link from "next/link";
 import { ChevronLeft, BookOpen, Code2, ArrowRight } from "lucide-react";
 
-const CONCEPT_META: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
-  array:       { label: "Arrays",                      emoji: "📦", color: "text-violet-400", bg: "bg-violet-500/10" },
-  string:      { label: "Strings",                     emoji: "🔤", color: "text-sky-400",    bg: "bg-sky-500/10"    },
-  "linked-list":{ label: "Linked List",                emoji: "🔗", color: "text-emerald-400",bg: "bg-emerald-500/10"},
-  stack:       { label: "Stack",                       emoji: "📚", color: "text-orange-400", bg: "bg-orange-500/10" },
-  queue:       { label: "Queue",                       emoji: "🚶", color: "text-yellow-400", bg: "bg-yellow-500/10" },
-  tree:        { label: "Tree",                        emoji: "🌳", color: "text-green-400",  bg: "bg-green-500/10"  },
-  graph:       { label: "Graph",                       emoji: "🕸️", color: "text-pink-400",   bg: "bg-pink-500/10"   },
-  dp:          { label: "Dynamic Programming",         emoji: "🧩", color: "text-cyan-400",   bg: "bg-cyan-500/10"   },
+const CONCEPT_META: Record<string, { label: string; emoji: string; accent: string }> = {
+  array: { label: "Arrays", emoji: "📦", accent: "text-accent-violet" },
+  string: { label: "Strings", emoji: "🔤", accent: "text-accent-blue" },
+  "linked-list": { label: "Linked List", emoji: "🔗", accent: "text-accent-green" },
+  stack: { label: "Stack", emoji: "📚", accent: "text-accent-orange" },
+  queue: { label: "Queue", emoji: "🚶", accent: "text-accent-cyan" },
+  tree: { label: "Tree", emoji: "🌳", accent: "text-accent-green" },
+  graph: { label: "Graph", emoji: "🕸️", accent: "text-accent-pink" },
+  dp: { label: "Dynamic Programming", emoji: "🧩", accent: "text-accent-cyan" },
 };
 
 const SUB_CARDS = [
@@ -21,23 +21,15 @@ const SUB_CARDS = [
     id: "basics",
     label: "Basics",
     icon: BookOpen,
-    desc: "Core concepts, syntax, built-in methods and essential patterns — everything you need to know before LeetCode.",
-    accentBg: "bg-violet-500/10",
-    accentBorder: "border-violet-500/30 hover:border-violet-500/60",
-    accentText: "text-violet-400",
-    glow: "hover:shadow-[0_0_24px_rgba(139,92,246,0.25)]",
-    tag: "Fundamentals",
+    desc: "Core concepts, syntax, built-in methods and essential patterns — everything you need before LeetCode.",
+    accent: "text-primary", hoverBorder: "hover:border-primary/40", tag: "Fundamentals",
   },
   {
     id: "leetcode",
     label: "LeetCode Questions",
     icon: Code2,
-    desc: "Top interview questions with complete Java solutions, VS Code-style code view, and a quick approach summary.",
-    accentBg: "bg-amber-500/10",
-    accentBorder: "border-amber-500/30 hover:border-amber-500/60",
-    accentText: "text-amber-400",
-    glow: "hover:shadow-[0_0_24px_rgba(245,158,11,0.25)]",
-    tag: "Coding Practice",
+    desc: "Top interview questions with complete Java solutions, an editor-style code view, and a quick approach summary.",
+    accent: "text-accent-orange", hoverBorder: "hover:border-accent-orange/40", tag: "Coding practice",
   },
 ];
 
@@ -51,66 +43,54 @@ export default async function ConceptPage({ params }: { params: { concept: strin
   return (
     <>
       <DashboardNav userName={session.user.name} />
-
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
+      <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl mx-auto">
-
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-text-muted mb-8">
+          <nav className="flex items-center gap-2 text-sm text-text-muted mb-8">
             <Link href="/learn" className="hover:text-text transition-colors">Learn</Link>
-            <span>/</span>
+            <span className="text-text-dim">/</span>
             <Link href="/learn/dsa" className="hover:text-text transition-colors">DSA</Link>
-            <span>/</span>
-            <span className={meta.color}>{meta.label}</span>
-          </div>
+            <span className="text-text-dim">/</span>
+            <span className={meta.accent}>{meta.label}</span>
+          </nav>
 
-          {/* Header */}
           <div className="flex items-center gap-4 mb-10">
-            <div className={`w-14 h-14 rounded-2xl ${meta.bg} flex items-center justify-center text-3xl`}>
+            <div className="w-14 h-14 rounded-2xl bg-bg-surface border border-bg-border flex items-center justify-center text-3xl">
               {meta.emoji}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-text">{meta.label}</h1>
+              <h1 className="text-2xl font-bold text-text tracking-tight">{meta.label}</h1>
               <p className="text-sm text-text-muted mt-0.5">Choose how you want to study</p>
             </div>
           </div>
 
-          {/* Sub-cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {SUB_CARDS.map(({ id, label, icon: Icon, desc, accentBg, accentBorder, accentText, glow, tag }) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {SUB_CARDS.map(({ id, label, icon: Icon, desc, accent, hoverBorder, tag }) => (
               <Link
                 key={id}
                 href={`/learn/dsa/${params.concept}/${id}`}
-                className={`group flex flex-col glass-card rounded-2xl border ${accentBorder} ${glow} p-6 transition-all duration-300 hover:-translate-y-1`}
+                className={`group flex flex-col glass-card rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 ${hoverBorder}`}
               >
                 <div className="flex items-start justify-between mb-5">
-                  <div className={`w-12 h-12 rounded-xl ${accentBg} flex items-center justify-center`}>
-                    <Icon className={`w-5 h-5 ${accentText}`} />
+                  <div className={`w-12 h-12 rounded-xl bg-bg-surface border border-bg-border flex items-center justify-center ${accent}`}>
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full ${accentBg} ${accentText} border ${accentBorder}`}>
-                    {tag}
-                  </span>
+                  <span className="chip">{tag}</span>
                 </div>
-
-                <h2 className={`text-lg font-bold ${accentText} mb-2`}>{label}</h2>
+                <h2 className={`text-lg font-bold mb-2 ${accent}`}>{label}</h2>
                 <p className="text-sm text-text-muted leading-relaxed flex-1">{desc}</p>
-
-                <div className={`mt-5 flex items-center gap-1.5 text-sm font-semibold ${accentText}`}>
+                <div className={`mt-5 flex items-center gap-1.5 text-sm font-semibold ${accent}`}>
                   Open {label}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>
               </Link>
             ))}
           </div>
 
-          {/* Back */}
-          <Link href="/learn/dsa" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mt-10">
-            <ChevronLeft className="w-4 h-4" /> All DSA concepts
+          <Link href="/learn/dsa" className="group inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mt-10">
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" /> All DSA concepts
           </Link>
-
         </div>
       </main>
     </>

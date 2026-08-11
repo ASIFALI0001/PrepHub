@@ -1,0 +1,830 @@
+================================================================================
+PREPHUB — FULL PROJECT DETAIL DOCUMENT
+================================================================================
+Generated as a complete reference for the PrepHub codebase: what it is, how it
+is built, every feature, every data model, every API route, the AI pipelines,
+the design system, and how to set it up. Written to reflect the ACTUAL code in
+this repository (not aspirational/marketing copy).
+
+Project root: d:/Projects 2026/PrepHub/Application
+
+
+================================================================================
+1. WHAT PREPHUB IS
+================================================================================
+PrepHub is a full-stack, all-in-one technical interview preparation platform.
+A student/candidate signs up, and from one dashboard can:
+
+  - LEARN curated concept Q&A across DSA, OOPS, DBMS, OS, Computer Networks,
+    SQL, MongoDB, NumPy, Pandas, Scikit-learn, and RAG systems, with per-user
+    "mark as learned" progress tracking.
+  - QUIZ themselves with timed, randomized MCQ sessions per topic, with
+    persistent high-score / accuracy history.
+  - Take a LIVE AI MOCK INTERVIEW — either via the browser's built-in
+    Web Speech API (free, manual pacing) or via a real-time conversational
+    AI voice agent (VAPI) that asks follow-up questions like a human
+    interviewer — and receive a Gemini-generated scored report afterward.
+  - Generate a COMPANY BRAIN — company- and role-specific interview
+    questions assembled by scraping public sources (Reddit, GitHub,
+    GeeksForGeeks, InterviewBit, LeetCode Discuss, job postings, etc.) and
+    having Gemini synthesize 35-50 tailored questions.
+  - Run their resume through an ATS CHECKER that scores it against
+    Applicant-Tracking-System criteria, shows missing keywords and quick
+    wins, and can auto-generate a professional, ATS-optimized LaTeX resume
+    (opens directly in Overleaf to compile to PDF), improved further via a
+    RAG knowledge base of real 90+-scoring resumes.
+  - Get an AI CAREER GUIDE: upload a resume + optional GitHub profile +
+    answer an 8-question lifestyle/goals assessment, and receive ranked
+    career-path recommendations with a detailed 24-month phase-by-phase
+    roadmap, exam targets (GATE/GRE/CAT/GMAT), and reach/match/safe college
+    targets — exportable as a print-ready PDF.
+  - Manage their PROFILE (college, branch, semester) and leave FEEDBACK
+    (5-star ratings per feature + free text).
+
+An ADMIN (separate token-based login, not a normal user account) can:
+  - View every registered user with their engagement stats (streak, quiz
+    accuracy, interview average/grade, profile info).
+  - BLOCK / UNBLOCK any user. A blocked user immediately sees a full-screen
+    "Admin blocked you" message and cannot use the app until unblocked.
+  - PAUSE / RESUME any of the 6 feature pages (Learn, Quiz, Interview,
+    Company Brain, Career Guide, ATS Checker) platform-wide for maintenance.
+    A paused page shows users an "Under maintenance" screen. This setting
+    is stored in MongoDB, so it survives page refreshes and server restarts.
+  - Review the RAG knowledge base of top (90+) resumes collected for the
+    ATS builder.
+  - Review all user feedback with per-feature average ratings.
+
+
+================================================================================
+2. TECH STACK
+================================================================================
+Framework:        Next.js 14.2.5 (App Router, React 18, TypeScript, Node.js)
+Styling:           Tailwind CSS 3 with a fully custom design-token system
+Animation:         Framer Motion 11
+Database:          MongoDB Atlas via Mongoose 8 (+ MongoDB Atlas Vector
+                    Search for resume-similarity RAG)
+Auth:               NextAuth.js 4 (credentials provider, JWT session strategy,
+                    bcryptjs password hashing)
+AI / LLM:           Google Gemini (@google/generative-ai) — models
+                    gemini-2.5-flash / gemini-2.5-pro with automatic retry +
+                    model fallback, plus gemini-embedding-2 for vector
+                    embeddings
+Voice AI:           @vapi-ai/web (VAPI) — real-time conversational voice
+                    agent for the flagship "Live Interview" feature
+Speech (free path): Browser-native Web Speech API (SpeechRecognition +
+                    SpeechSynthesis) — zero-cost fallback interview mode
+Icons:              lucide-react
+Theming:            next-themes (light/dark, class-based)
+PDF/Resume parsing: pdf-parse, pdfjs-dist
+Web scraping:       Jina AI Reader API + TinyFish browsing engine + direct
+                    Greenhouse/Lever job-posting APIs (Company Brain)
+Language:           TypeScript throughout (strict-ish, full type coverage on
+                    models, API contracts, and component props)
+
+
+================================================================================
+3. HIGH-LEVEL ARCHITECTURE
+================================================================================
+- Next.js App Router with route groups:
+    app/(auth)/...        -> /login, /signup (public, split-screen auth UI)
+    app/(dashboard)/...    -> all authenticated feature pages
+    app/admin/...           -> separate admin login + admin dashboard
+    app/api/...              -> all backend route handlers (REST-style)
+    app/page.tsx             -> public landing page
+
+- No shared (dashboard)/layout.tsx exists on purpose in the current
+  structure; every authenticated page renders <DashboardNav> itself. This
+  means DashboardNav is the single highest-leverage component — it also
+  hosts <AccessGuard/> (block/maintenance enforcement) so every gated page
+  is automatically protected without per-page wiring.
+
+- Server Components fetch session + do initial DB reads (e.g. dashboard
+  page fetches user progress server-side); most interactive feature UIs are
+  Client Components that call the JSON API routes under app/api/*.
+
+- MongoDB connection is a cached singleton (lib/mongodb.ts) reused across
+  hot-reloads in dev and across serverless invocations in prod.
+
+- Mongoose models self-register once via `mongoose.models.X ?? mongoose.
+  model(...)` to survive Next.js dev hot-reload without "OverwriteModelError".
+
+- AI calls are centralized through lib/gemini.ts's generateWithRetry(),
+  which retries with exponential backoff (2s/4s/8s) on 503/429 errors and
+  alternates between gemini-2.5-flash and gemini-2.5-pro across attempts.
+
+
+================================================================================
+4. AUTHENTICATION & ACCOUNTS
+================================================================================
+- Regular users: NextAuth CredentialsProvider. Passwords hashed with
+  bcryptjs. Session strategy: JWT (no DB session table). Session carries
+  { id, name, email }. Sign-in/register pages: app/(auth)/login,
+  app/(auth)/signup, backed by POST /api/auth/register and NextAuth's
+  built-in /api/auth/[...nextauth] handler.
+
+- Admin: an entirely separate, lightweight auth mechanism — NOT a User
+  document. Credentials are two environment variables (ADMIN_EMAIL,
+  ADMIN_PASSWORD). POST /api/admin/login checks them and returns a token
+  that is base64(email:password) (lib/adminAuth.ts). The admin SPA
+  (app/admin/page.tsx) stores this token in sessionStorage and sends it as
+  the `x-admin-token` header on every admin API call. All /api/admin/*
+  routes call isAdminRequest(req) to gate access (401 if missing/wrong).
+
+- Access control layer (added for the block/maintenance feature): every
+  authenticated page is wrapped by <DashboardNav>, which renders
+  <AccessGuard/>. AccessGuard polls GET /api/platform-status every 30
+  seconds (and on route change) to learn:
+     { blocked: boolean, disabledPages: string[] }
+  If the user is blocked -> full-screen "Admin blocked you" overlay
+  (z-[200], covers everything, only action is Sign out).
+  If the current route's feature key is inside disabledPages -> a
+  "Under maintenance" overlay is shown for that page only (z-40, sits
+  below the 64px nav bar so the user can still navigate elsewhere).
+
+
+================================================================================
+5. DATA MODELS (MongoDB via Mongoose) — models/*.ts
+================================================================================
+
+--- User.ts ---
+  name, email (unique), password (bcrypt hash), blocked (bool, default
+  false — admin block flag), streak (number), lastActive (Date),
+  topicProgress: Record<topicId, learnedQuestionIds[]>,
+  quizStats: Record<topicId, {attempts, avgScore, lastScore, lastTaken}>,
+  profile: { semester, college, branch }, timestamps.
+
+--- Interview.ts ---
+  userId, title, role, type (technical|behavioral|mixed),
+  level (beginner|intermediate|senior), questionCount,
+  questions: [{id, text, expectedKeyPoints[]}],
+  answers: [{questionId, questionText, answerText}],
+  report: {
+     overallScore (0-100), grade (A-F), correctness, structure, confidence,
+     strengths[], improvements[], summary,
+     questionReports: [{questionId, questionText, answerText, score(0-10),
+        feedback, keyPointsCovered[], keyPointsMissed[]}],
+     generatedAt
+  } | null,
+  status: pending | in_progress | completed, timestamps.
+
+--- CompanyBrain.ts ---
+  userId, companyName, role, description,
+  questions: [{id, text, category(DSA|System Design|OOPS|Core CS|
+     Behavioral|Domain), difficulty(easy|medium|hard), sourceHint}],
+  sources[] (URLs scraped), status: generating|ready|error, timestamps.
+
+--- CareerGuide.ts ---
+  userId, resumeText, githubUsername, githubData (raw API data, Mixed),
+  mcqAnswers: [{question, answer}], usedPlatformData (bool),
+  careerOptions: [{path, score, reasoning, specialization, pros[], cons[]}],
+  roadmap: {
+     chosenPath, specialization,
+     phases: [{label, title, goals[], actions[], exams[]?}],
+     collegeTargets?: {reach[], match[], safe[]},
+     keySkills[], generatedAt
+  } | undefined,
+  status: analyzing|options_ready|roadmap_ready|error, timestamps.
+
+--- TopResume.ts ---  (RAG knowledge base for the ATS resume builder)
+  anonymizedContent (PII-stripped resume text), embedding: number[]
+  (Gemini embedding vector), score (ATS score that qualified it, >=90),
+  roleType, skills[], createdAt.
+  Backed by a MongoDB Atlas Vector Search index named
+  "top_resumes_vector_index" on the `embedding` field (cosine similarity).
+
+--- Feedback.ts ---
+  userId, userName, userEmail,
+  ratings: {learn, quiz, interview, companyBrain, ats, careerGuide}
+  (each 0-5 stars), text (free-form), timestamps.
+
+--- Settings.ts --- (added for admin page-pause feature)
+  Singleton document, key: "platform" (unique), disabledPages: string[]
+  (feature keys currently paused, e.g. ["quiz","ats"]). Read/written by the
+  admin Pages tab; read by every user via /api/platform-status.
+  NOTE: the list of pausable page keys/labels/hrefs lives in the
+  mongoose-free lib/pages.ts (TOGGLEABLE_PAGES) so client components can
+  safely import it without bundling mongoose into the browser. models/
+  Settings.ts re-exports it for server-side convenience.
+
+
+================================================================================
+6. FULL API ROUTE MAP — app/api/**/route.ts
+================================================================================
+Auth
+  POST   /api/auth/register              Create account (bcrypt hash)
+  *      /api/auth/[...nextauth]         NextAuth handler (login/session)
+
+User-facing feature APIs
+  GET    /api/dashboard                   Aggregated stats for the home
+                                           dashboard (streak, quiz accuracy,
+                                           interview avg/grade)
+  GET    /api/content/learn/[topic]       Curated Q&A content for a topic
+  GET    /api/progress                    (bulk) topic progress
+  PATCH  /api/progress/[topicId]          Mark/unmark a question as learned
+  DELETE /api/progress/[topicId]          Reset all progress for a topic
+
+  GET    /api/quiz/[topic]?count=N        Fetch N random quiz questions
+  POST   /api/quiz/[topic]/submit         Submit score, updates quizStats
+  GET    /api/quiz/stats                  Per-topic quiz stats for the
+                                           Quiz landing grid
+
+  POST   /api/interview                    Generate a new interview (Gemini
+                                           writes N questions for role/type/
+                                           level)
+  GET    /api/interview/[id]              Fetch one interview (for the
+                                           session/report pages)
+  POST   /api/interview/[id]/submit       Submit answers (Web Speech path)
+                                           OR a raw VAPI transcript ->
+                                           Gemini evaluates and writes
+                                           the `report`
+
+  POST   /api/company-brain/generate      Server-Sent-Events (streaming)
+                                           endpoint: scrapes 8 sources
+                                           across 3 engines live, streams
+                                           progress events, then calls
+                                           Gemini to produce 35-50 tailored
+                                           questions and saves a
+                                           CompanyBrain doc
+  GET    /api/company-brain               List the user's company research
+  GET    /api/company-brain/[id]          One company's full question set
+  DELETE /api/company-brain/[id]          Delete a research entry
+
+  POST   /api/ats/analyze                 Gemini scores an uploaded resume
+                                           (ATS report JSON)
+  POST   /api/ats/similar                 Atlas Vector Search: top 3 most
+                                           similar 90+ resumes from the
+                                           TopResume collection
+  POST   /api/ats/build                   Gemini generates/edits a full
+                                           ATS-optimized LaTeX resume
+                                           (optionally grounded in RAG
+                                           similar resumes + a JD +
+                                           free-text edit instructions)
+
+  GET    /api/career-guide                List the user's saved guides
+  POST   /api/career-guide/analyze         Resume + GitHub + 8 MCQ answers
+                                           -> Gemini ranks career paths
+  POST   /api/career-guide/roadmap        Chosen path -> Gemini generates
+                                           the full 24-month roadmap
+  POST   /api/career-guide/parse-resume   PDF upload -> extracted text
+                                           (used by both Career Guide and
+                                           ATS Checker upload flows)
+
+  GET    /api/profile                     Fetch account + academic profile
+  PUT    /api/profile                     Update college/branch/semester
+
+  GET    /api/feedback                    Fetch the current user's saved
+                                           feedback (to pre-fill the form)
+  POST   /api/feedback                    Submit/update feedback
+
+  GET    /api/platform-status             Current user's { blocked,
+                                           disabledPages } — polled by
+                                           AccessGuard on every gated page
+
+Admin-only APIs (all require header  x-admin-token: <token>)
+  POST   /api/admin/login                 Verify ADMIN_EMAIL/PASSWORD,
+                                           return the session token
+  GET    /api/admin/users                  All users + computed engagement
+                                           stats (quiz accuracy, interview
+                                           avg/grade, streak, blocked flag)
+  PATCH  /api/admin/users                  Body: {userId, blocked} — block
+                                           or unblock a specific user
+  GET    /api/admin/top-resumes           List of the RAG knowledge-base
+                                           resumes (score, roleType, skills,
+                                           anonymized preview)
+  GET    /api/admin/feedback              All feedback entries + computed
+                                           per-feature average ratings
+  GET    /api/admin/settings              Current disabledPages[] (which
+                                           feature pages are paused)
+  PATCH  /api/admin/settings              Body: {disabledPages: string[]}
+                                           — persist the full paused-pages
+                                           set (upserts the Settings
+                                           singleton doc)
+
+
+================================================================================
+7. FEATURE-BY-FEATURE DETAIL
+================================================================================
+
+--- 7.1 LEARN ---
+Content model: lib/topics.ts defines SECTIONS (Basics, AI/ML, DSA, Tools),
+each containing Topic entries (id, label, desc, accent color token, total
+question count). Topics: Java, OOPS, DBMS, Computer Networks, Operating
+Systems, NumPy, Pandas, Scikit-learn, RAG Systems, DSA (separate deep-dive
+sub-flow), MongoDB Atlas, SQL.
+Question content is served per-topic from a JSON-backed API
+(/api/content/learn/[topic]) with metadata: total_questions, sources
+(with attribution + "strength" description), frequency_legend, and a
+`summary` block containing a study_plan (freshers/mid-level/senior
+guidance) and highest_probability_topics.
+Each question has: section, question, answer, frequency
+(MOST_FREQ|MED|LOW), sources[]. Users can expand a question and click
+"Mark as learned" — persisted per-user, per-topic via PATCH /api/progress/
+[topicId]; a topic can be fully reset via DELETE.
+DSA gets a dedicated sub-flow: /learn/dsa (8 concept cards: Arrays,
+Strings, Linked List, Stack, Queue, Tree, Graph, DP — only Arrays is
+currently marked available, the rest show a "Soon" lock badge) ->
+/learn/dsa/[concept] (choose Basics or LeetCode Questions) ->
+/learn/dsa/[concept]/basics (concept explainer with syntax-highlighted
+Java code blocks, sourced from content/learn/dsa/[concept]/basics.json)
+and /learn/dsa/[concept]/leetcode (curated LeetCode problems with full
+Java solutions + approach summary, from leetcode.json). Code blocks use a
+custom hand-rolled VS-Code-Dark+-themed tokenizer/highlighter component
+(components/DSACodeBlock.tsx) — no external syntax-highlighting library.
+
+--- 7.2 QUIZ ---
+Landing grid (/quiz) shows available topics (currently: Java is live;
+OOPS/CN/OS show a "Soon" lock) with per-topic readiness stats (times
+taken, average score, last score) pulled from GET /api/quiz/stats.
+Per-topic page (/quiz/[topic]) lets the user pick a question count
+(quick-pick buttons 5/10/15/20/25/30/50/100 or a slider), then starts a
+timed session: one question at a time, 4 options, immediate correct/
+incorrect feedback with an explanation, a running correct/incorrect tally,
+and a final results screen with a letter grade (A-F based on percentage),
+per-question review of anything answered incorrectly (shows the chosen
+answer, the correct answer, and the explanation). Final score is POSTed to
+/api/quiz/[topic]/submit which updates the user's quizStats (attempts,
+avgScore, lastScore, lastTaken).
+
+--- 7.3 LIVE AI INTERVIEW (flagship feature) ---
+Flow: /interview (list of past interviews + "New interview") ->
+/interview/setup (a conversational, step-by-step wizard — greeting -> role
+-> type(technical/behavioral/mixed) -> level(beginner/intermediate/senior)
+-> question count (3-15) -> confirm -> generating) which POSTs to
+/api/interview; Gemini (lib/gemini.ts: generateInterviewQuestions) writes N
+role/type/level-appropriate questions, each with expectedKeyPoints[] used
+later for grading -> saved as a new Interview document with status
+"pending".
+Then /interview/[id] renders <InterviewModeWrapper>, which first shows
+<InterviewModeSelector> — the user chooses between two modes:
+  (A) "Web Speech" — <InterviewSession>: uses the browser's free, built-in
+      SpeechRecognition + SpeechSynthesis (hooks/useSpeech.ts). The AI
+      "speaks" each question via TTS, the user answers by typing and/or
+      holding a mic button (chunks get appended live), advances manually
+      question-by-question, can skip, and submits the full answer set to
+      POST /api/interview/[id]/submit at the end.
+  (B) "Vapi AI Agent" (marked Recommended) — <VapiInterviewSession>: uses
+      hooks/useVapi.ts + @vapi-ai/web to place a real-time conversational
+      voice call with an AI interviewer persona named "Alex". The
+      assistant is configured with a custom first message and variable
+      values (role, interview type, level, the full numbered question
+      list embedded with [id:qN] tags so answers can be matched back to
+      specific questions) so it can ask questions naturally, probe with
+      one follow-up per question for depth, and knows when to end the
+      call. A live animated transcript is shown (bubbles for
+      Alex/candidate, a speaking-state avatar with a sound-wave
+      visualization for whichever party is talking, and a progress bar
+      derived by detecting "QUESTION N" markers in the assistant's
+      speech). On call end, the raw transcript is POSTed to
+      /api/interview/[id]/submit.
+Either path converges on Gemini evaluating every answer (comparing against
+expectedKeyPoints, scoring 0-10 per question, providing feedback + covered/
+missed key points) and computing an overall report: overallScore (0-100),
+letter grade, three sub-scores (correctness, structure, confidence),
+strengths[], improvements[], and a written summary. The interview's status
+flips to "completed".
+/interview/[id]/report renders <InterviewReport>: an animated SVG score
+ring, a 3-metric mini-grid, a score-breakdown bar chart, strengths vs.
+areas-to-improve two-column lists, and a per-question accordion (score
+pill, full question text, expand to see the user's answer, Gemini's
+feedback, and covered/missed key points). Actions: Retake or start a New
+interview.
+The interview list (<InterviewListClient> + <InterviewCard>) shows every
+past interview with a circular grade ring (completed) or a mic icon
+(pending/in-progress), type/level/question-count chips, a colored score
+bar, and actions to view the report, retake, or delete (with an inline
+confirm step).
+
+--- 7.4 COMPANY BRAIN ---
+User enters a company name + role (+ optional placement-announcement
+context and/or a full job description). POST /api/company-brain/generate
+is a streaming (Server-Sent Events) endpoint that:
+  1. Scrapes up to 8 distinct sources across 3 "engines"
+     (lib/companyBrainScraper.ts):
+       - TinyFish engine (browser-automation search + direct site fetch
+         + LeetCode Discuss search) — targets a curated allow-list of
+         domains known to work (GeeksForGeeks, AmbitionBox, InterviewBit,
+         igotanoffer, CareerCup, PrepInsta, Medium, Reddit, GitHub,
+         TechInterviewHandbook, LeetCode, dev.to) and explicitly skips a
+         block-list (Glassdoor, LinkedIn, Indeed, Quora, Naukri, levels.fyi,
+         Blind, YouTube, Twitter/X — sites known to block scraping).
+       - Jina AI Reader engine — Reddit-specific search
+         (r/cscareerquestions, r/leetcode, r/developersIndia), GitHub repo
+         search, a general Jina AI web search, and a direct-fetch fallback
+         reader for LeetCode/InterviewBit/GFG.
+       - Direct API engine — Greenhouse & Lever public job-posting APIs.
+     Each source has a 25s per-source timeout, a 12s fetch timeout, caps
+     of ~8 chunks/source and 55 chunks / 20 sources total, and results are
+     cached in-memory per company+role for 7 days to avoid re-scraping.
+     Progress is streamed live to the client as {type:"source_start"},
+     {type:"source_done", ok, chunks}, and {type:"scraped_data"} events —
+     the UI (<CompanyBrainForm>) renders a real-time checklist grouped by
+     engine, with a live snippet counter and an expandable "scraped data
+     inspector" showing every source URL and every raw text chunk fed to
+     the model.
+  2. Feeds all scraped chunks + any user-provided context/JD to Gemini,
+     which synthesizes 35-50 categorized interview questions (category:
+     DSA / System Design / OOPS / Core CS / Behavioral / Domain;
+     difficulty: easy/medium/hard; each may carry a sourceHint).
+  3. Saves a CompanyBrain document and redirects to its detail page.
+The detail page (/company-brain/[id]) shows company header, question-
+count, category breakdown, a source-attribution strip (clickable links),
+and <CompanyBrainQuestionsClient> — a filterable-by-category, expandable
+question accordion grouped by category with difficulty badges and a study
+tip on expand.
+The list page shows research cards (company initials avatar, question
+count, source count, date) with delete (confirm step).
+
+--- 7.5 ATS RESUME CHECKER ---
+<ATSChecker> is a single-file step-machine (input -> analyzing -> report ->
+building -> built):
+  1. User uploads a resume PDF (parsed server-side via /api/career-guide/
+     parse-resume, reused across both ATS and Career Guide flows) and
+     optionally pastes/describes a target job description.
+  2. POST /api/ats/analyze -> Gemini (lib/ats.ts: analyzeATS) returns a
+     full ATSReport: overallScore (0-100), a written summary, detected
+     roleType (one of 9 categories), 6 section scores (Contact Info,
+     Summary, Skills, Experience/Projects, Education, Formatting) each
+     with specific feedback, keywordsFound[]/keywordsMissing[] (matched
+     against the JD if provided, else general role keywords),
+     8 formattingChecks (single page, clear headings, bullet points, no
+     tables/columns, standard fonts, quantified achievements, action
+     verbs, no special characters) each pass/fail with a note, and 5
+     specific quickWins.
+  3. In parallel, /api/ats/similar runs an Atlas Vector Search
+     (lib/ats.ts: findSimilarResumes) against the TopResume RAG collection
+     to surface the top 3 most similar historically-high-scoring (90+)
+     resumes — shown to the user as "patterns that will be fed to Gemini."
+  4. "Build Resume" -> POST /api/ats/build (lib/ats.ts:
+     buildLatexResume) -> Gemini generates a complete, compilable LaTeX
+     resume following a strict single-page template (defined inline as
+     LATEX_TEMPLATE, using classic Jake's-Resume-style macros:
+     \resumeItem, \resumeSubheading, \resumeProjectHeading, etc.) The
+     prompt enforces: absolute single-page limit, use of every real
+     candidate data point (no placeholders), exact template macro/section
+     structure, past-tense action-verb bullets with real quantified
+     results only (never fabricated numbers), and natural JD keyword
+     alignment. If similar resumes were found via RAG, they're passed in
+     purely as style/structure references (explicitly instructed never to
+     copy their content).
+  5. Result screen: Copy LaTeX to clipboard, or a one-click "Open in
+     Overleaf" button (a hidden auto-submitting form POSTs the LaTeX to
+     https://www.overleaf.com/docs, which opens a new Overleaf project
+     pre-loaded with the resume — no API key needed). A live LaTeX code
+     preview pane (editor-chrome styled) is shown. An inline "Request
+     changes" box lets the user type free-text edit instructions (or pick
+     a quick preset: "Remove summary," "Add more keywords," "Make it 1
+     page," "Stronger action verbs") which re-runs the build with that
+     instruction appended, replacing the current version.
+Any resume that scores 90+ on the ATS check is (fire-and-forget, non-
+blocking) anonymized — lib/ats.ts:stripPII does a regex pass (strips
+emails/phones/URLs/LinkedIn/GitHub) followed by a Gemini pass (strips
+names, universities, employers, locations while preserving titles,
+skills, tech, project descriptions, certifications, and metrics) — then
+embedded (gemini-embedding-2) and stored in TopResume, growing the RAG
+knowledge base over time for future users' resume builds.
+
+--- 7.6 AI CAREER GUIDE ---
+<CareerGuideWizard> is a 4-step flow (upload -> questions -> analyzing ->
+options):
+  1. Upload: resume PDF (required) + optional GitHub profile URL (fetched
+     via the GitHub public API — repos, languages, activity, no login
+     needed) + a toggle to include or exclude the user's own PrepHub
+     platform data (quiz scores, interview history) in the analysis.
+  2. Questions: 8 fixed MCQ questions covering priorities (salary vs.
+     expertise vs. leadership vs. research), 5-year vision, willingness to
+     study 2+ more years, most exciting technical area, importance of
+     studying/working abroad, academic performance band, preferred problem
+     type, and financial situation for further education.
+  3. POST /api/career-guide/analyze -> Gemini (lib/careerGuide.ts) reviews
+     resume + GitHub data + platform stats (if opted in) + all 8 answers,
+     and returns several ranked ICareerPath options, each with a 0-100
+     match score, honest reasoning, a specialization recommendation, and
+     explicit pros/cons.
+  4. User selects one path -> POST /api/career-guide/roadmap -> Gemini
+     generates a full IRoadmap: multiple phases (each with a time-window
+     label e.g. "0-3 Months", a title, concrete goals[], concrete
+     actions[], and optional relevant exams[] like "GATE CSE — target
+     650+"), plus optional collegeTargets split into reach/match/safe
+     tiers, and a prioritized keySkills[] list.
+The roadmap page (/career-guide/roadmap) renders a rich "AI Career Report"
+document: an animated match-score ring, recommended path + specialization,
+the "why this was recommended" reasoning with pros as green chips, a
+skills-to-build list with Must-Have/Important/Good-to-Have priority
+badges, a 3-column reach/match/safe college list, and a full animated
+24-month timeline (one card per phase, alternating accent colors, goals
+vs. numbered action items side-by-side, exam target chips). A completely
+separate, hidden-until-print CSS block (#print-doc, only shown via
+@media print) renders the exact same content as a clean, serif,
+black-and-white printable document — so "Export PDF" (browser print-to-
+PDF) produces a professional report rather than a dark-themed screenshot.
+The Career Guide landing page (/career-guide) lists all of a user's past
+assessments (with their top recommendation, all-path score chips, and a
+"Roadmap ready" vs "Options ready" status) or, for first-time users, an
+explainer of the 4 inputs used (Resume / GitHub / MCQ / PrepHub Data) and
+what they'll get.
+
+--- 7.7 PROFILE, FEEDBACK, DASHBOARD ---
+/profile: read-only account info (name, email, member-since) + an
+editable academic-info form (college free-text, branch dropdown of 10
+engineering disciplines, current semester 1-8 as a button grid) saved via
+PUT /api/profile.
+/feedback (full page) and a reusable <FeedbackModal> (same UX, dialog
+form): a 5-star rating per feature (Learn, Quiz, Interview, Company Brain,
+ATS Checker, Career Guide) plus optional free-text — POSTed to
+/api/feedback, which upserts the user's single feedback document.
+/dashboard (<DashboardHome>): personalized greeting (time-of-day aware),
+3 stat cards (day streak, quiz accuracy, interview average/grade) pulled
+from GET /api/dashboard, a "Quick start" 4-tile grid (Learn/Quiz/Live
+Interview/Career Guide), a 6-topic "Explore topics" strip, and a flagship
+Live-AI-Interview promo card.
+
+
+================================================================================
+8. ADMIN PANEL — FULL DETAIL (app/admin/*)
+================================================================================
+/admin/login: email+password form -> POST /api/admin/login -> on success,
+token stored in sessionStorage, redirect to /admin. Wrong credentials show
+an inline error. No token in sessionStorage -> auto-redirect to login.
+
+/admin (single-page app with 4 tabs):
+
+  TAB: Users
+    - 4 summary stat tiles: Total Users, Avg Streak, Avg Quiz Accuracy,
+      Total Interviews (computed client-side from the fetched user list).
+    - Every user as an expandable row: avatar-initial, name (+ "Blocked"
+      badge if applicable), email, and (desktop) inline streak/quiz-acc/
+      interview-grade quick stats. Expanding shows college, branch,
+      semester, quiz topics attempted, interviews completed + avg score,
+      joined date, last active date, AND a Block/Unblock action row with
+      a status sentence and a colored button (pink "Block user" when
+      active, green "Unblock user" when blocked). Clicking it optimistically
+      updates the UI and PATCHes /api/admin/users; reverts on failure.
+
+  TAB: Top Resumes
+    - The RAG knowledge base viewer: every 90+ resume stored in TopResume,
+      shown as an expandable row (ATS score badge, detected role type, up
+      to 5 skill chips, submission date). Expanding reveals the full
+      anonymized (PII-stripped) content preview in a monospace block —
+      lets the admin audit exactly what's being fed into future resume
+      generations.
+
+  TAB: Feedback
+    - An "Average Ratings by Feature" summary card (star display + numeric
+      average per feature, computed server-side in /api/admin/feedback).
+    - Every individual feedback submission: user avatar/name/email, date,
+      a 6-feature star-rating grid, and the free-text comment if given.
+
+  TAB: Pages  (the maintenance-mode control center)
+    - A card per toggleable page (Learn, Quiz, Interview, Company Brain,
+      Career Guide, ATS Checker) showing its label, its route (e.g.
+      /quiz), a Live/Paused status badge, and an on/off switch.
+    - Toggling a switch immediately PATCHes /api/admin/settings with the
+      FULL updated disabledPages[] array; the change is optimistic in the
+      UI and reverts if the request fails. Because this write goes to the
+      Settings collection in MongoDB (not local/component state), the
+      configuration is durable: refreshing the admin page, closing the
+      browser, or restarting the server does NOT reset it — GET
+      /api/admin/settings (called on every admin page load) reloads
+      exactly what was last saved.
+    - The effect on end users: AccessGuard (see section 4) polls
+      /api/platform-status and will show the "Under maintenance" overlay
+      on any paused page within ~30 seconds, without requiring the user to
+      manually refresh.
+
+Top bar: desktop shows all 4 tabs inline + a Logout button; mobile
+collapses to a horizontally-scrollable secondary tab strip beneath a
+slimmer header (logo + Logout icon) to avoid overflow on small screens.
+
+
+================================================================================
+9. DESIGN SYSTEM — "Precision / Editorial"
+================================================================================
+The entire UI was redesigned from a generic dark-glassmorphism/neon-glow
+look to a restrained, Linear/Vercel-inspired system. Both light and dark
+themes are first-class (equal design investment), toggled via next-themes
+and a persistent <ThemeToggle>.
+
+Tokens (app/globals.css, consumed through tailwind.config.ts):
+  - All colors declared as RGB channel triplets (e.g. --bg: 255 255 255)
+    and exposed to Tailwind via rgb(var(--x) / <alpha-value>) so every
+    opacity utility (bg-primary/10, border-bg-border/60, ...) is
+    mathematically correct and theme-aware automatically.
+  - Single confident accent: an indigo-iris "primary" (no rainbow
+    gradients on brand text).
+  - Semantic/category hues: accent-blue, accent-cyan, accent-green,
+    accent-orange, accent-pink, accent-violet — used consistently for
+    status, category, and score coloring (see lib/score.ts).
+  - Elevation comes from real layered box-shadows (shadow-xs/sm/md/lg/
+    glow/glow-lg/accent), not neon colored glow — the old
+    shadow-glow/glow-cyan/glow-blue class names were kept (so ~100 legacy
+    usages inherit the change for free) but their VALUES were replaced
+    with realistic elevation.
+  - Editorial display type sizes with baked-in negative letter-spacing
+    (text-display, text-display-lg, tracking-tightest).
+  - A tighter border-radius scale (10/12/16/22px) than default Tailwind.
+
+Shared utility classes (globals.css @layer utilities), redefined once so
+the whole app inherits changes centrally:
+  .glass / .glass-card    - blurred/hairline surfaces (crisp, not heavy)
+  .gradient-text          - the wordmark/accent color (static, restrained)
+  .grid-backdrop           - faint dot/line grid background texture
+  .mesh-gradient           - subtle radial accent wash for page backgrounds
+  .btn-primary / .btn-ghost / .btn-subtle
+  .input-wrap / .input-icon / .input-inner / .input-action
+  .nav-link, .card-hover, .chip, .kbd, .eyebrow, .skeleton (shimmer)
+  .tnum                    - tabular-nums for any numeric/data display
+
+Shared Framer Motion vocabulary (lib/motion.ts): a single "expo-out"
+signature easing curve, standard durations, fadeUp/fadeIn/scaleIn/
+staggerContainer/listItem/pageTransition/backdrop/modalPanel/popover
+variants, and hoverLift/pressable interaction presets — so every animated
+surface in the app (cards, modals, dropdowns, page transitions) moves with
+the same rhythm.
+
+Score theming (lib/score.ts): a single scoreTheme(score) / qScoreTheme
+function maps any 0-100 (or 0-10) score to one of 4 consistent on-palette
+bands — Excellent (green, >=80), Good (indigo, >=60), Fair (orange, >=40),
+Needs work (pink, <40) — replacing dozens of previously ad-hoc/off-palette
+colors (yellow-400, red-400, emerald, amber, violet-400, etc.) that were
+scattered across the interview, quiz, ATS, and career-guide score displays.
+
+Reusable primitives:
+  components/Logo.tsx        - geometric "ascending bars" brand mark
+                               (replaced a generic gradient-blob+book icon)
+  components/ui/PageHeader.tsx - the standard page header (eyebrow, icon,
+                               title, description, optional back-link,
+                               optional right-aligned actions) used across
+                               every internal feature page.
+    IMPORTANT implementation detail: PageHeader is a Client Component
+    (uses framer-motion). Its `icon` prop must be passed as an ALREADY-
+    RENDERED element (e.g. icon={<Mic />}), never a bare component
+    reference (icon={Mic}) — Server Component pages cannot pass raw
+    functions/components across the server->client boundary; doing so
+    throws "Functions cannot be passed directly to Client Components."
+  components/AuthShell.tsx   - shared split-screen layout for /login and
+                               /signup (branded left panel with a
+                               testimonial + feature highlights, form on
+                               the right), plus shared <AuthError> and
+                               <AuthSubmit> pieces.
+
+Route/nav motion:
+  app/(dashboard)/template.tsx - an opacity-only fade transition between
+    dashboard pages. Deliberately NOT transform-based, because
+    DashboardNav is `position: fixed` on every page; a transform on an
+    ancestor would re-anchor the fixed nav and make it jump on navigation.
+
+
+================================================================================
+10. MOBILE RESPONSIVENESS
+================================================================================
+- DashboardNav: on mobile (<768px), the old cramped 6-item horizontal-
+  scroll strip was replaced with a proper hamburger button that opens a
+  right-side slide-in drawer (full labels, active-state highlighting, an
+  Account section, and Sign out) — backdrop-dismissible, closes on route
+  change, locks body scroll while open, closes on Escape. The nav bar is
+  now a fixed, consistent 64px tall on every screen size.
+- LandingNavbar: mobile shows a hamburger revealing a dropdown sheet with
+  Get Started / Log in / Visualizer / Admin (all reachable — previously
+  Visualizer/Admin were desktop-only and unreachable on small screens).
+- Admin page header: mobile splits into a slim top bar (logo + Logout
+  icon) plus a horizontally-scrollable secondary tab strip, avoiding
+  overflow from cramming 4 tabs + branding + logout into one row.
+- Global overflow guards (globals.css): body { overflow-x: hidden } plus
+  max-width: 100% on inputs/textareas/selects/buttons/images/svg/video, so
+  no single wide element can trigger horizontal page-level scrolling.
+- Various spacing tightened at the smallest breakpoints (e.g. Hero's stat
+  divider row uses less horizontal padding below `sm`).
+
+
+================================================================================
+11. PERFORMANCE NOTES
+================================================================================
+- next.config.js sets experimental.staleTimes ({dynamic: 60, static: 300})
+  to enable Next's client-side Router Cache — visited pages are kept in
+  the browser for fast back/forward navigation instead of always
+  re-fetching from the server.
+- Company Brain scraping results are cached in-memory per company+role
+  for 7 days (companyBrainScraper.ts) to avoid redundant scraping.
+- ATS/Interview evaluation results are naturally cached by being persisted
+  to MongoDB (no re-computation needed once generated).
+- IMPORTANT: `npm run dev` compiles each route on first visit (visible as
+  "✓ Compiled /learn in 4.3s" in the terminal) — this is a known Next.js
+  dev-mode characteristic and does NOT reflect production performance.
+  Always benchmark real navigation speed with `npm run build && npm start`.
+
+
+================================================================================
+12. ENVIRONMENT VARIABLES (.env.local)
+================================================================================
+Required:
+  MONGODB_URI            MongoDB Atlas connection string
+  NEXTAUTH_SECRET        NextAuth JWT signing secret
+  GEMINI_API_KEY         Google Gemini API key (interview generation/
+                         grading, ATS analysis/build, career guide
+                         analysis/roadmap, PII stripping, embeddings,
+                         resume PDF parsing fallback)
+  ADMIN_EMAIL            Admin panel login email
+  ADMIN_PASSWORD         Admin panel login password
+
+Feature-specific:
+  NEXT_PUBLIC_VAPI_PUBLIC_KEY     VAPI web SDK public key (Live Interview
+                                  "Vapi AI Agent" mode)
+  NEXT_PUBLIC_VAPI_ASSISTANT_ID   The configured VAPI assistant ID
+  JINA_API_KEY                    Jina AI Reader API key (Company Brain
+                                  scraping engine)
+  GITHUB_TOKEN                    GitHub API token (Company Brain GitHub
+                                  search + Career Guide GitHub profile
+                                  fetch — raises rate limits)
+  TINYFISH_API_KEY                TinyFish browsing-engine API key
+                                  (Company Brain scraping engine)
+
+
+================================================================================
+13. PROJECT STRUCTURE (top-level)
+================================================================================
+app/
+  (auth)/login, (auth)/signup           - public auth pages
+  (dashboard)/dashboard                  - home dashboard
+  (dashboard)/learn, learn/[topic],
+    learn/dsa, learn/dsa/[concept],
+    learn/dsa/[concept]/basics|leetcode - Learn module + DSA sub-flow
+  (dashboard)/quiz, quiz/[topic]         - Quiz module
+  (dashboard)/interview, interview/setup,
+    interview/[id], interview/[id]/report - Live AI Interview module
+  (dashboard)/company-brain, .../new,
+    .../[id]                             - Company Brain module
+  (dashboard)/career-guide, .../new,
+    .../roadmap                          - AI Career Guide module
+  (dashboard)/ats                        - ATS Checker module
+  (dashboard)/profile                    - Profile page
+  (dashboard)/feedback                   - Feedback page
+  (dashboard)/template.tsx               - fade route transition
+  admin/login, admin/page.tsx            - Admin login + dashboard
+  api/**/route.ts                        - all backend endpoints (see §6)
+  layout.tsx, page.tsx, globals.css      - root layout, landing page,
+                                           design tokens
+
+components/                              - ~45 React components: page
+  content (DashboardHome, InterviewSession, QuizSession, ATSChecker,
+  CareerGuideWizard/Roadmap/Landing, CompanyBrainForm/List/Card, etc.),
+  shell (DashboardNav, LandingNavbar, AccessGuard, Logo, ThemeToggle,
+  AuthProvider, AuthShell), and components/ui/ (PageHeader, shared
+  primitives)
+
+models/         - Mongoose schemas: User, Interview, CompanyBrain,
+                  CareerGuide, TopResume, Feedback, Settings
+lib/            - mongodb (connection), authOptions (NextAuth config),
+                  gemini (LLM call wrapper + interview question gen),
+                  ats (ATS analysis/build/RAG), careerGuide (career
+                  analysis/roadmap gen), companyBrainScraper (multi-engine
+                  scraper), adminAuth (admin token logic), streak (streak
+                  calculation), topics/topicIcons (Learn content config),
+                  score (score-to-theme mapping), motion (Framer Motion
+                  vocabulary), pages (toggleable page registry, client-safe)
+hooks/          - useSpeech (Web Speech API wrapper), useVapi (VAPI call
+                  lifecycle + live transcript + error normalization)
+types/          - next-auth.d.ts (session type augmentation)
+content/        - static JSON content backing the Learn module (per-topic
+                  Q&A banks, DSA basics/leetcode data)
+scripts/        - seedResumes.ts (utility to seed the TopResume RAG
+                  collection)
+
+
+================================================================================
+14. NOTABLE ENGINEERING DECISIONS / GOTCHAS
+================================================================================
+- Client-vs-server boundary: any component prop that is itself a React
+  component (not an already-rendered element) cannot cross from a Server
+  Component into a Client Component — it must be rendered first
+  (icon={<Mic/>} not icon={Mic}). This bit the PageHeader integration
+  during the redesign and was fixed across all 8 call sites.
+- lib/pages.ts is intentionally mongoose-free and separate from models/
+  Settings.ts specifically so client components (AccessGuard, the admin
+  Pages tab) can import the page registry without pulling mongoose into
+  the browser bundle.
+- Interview scoring never fabricates results: Gemini is explicitly
+  instructed (both in the interview grading prompt and the ATS resume
+  builder prompt) to base scores/bullets only on real, provided
+  data — never invent quantified metrics that aren't in the source
+  material.
+- Company Brain's scraper maintains an explicit allow-list and block-list
+  of domains based on empirically what does/doesn't tolerate automated
+  scraping, rather than trying every possible source blindly.
+- All Gemini calls funnel through one retry wrapper (generateWithRetry)
+  with exponential backoff and model fallback (flash <-> pro) so
+  transient 503/429 errors from the API don't fail user-facing requests
+  outright.
+- Admin auth is deliberately decoupled from the regular User/NextAuth
+  system (env-var credentials + a simple bearer token) rather than being
+  a "isAdmin" flag on a User document — there is no way to become an
+  admin through the regular signup flow.
+- Score/status color conventions are centralized in lib/score.ts
+  specifically so that "what does orange mean" / "what does pink mean" is
+  consistent everywhere (Interview reports, Quiz results, ATS scores,
+  Career Guide match percentages) rather than each feature inventing its
+  own ad-hoc thresholds and colors.
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================

@@ -171,8 +171,7 @@ export default function CareerGuideWizard() {
   }
 
   return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
       <div className="mesh-gradient fixed inset-0 pointer-events-none" />
 
       <div className="relative z-10 max-w-2xl mx-auto">
@@ -259,8 +258,8 @@ export default function CareerGuideWizard() {
               <div className="glass-card rounded-2xl border border-bg-border p-5 mb-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${usePlatformData ? "bg-accent-green/10" : "bg-bg-border/60"}`}>
-                      {usePlatformData ? <ShieldCheck className="w-4 h-4 text-accent-green" /> : <BarChart3 className="w-4 h-4 text-text-muted" />}
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center border ${usePlatformData ? "bg-accent-green/10 border-accent-green/20 text-accent-green" : "bg-bg-surface border-bg-border text-text-muted"}`}>
+                      {usePlatformData ? <ShieldCheck className="w-4 h-4" /> : <BarChart3 className="w-4 h-4" />}
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-text">Include PrepHub profile data</p>
@@ -276,7 +275,7 @@ export default function CareerGuideWizard() {
                 </div>
               </div>
 
-              {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+              {error && <p className="text-sm text-accent-pink mb-4">{error}</p>}
 
               <button
                 onClick={handleProceedToQuestions}
@@ -411,7 +410,7 @@ export default function CareerGuideWizard() {
                 ))}
               </div>
 
-              {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+              {error && <p className="text-sm text-accent-pink mb-4">{error}</p>}
 
               <button
                 onClick={handleGenerateRoadmap}

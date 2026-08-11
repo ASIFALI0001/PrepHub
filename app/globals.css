@@ -2,160 +2,283 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
-/* ─── Theme variables ─── */
+/* ══════════════════════════════════════════════════════════════════
+   PrepHub — "Precision / Editorial" design system
+   Colors are RGB channel triplets so Tailwind alpha modifiers work
+   and the accent can shift per theme. Consumed via tailwind.config.ts.
+   ══════════════════════════════════════════════════════════════════ */
+
 :root {
-  /* Backgrounds */
-  --bg:          #f4f4fc;
-  --bg-surface:  #eaeaf5;
-  --bg-card:     #ffffff;
-  --bg-border:   #dcdcee;
+  /* ── Light canvas (first-class) ── */
+  --bg:          255 255 255;
+  --bg-surface:  247 247 249;
+  --bg-card:     255 255 255;
+  --bg-elevated: 255 255 255;
+  --bg-border:   233 233 237;
 
-  /* Text */
-  --text:        #0e0e1a;
-  --text-muted:  #686888;
-  --text-dim:    #c0c0d8;
+  --text:        21 21 26;
+  --text-muted:  106 106 117;
+  --text-dim:    159 159 170;
 
-  /* Glass (light) */
-  --glass-bg:         rgba(255, 255, 255, 0.80);
-  --glass-border:     rgba(220, 220, 238, 0.90);
-  --glass-card-bg:    rgba(255, 255, 255, 0.92);
-  --glass-card-border:rgba(220, 220, 238, 0.70);
+  /* Signature accent — refined indigo-iris */
+  --accent:        88 80 236;
+  --accent-light:  112 105 245;
+  --accent-dark:   70 62 214;
+
+  /* Semantic / category hues (muted, editorial) */
+  --c-blue:   45 106 232;
+  --c-cyan:   8 145 178;
+  --c-green:  22 163 120;
+  --c-orange: 214 118 38;
+  --c-pink:   214 74 138;
+  --c-violet: 124 91 226;
+
+  --shadow: 17 17 26;
+
+  /* Surface treatments */
+  --surface-glass:   255 255 255;
+  --surface-glass-a: 0.72;
+  --grid-line:       17 17 26;
+  --grid-line-a:     0.04;
+  --ring-a:          0.35;
 }
 
 .dark {
-  /* Backgrounds */
-  --bg:          #05050a;
-  --bg-surface:  #0d0d14;
-  --bg-card:     #12121c;
-  --bg-border:   #1e1e2e;
+  /* ── Dark canvas (first-class, Linear/Vercel near-black) ── */
+  --bg:          9 9 11;
+  --bg-surface:  16 16 20;
+  --bg-card:     20 20 25;
+  --bg-elevated: 27 27 33;
+  --bg-border:   38 38 45;
 
-  /* Text */
-  --text:        #e8e8f0;
-  --text-muted:  #6b6b8a;
-  --text-dim:    #3a3a55;
+  --text:        237 237 242;
+  --text-muted:  139 139 151;
+  --text-dim:    82 82 94;
 
-  /* Glass (dark) */
-  --glass-bg:         rgba(13, 13, 20, 0.65);
-  --glass-border:     rgba(30, 30, 46, 0.80);
-  --glass-card-bg:    rgba(18, 18, 28, 0.88);
-  --glass-card-border:rgba(30, 30, 46, 0.60);
+  --accent:        130 124 250;
+  --accent-light:  156 150 253;
+  --accent-dark:   110 103 242;
+
+  --c-blue:   96 148 255;
+  --c-cyan:   45 191 219;
+  --c-green:  52 199 160;
+  --c-orange: 245 158 78;
+  --c-pink:   244 122 175;
+  --c-violet: 167 139 250;
+
+  --shadow: 0 0 0;
+
+  --surface-glass:   14 14 18;
+  --surface-glass-a: 0.66;
+  --grid-line:       255 255 255;
+  --grid-line-a:     0.035;
+  --ring-a:          0.5;
 }
 
-/* ─── Base ─── */
+/* ─────────────────────────── Base ─────────────────────────── */
 @layer base {
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  * { box-sizing: border-box; border-color: rgb(var(--bg-border)); }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
   body {
-    background-color: var(--bg);
-    color: var(--text);
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
     font-family: "Inter", system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01", "cv02", "cv03";
     -webkit-font-smoothing: antialiased;
-    transition: background-color 0.3s ease, color 0.2s ease;
+    text-rendering: optimizeLegibility;
+    /* Guard against accidental horizontal scroll on small screens */
+    overflow-x: hidden;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  ::selection {
-    background: rgba(124, 58, 237, 0.25);
-    color: var(--text);
+  /* Form controls should never blow out their container on mobile */
+  input, textarea, select, button { max-width: 100%; }
+  img, svg, video { max-width: 100%; }
+
+  /* Tabular figures for anything numeric/data-like */
+  .tnum, [data-tnum] { font-feature-settings: "tnum", "cv11"; font-variant-numeric: tabular-nums; }
+
+  h1, h2, h3, h4 { letter-spacing: -0.02em; }
+
+  ::selection { background: rgb(var(--accent) / 0.22); color: rgb(var(--text)); }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--bg-border));
+    border-radius: 999px;
+    border: 3px solid rgb(var(--bg));
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--text-dim)); }
+
+  /* Consistent, accessible focus ring across the app */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent) / var(--ring-a));
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
-/* ─── Utilities ─── */
+/* ────────────────────────── Utilities ───────────────────────── */
 @layer utilities {
-  /* Gradient text — always purple→cyan */
+  /* Wordmark / accent text — restrained, static, NOT a rainbow gradient.
+     Retained class name so all existing usages inherit the new look. */
   .gradient-text {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 40%, #06b6d4 100%);
-    background-size: 300% 300%;
+    color: rgb(var(--accent));
+    letter-spacing: -0.02em;
+  }
+  /* Opt-in expressive gradient for rare hero moments only */
+  .accent-gradient-text {
+    background: linear-gradient(100deg, rgb(var(--text)) 0%, rgb(var(--accent)) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: gradient-x 6s ease infinite;
   }
 
-  /* Glass uses CSS variables — switches automatically with .dark class */
+  /* "glass" → crisp precision surfaces (subtle blur, hairline, real depth).
+     Class names retained; every inherited nav/card upgrades automatically. */
   .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
+    background: rgb(var(--surface-glass) / var(--surface-glass-a));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgb(var(--bg-border) / 0.9);
   }
-
   .glass-card {
-    background: var(--glass-card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-card-border);
+    background: rgb(var(--bg-card));
+    border: 1px solid rgb(var(--bg-border));
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.04);
   }
 
-  /* Noise texture overlay */
+  /* Grain — barely-there, neutral (no colored mesh cliché) */
   .noise-overlay {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.025;
+    opacity: 0.015;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
 
-  /* Mesh gradient — subtle in both modes */
+  /* "mesh-gradient" → neutral editorial grid + faint accent wash.
+     Repurposed (name kept) so landing/dashboard backgrounds transform. */
   .mesh-gradient {
     background:
-      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(124, 58, 237, 0.09) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgb(var(--accent) / 0.06) 0%, transparent 60%),
+      linear-gradient(to bottom, rgb(var(--bg-surface) / 0.4) 0%, transparent 40%);
   }
 
-  /* ─── Form primitives ─── */
+  /* Editorial dot/line grid backdrop */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, rgb(var(--grid-line) / var(--grid-line-a)) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--grid-line) / var(--grid-line-a)) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 0%, transparent 80%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 0%, transparent 80%);
+  }
+
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  .hairline { border: 1px solid rgb(var(--bg-border)); }
+  .hairline-t { border-top: 1px solid rgb(var(--bg-border)); }
+  .hairline-b { border-bottom: 1px solid rgb(var(--bg-border)); }
+
+  /* ── Form primitives ── */
   .input-wrap {
-    @apply flex items-center rounded-xl border border-bg-border bg-bg-card
-      focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/40
+    @apply flex items-center rounded-lg border border-bg-border bg-bg-card
+      focus-within:border-primary/70 focus-within:ring-4 focus-within:ring-primary/10
       transition-all duration-200;
   }
-  .input-icon  { @apply flex items-center pl-3.5 shrink-0 text-text-muted pointer-events-none; }
-  .input-inner { @apply flex-1 px-3 py-3 bg-transparent text-text text-sm placeholder-text-muted focus:outline-none; }
-  .input-action { @apply pr-3.5 flex items-center text-text-muted hover:text-text transition-colors; }
+  .input-icon  { @apply flex items-center pl-3.5 shrink-0 text-text-dim pointer-events-none; }
+  .input-inner { @apply flex-1 px-3 py-2.5 bg-transparent text-text text-sm placeholder-text-dim focus:outline-none; }
+  .input-action { @apply pr-3.5 flex items-center text-text-dim hover:text-text transition-colors; }
 
-  /* ─── Buttons ─── */
+  /* ── Buttons ── (solid, crisp, no neon glow) */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white
-      bg-gradient-to-r from-primary to-primary-light
-      hover:shadow-glow hover:-translate-y-0.5
-      transition-all duration-200 active:scale-95;
+    @apply relative inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-semibold text-sm text-white
+      bg-primary hover:bg-primary-dark
+      shadow-accent hover:-translate-y-px active:translate-y-0
+      transition-all duration-200;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold
-      border border-bg-border text-text-muted
-      hover:border-primary/50 hover:text-primary
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-lg font-semibold text-sm
+      border border-bg-border bg-bg-card text-text
+      hover:bg-bg-surface hover:border-text-dim/40
+      transition-all duration-200 active:translate-y-0;
+  }
+  .btn-subtle {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm
+      text-text-muted hover:text-text hover:bg-bg-surface
       transition-all duration-200;
   }
 
-  /* ─── Nav links ─── */
+  /* ── Nav links ── */
   .nav-link {
-    @apply relative px-4 py-2 text-text-muted font-medium rounded-lg
-      hover:text-text hover:bg-bg-card transition-all duration-200;
+    @apply relative px-3 py-2 text-sm text-text-muted font-medium rounded-lg
+      hover:text-text transition-colors duration-200;
   }
-  .nav-link.active { @apply text-primary bg-primary/10; }
+  .nav-link.active { @apply text-text; }
 
-  .card-hover { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-glow; }
+  /* Card hover: subtle lift + border warm-up, no glow */
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-0.5
+      hover:border-text-dim/30 hover:shadow-md;
+  }
+
+  /* Chip / badge / kbd */
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium
+      bg-bg-surface border border-bg-border text-text-muted;
+  }
+  .kbd {
+    @apply inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-[5px]
+      text-[11px] font-medium font-mono text-text-muted
+      bg-bg-surface border border-bg-border;
+  }
+
+  /* Eyebrow label */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-text-dim;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-bg-surface;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background: linear-gradient(90deg, transparent, rgb(var(--text) / 0.05), transparent);
+  }
 }
 
-/* ─── Keyframes ─── */
+/* ───────────────────────── Keyframes ───────────────────────── */
 @keyframes gradient-x {
   0%, 100% { background-position: 0% 50%; }
   50%       { background-position: 100% 50%; }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
+  50%       { transform: translateY(-10px); }
 }
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.3; }
-  50%       { opacity: 0.7; }
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.6; }
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
 }

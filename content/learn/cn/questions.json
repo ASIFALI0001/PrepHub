@@ -1,0 +1,887 @@
+{
+  "metadata": {
+    "title": "Top 100 Computer Networks Interview Questions",
+    "description": "Most probable Computer Networks interview questions compiled from the highest-traffic interview-prep sources plus the LastMinuteNotes revision sheet. Weighted toward what actually gets asked in campus placements and SDE screens — OSI vs TCP/IP, TCP vs UDP, the three-way handshake, DNS, HTTP/HTTPS, IP addressing and subnetting — with hardware/cabling trivia pushed to LOW. Each question is tagged with the sources it appears in and a frequency ranking based on how often it shows up across those sources.",
+    "total_questions": 100,
+    "last_updated": "2026-08-08",
+    "sources": {
+      "LastMinuteNotes": {
+        "full_name": "LastMinuteNotes — CN.md (anxkhn)",
+        "url": "https://github.com/anxkhn/LastMinuteNotes/blob/main/CN.md",
+        "strength": "Tight last-minute revision sheet; the concepts that survive when you only have an hour left — OSI layers, TCP/IP, IPv4 vs IPv6, MAC/ARP/DHCP, three-way handshake, and the what-happens-when-you-type-a-URL walkthrough"
+      },
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks Networking Interview Questions",
+        "url": "https://www.geeksforgeeks.org/blogs/networking-interview-questions/",
+        "strength": "By far the deepest bank; the only source that properly covers TCP internals (congestion control, sliding window, TIME_WAIT, cwnd vs rwnd), routing protocol comparisons, STP, CIDR vs VLSM and HTTP/2 vs HTTP/3"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit Networking Section",
+        "url": "https://www.interviewbit.com/networking-interview-questions/",
+        "strength": "Clean basic → intermediate → advanced progression; strongest on the questions product companies ask — subnetting/CIDR examples, NAT, TLS handshake, proxies, VLANs, port numbers"
+      },
+      "JavaTpoint": {
+        "full_name": "JavaTpoint / Tpoint Tech Networking Questions",
+        "url": "https://www.tpointtech.com/networking-interview-questions",
+        "strength": "University-style theory bank; the definitive source for definition questions — protocol elements, DNS, POP3, APIPA, RIP, multiplexing, peer-to-peer process"
+      },
+      "Guru99": {
+        "full_name": "Guru99 Networking Interview Questions",
+        "url": "https://www.guru99.com/networking-interview-questions.html",
+        "strength": "Largest raw bank (130+ Q); practical network-admin angle — IP classes, subnet masks, devices, DHCP, ARP, OSPF, CSMA/CD vs CSMA/CA, firewalls and physical media"
+      },
+      "SoftwareTestingHelp": {
+        "full_name": "SoftwareTestingHelp Networking Interview Questions",
+        "url": "https://www.softwaretestinghelp.com/networking-interview-questions-2/",
+        "strength": "Fresher/service-company oriented; confirms which subset actually gets asked at entry level and adds Internet vs Intranet vs Extranet, static vs dynamic IP, encapsulation and transmission modes"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every Computer Networks interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What is a computer network and what are its advantages?",
+      "answer": "A set of two or more devices connected by a transmission medium so they can exchange data and share resources. Advantages: resource sharing (files, printers, internet), fast communication, centralized data and backup, scalability, and reliability through redundant paths.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "2",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What are nodes and links?",
+      "answer": "A node is any device on the network that can send, receive or forward data — a computer, printer, router or switch. A link is the physical or logical connection between two nodes (cable, fibre, or a wireless channel). A network is just nodes joined by links.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "3",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What are the different types of networks by size (PAN, LAN, MAN, WAN)?",
+      "answer": "PAN: a few metres, around one person (Bluetooth, hotspot). LAN: one building or campus, high speed, privately owned (office Ethernet, Wi-Fi). MAN: a city, joining multiple LANs (cable TV, metro fibre). WAN: country- or worldwide, usually leased lines — the Internet is the largest WAN. Speed drops and cost/latency rise as you move outward.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "4",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What is network topology? Name the types.",
+      "answer": "The physical or logical arrangement of nodes and links. Bus: all nodes share one backbone cable. Star: all nodes connect to a central hub/switch. Ring: each node connects to exactly two neighbours forming a loop. Mesh: every node connects to every other. Tree: a hierarchy of star networks. Hybrid: any combination.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "5",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "Compare the advantages and disadvantages of star, bus, ring and mesh topologies.",
+      "answer": "Star: easy to add/remove nodes and isolate faults, but the central switch is a single point of failure — the standard in practice. Bus: cheap and needs little cable, but one break kills the network and collisions rise with load. Ring: predictable performance and no collisions, but one failed node can break the loop and adding nodes disrupts it. Mesh: maximum redundancy and no single point of failure, but n(n−1)/2 links make it expensive — used for backbones.",
+      "frequency": "MED",
+      "sources": ["Guru99", "SoftwareTestingHelp", "JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "6",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "Difference between bandwidth, throughput and latency?",
+      "answer": "Bandwidth is the theoretical maximum data rate of a link (bits per second) — the width of the pipe. Throughput is the actual rate achieved, always lower because of overhead, congestion and errors. Latency is the time for one bit to travel from source to destination. High bandwidth does not mean low latency — a satellite link can carry a lot of data with terrible delay.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "7",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What are the different types of network delay?",
+      "answer": "Transmission delay: time to push all bits of a packet onto the link = packet size / bandwidth. Propagation delay: time for a bit to physically travel the distance = distance / propagation speed. Queuing delay: time spent waiting in a router's buffer — the only variable one, and the cause of jitter. Processing delay: time the router takes to examine the header and decide the output link. Total delay is the sum of all four at every hop.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "LastMinuteNotes"]
+    },
+    {
+      "id": "8",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What is jitter? What is Round Trip Time (RTT)?",
+      "answer": "Jitter is the variation in packet arrival delay — caused mainly by fluctuating queuing delay. Constant delay is fine for voice and video; inconsistent delay is what makes calls choppy, which is why receivers use a jitter buffer. RTT is the time for a packet to reach the destination plus the time for its acknowledgment to return — what `ping` measures, and the basis of TCP's retransmission timeout.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "SoftwareTestingHelp", "JavaTpoint"]
+    },
+    {
+      "id": "9",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "Difference between the Internet, an intranet and an extranet?",
+      "answer": "The Internet is the global public network, open to everyone. An intranet is a private network internal to one organization, using the same TCP/IP technology but restricted to employees. An extranet is an intranet that is partially opened to specific outsiders — vendors, partners, clients — usually over a VPN or authenticated portal.",
+      "frequency": "MED",
+      "sources": ["SoftwareTestingHelp", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "10",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "Difference between client-server and peer-to-peer architecture?",
+      "answer": "Client-server: dedicated servers provide resources and clients request them — centralized control, easier security and backup, but the server is a bottleneck and a single point of failure. Peer-to-peer: every node acts as both client and server — cheap, no dedicated hardware, scales naturally, but there is no central security or backup and performance degrades as nodes leave.",
+      "frequency": "MED",
+      "sources": ["Guru99", "SoftwareTestingHelp", "JavaTpoint"]
+    },
+    {
+      "id": "11",
+      "section": "Networking Fundamentals & Topologies",
+      "question": "What is data encapsulation and decapsulation?",
+      "answer": "As data moves down the sending stack, each layer wraps it in its own header (and trailer at the data link layer) — this is encapsulation, and the unit is called a PDU: data → segment (transport) → packet (network) → frame (data link) → bits (physical). On the receiving side each layer strips off its own header and passes the payload up — decapsulation. Each layer only reads the header its peer layer wrote.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "12",
+      "section": "OSI & TCP/IP Models",
+      "question": "What is the OSI model and why is it needed?",
+      "answer": "The Open Systems Interconnection model is a 7-layer reference framework that splits network communication into independent layers, each with a defined job and a clean interface to the layers above and below. It matters because it standardizes interoperability between vendors, makes troubleshooting systematic (isolate the failing layer), and lets one layer change without breaking the others.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "13",
+      "section": "OSI & TCP/IP Models",
+      "question": "Explain the seven layers of the OSI model.",
+      "answer": "From bottom up — Physical (raw bits, cables, signals), Data Link (framing, MAC addressing, error detection, switches), Network (logical addressing and routing, IP, routers), Transport (end-to-end delivery, TCP/UDP, segmentation, reliability), Session (establishing, managing and terminating sessions), Presentation (translation, encryption, compression), Application (services the user interacts with — HTTP, FTP, SMTP, DNS). Mnemonic: Please Do Not Throw Sausage Pizza Away.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "14",
+      "section": "OSI & TCP/IP Models",
+      "question": "What does the physical layer do?",
+      "answer": "Transmits raw bits over the physical medium. It defines the electrical, mechanical and timing specifications: voltage levels, cable and connector types, pin layout, data rate, transmission mode (simplex/duplex), topology and synchronization of bits. Devices: hubs, repeaters, cables, modems. PDU: bits.",
+      "frequency": "MED",
+      "sources": ["Guru99", "JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "15",
+      "section": "OSI & TCP/IP Models",
+      "question": "What does the data link layer do? What are its sublayers?",
+      "answer": "Provides node-to-node delivery over a single link: framing, physical (MAC) addressing, error detection via CRC, flow control and media access control. Its two sublayers are LLC (Logical Link Control — flow control, error control, multiplexing network-layer protocols) and MAC (Media Access Control — who gets to transmit, MAC addressing). Devices: switches and bridges. PDU: frame.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Guru99", "JavaTpoint", "LastMinuteNotes"]
+    },
+    {
+      "id": "16",
+      "section": "OSI & TCP/IP Models",
+      "question": "What does the network layer do?",
+      "answer": "Delivers packets from source to destination across multiple networks: logical (IP) addressing, routing — choosing the path — and forwarding, plus fragmentation and reassembly when a link's MTU is too small. It is the lowest layer that knows about the end-to-end path. Devices: routers. Protocols: IP, ICMP, ARP, OSPF, BGP. PDU: packet/datagram.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "17",
+      "section": "OSI & TCP/IP Models",
+      "question": "What does the transport layer do?",
+      "answer": "Provides end-to-end (process-to-process) delivery. Responsibilities: segmentation and reassembly, port-based addressing so data reaches the right application, connection control, and — for TCP — reliability, flow control and congestion control. Protocols: TCP (reliable, connection-oriented) and UDP (fast, connectionless). PDU: segment (TCP) or datagram (UDP).",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "18",
+      "section": "OSI & TCP/IP Models",
+      "question": "What do the session, presentation and application layers do?",
+      "answer": "Session: establishes, maintains, synchronizes and terminates sessions between applications — checkpointing and dialog control (who talks when). Presentation: the translator — character encoding conversion, data compression, and encryption/decryption (SSL/TLS conceptually sits here). Application: the layer users interact with, providing network services through HTTP, FTP, SMTP, DNS, Telnet. Together these three are the software/user-support layers.",
+      "frequency": "MED",
+      "sources": ["Guru99", "JavaTpoint", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "19",
+      "section": "OSI & TCP/IP Models",
+      "question": "What is the TCP/IP model? Describe its four layers.",
+      "answer": "The practical model the Internet actually runs on. Network Access/Link (OSI physical + data link — Ethernet, Wi-Fi, ARP), Internet (OSI network — IP, ICMP, routing), Transport (TCP, UDP), and Application (OSI session + presentation + application — HTTP, FTP, SMTP, DNS). It was built around working protocols, whereas OSI was designed as a theoretical reference first.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "20",
+      "section": "OSI & TCP/IP Models",
+      "question": "Difference between the OSI model and the TCP/IP model?",
+      "answer": "OSI has 7 layers, TCP/IP has 4 (TCP/IP merges session + presentation + application into one, and physical + data link into network access). OSI is a theoretical reference model designed before its protocols; TCP/IP was derived from protocols that already worked and is what the Internet uses. OSI strictly separates service, interface and protocol; TCP/IP does not. OSI's network layer is both connection-oriented and connectionless, TCP/IP's is connectionless only.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "21",
+      "section": "OSI & TCP/IP Models",
+      "question": "Which devices and protocols operate at which OSI layer?",
+      "answer": "Physical: hubs, repeaters, cables, NIC hardware. Data Link: switches, bridges — Ethernet, PPP, ARP. Network: routers, layer-3 switches — IP, ICMP, OSPF, BGP. Transport: gateways/firewalls doing port filtering — TCP, UDP. Application: proxies and application firewalls — HTTP, FTP, SMTP, DNS, DHCP. A common follow-up: a hub is layer 1, a switch layer 2, a router layer 3.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "SoftwareTestingHelp", "Guru99", "InterviewBit"]
+    },
+    {
+      "id": "22",
+      "section": "OSI & TCP/IP Models",
+      "question": "What is a protocol? What are its key elements?",
+      "answer": "A set of agreed rules governing how two entities communicate. Its three key elements are Syntax (the format and structure of the data — field order and sizes), Semantics (the meaning of each field and the action to take), and Timing (when data may be sent and how fast — speed matching and sequencing).",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "23",
+      "section": "Physical & Data Link Layer",
+      "question": "What are simplex, half-duplex and full-duplex transmission modes?",
+      "answer": "Simplex: one direction only — keyboard to computer, TV broadcast. Half-duplex: both directions but only one at a time — a walkie-talkie, or old Ethernet on a hub. Full-duplex: both directions simultaneously, effectively doubling capacity — a phone call, or modern switched Ethernet.",
+      "frequency": "MED",
+      "sources": ["SoftwareTestingHelp", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "24",
+      "section": "Physical & Data Link Layer",
+      "question": "Difference between baseband and broadband transmission? What does 10Base-T mean?",
+      "answer": "Baseband sends a single digital signal using the entire bandwidth of the medium, bidirectionally — this is what Ethernet does. Broadband divides the medium into multiple frequency channels carrying several signals at once, usually unidirectionally — cable TV. In `10Base-T`: 10 = 10 Mbps, Base = baseband, T = twisted pair.",
+      "frequency": "LOW",
+      "sources": ["Guru99", "SoftwareTestingHelp", "JavaTpoint"]
+    },
+    {
+      "id": "25",
+      "section": "Physical & Data Link Layer",
+      "question": "What are the common transmission media? What are the advantages of fibre optics?",
+      "answer": "Guided: twisted pair (cheap, easy, limited to ~100 m for UTP), coaxial (better shielding), fibre optic (light through glass). Unguided: radio, microwave, infrared, satellite. Fibre advantages: enormous bandwidth, very low attenuation so it runs for kilometres, complete immunity to electromagnetic interference, thin and light, and much harder to tap — which is why it carries every backbone.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "26",
+      "section": "Physical & Data Link Layer",
+      "question": "What is multiplexing? Name its types.",
+      "answer": "Sharing one physical medium among several signals so the link's capacity isn't wasted. FDM (Frequency Division): each signal gets a separate frequency band — radio, cable TV. TDM (Time Division): each signal gets a repeating time slot — digital telephony; synchronous TDM wastes idle slots, statistical TDM allocates on demand. WDM (Wavelength Division): FDM for fibre, using different light wavelengths.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "GeeksforGeeks", "Guru99"]
+    },
+    {
+      "id": "27",
+      "section": "Physical & Data Link Layer",
+      "question": "What is a MAC address and how does it differ from an IP address?",
+      "answer": "A MAC address is a 48-bit hardware address burned into the NIC by the manufacturer, written as six hex pairs (e.g. `00:1A:2B:3C:4D:5E`). It is physical, permanent, assigned by the vendor, works only within one local network, and lives at layer 2. An IP address is logical, 32/128-bit, assigned by the network or DHCP, changes when you move networks, is routable globally, and lives at layer 3. A packet keeps the same IP addresses end-to-end but its MAC addresses are rewritten at every hop.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "28",
+      "section": "Physical & Data Link Layer",
+      "question": "How does the data link layer detect errors? Explain parity, checksum and CRC.",
+      "answer": "Parity bit: one bit making the count of 1s even or odd — catches single-bit errors only. Checksum: the data is split into words, summed, and the 1s complement is sent; the receiver re-adds everything and expects all 1s — used by IP/TCP/UDP headers. CRC (Cyclic Redundancy Check): treats the frame as a polynomial and divides it by a generator polynomial, appending the remainder — catches all burst errors up to the length of the CRC and is what Ethernet uses.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "JavaTpoint"]
+    },
+    {
+      "id": "29",
+      "section": "Physical & Data Link Layer",
+      "question": "What is Hamming code?",
+      "answer": "An error-correcting (not just detecting) code that inserts parity bits at power-of-two positions, each covering a specific subset of bits. When a frame arrives, recomputing the parity bits yields a binary number that is exactly the position of the flipped bit, so a single-bit error can be located and corrected without retransmission. To correct d errors you need a Hamming distance of 2d+1.",
+      "frequency": "LOW",
+      "sources": ["Guru99", "GeeksforGeeks"]
+    },
+    {
+      "id": "30",
+      "section": "Physical & Data Link Layer",
+      "question": "Compare Stop-and-Wait, Go-Back-N and Selective Repeat.",
+      "answer": "Stop-and-Wait: send one frame, wait for its ACK — dead simple but wastes the link, efficiency = 1/(1+2a). Go-Back-N: pipeline up to N unacknowledged frames with cumulative ACKs; on a loss, retransmit that frame and everything after it — simple receiver (no buffering) but wasteful on lossy links. Selective Repeat: retransmit only the missing frame; the receiver buffers out-of-order frames — most efficient but needs buffering and individual ACKs, and its window must be at most half the sequence-number space to avoid ambiguity.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "JavaTpoint"]
+    },
+    {
+      "id": "31",
+      "section": "Physical & Data Link Layer",
+      "question": "What is piggybacking?",
+      "answer": "Instead of sending a standalone acknowledgment frame, the receiver waits briefly and attaches the ACK to an outgoing data frame heading back to the sender. This saves bandwidth and frame overhead in bidirectional communication; the cost is a small added delay while waiting for outbound data, so there is a timeout after which the ACK is sent alone.",
+      "frequency": "LOW",
+      "sources": ["SoftwareTestingHelp", "GeeksforGeeks"]
+    },
+    {
+      "id": "32",
+      "section": "Physical & Data Link Layer",
+      "question": "Difference between CSMA/CD and CSMA/CA?",
+      "answer": "Both are media access methods where a station listens before transmitting. CSMA/CD (Collision Detection) is used in wired Ethernet: a station transmits and monitors the line, and on detecting a collision it stops, sends a jam signal and backs off for a random time. CSMA/CA (Collision Avoidance) is used in Wi-Fi, where a station cannot listen while transmitting — so it tries to avoid collisions in advance using random backoff before sending, ACKs, and optional RTS/CTS handshakes.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "JavaTpoint"]
+    },
+    {
+      "id": "33",
+      "section": "Physical & Data Link Layer",
+      "question": "What is Ethernet?",
+      "answer": "The dominant LAN technology, standardized as IEEE 802.3, covering the physical and data link layers. It defines the frame format (destination MAC, source MAC, type/length, payload, CRC), MAC addressing, and originally CSMA/CD for shared media. Modern switched full-duplex Ethernet has no collisions at all, and speeds have scaled from 10 Mbps to 400 Gbps.",
+      "frequency": "MED",
+      "sources": ["Guru99", "SoftwareTestingHelp", "GeeksforGeeks"]
+    },
+    {
+      "id": "34",
+      "section": "Physical & Data Link Layer",
+      "question": "How does a switch learn MAC addresses? What is the Spanning Tree Protocol?",
+      "answer": "A switch builds its MAC address table by reading the source MAC of every incoming frame and recording which port it came from. For an unknown destination MAC it floods the frame out of every port except the incoming one; once the reply arrives it learns that address too. STP (IEEE 802.1D) prevents the broadcast storms that redundant links would cause: switches elect a root bridge, compute the lowest-cost path to it, and block the remaining redundant ports — leaving a loop-free tree that can reactivate blocked links if a path fails.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "35",
+      "section": "Network Devices",
+      "question": "Difference between a hub, a switch and a router?",
+      "answer": "Hub (layer 1): dumb repeater — copies an incoming frame to every port, so all ports share one collision domain and bandwidth; obsolete. Switch (layer 2): reads MAC addresses and forwards the frame only to the correct port, giving each port its own collision domain and full bandwidth. Router (layer 3): reads IP addresses and forwards packets between different networks, separating broadcast domains and providing the path to the Internet.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "36",
+      "section": "Network Devices",
+      "question": "What is a repeater and what is a bridge?",
+      "answer": "A repeater (layer 1) regenerates and amplifies a weakened signal so a segment can exceed its maximum cable length — it copies bits and understands nothing. A bridge (layer 2) connects two LAN segments and filters traffic using MAC addresses, forwarding a frame only if the destination is on the other side — a switch is essentially a multiport bridge with hardware forwarding.",
+      "frequency": "MED",
+      "sources": ["Guru99", "SoftwareTestingHelp", "JavaTpoint"]
+    },
+    {
+      "id": "37",
+      "section": "Network Devices",
+      "question": "What is a gateway and how does it differ from a router?",
+      "answer": "A gateway joins two networks that use different protocols or architectures, translating between them — it can operate at any layer, up to the application layer. A router forwards packets between networks that already speak the same protocol (IP), using a routing table. Every router is a kind of gateway, but a gateway may do protocol conversion a router never does. Your `default gateway` is simply the router your host sends non-local traffic to.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "38",
+      "section": "Network Devices",
+      "question": "What is a NIC?",
+      "answer": "A Network Interface Card is the hardware that connects a device to the network — it holds the burned-in MAC address, converts data into signals for the medium, and handles framing at layers 1 and 2. It can be wired (Ethernet) or wireless. Moving a NIC to another machine takes its MAC address with it, since the address belongs to the card, not the computer.",
+      "frequency": "MED",
+      "sources": ["JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "39",
+      "section": "Network Devices",
+      "question": "What is a modem?",
+      "answer": "Modulator-Demodulator — it converts the computer's digital signals into analog signals suitable for a telephone/cable line and converts incoming analog signals back to digital. It is what connects a home LAN to the ISP; a router is a separate function, though home 'modems' usually bundle both.",
+      "frequency": "LOW",
+      "sources": ["Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "40",
+      "section": "Network Devices",
+      "question": "What is a proxy server? Difference between a forward and a reverse proxy?",
+      "answer": "An intermediary that relays requests on behalf of someone else. A forward proxy sits in front of clients — it hides client identity, enforces content filtering and caches responses (a corporate web proxy). A reverse proxy sits in front of servers — clients think they are talking to it while it distributes traffic to backends, terminates TLS, caches and shields the servers (Nginx, a load balancer, a CDN edge).",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "Guru99", "SoftwareTestingHelp", "GeeksforGeeks"]
+    },
+    {
+      "id": "41",
+      "section": "Network Devices",
+      "question": "What is a VLAN? What is 802.1Q tagging?",
+      "answer": "A Virtual LAN logically groups devices into separate broadcast domains on the same physical switch — HR and Finance can be isolated without separate hardware. Benefits: security, reduced broadcast traffic, and grouping by function instead of location. IEEE 802.1Q inserts a 4-byte tag carrying a 12-bit VLAN ID into the Ethernet frame, so a single trunk link between switches can carry traffic for many VLANs while keeping them separated. Traffic between VLANs must pass through a router or layer-3 switch.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "Guru99"]
+    },
+    {
+      "id": "42",
+      "section": "Network Devices",
+      "question": "Difference between a collision domain and a broadcast domain?",
+      "answer": "A collision domain is a segment where two simultaneous transmissions would collide. A broadcast domain is the set of devices that receive a broadcast frame. A hub is one collision domain and one broadcast domain across all ports. A switch gives each port its own collision domain but keeps all ports in one broadcast domain. A router breaks up broadcast domains — which is exactly why broadcasts do not cross the Internet.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "43",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is an IP address?",
+      "answer": "A logical address that uniquely identifies a device on a network at layer 3. IPv4 is 32 bits, written as four decimal octets from 0.0.0.0 to 255.255.255.255 (about 4.3 billion addresses). Every address splits into a network portion (which network) and a host portion (which device on it), and the subnet mask is what says where the split falls.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "44",
+      "section": "IP Addressing & Subnetting",
+      "question": "What are the IPv4 address classes and how do you identify a class?",
+      "answer": "Class A: first octet 1–126, default mask /8, ~16 million hosts — huge networks. Class B: 128–191, /16, ~65,000 hosts. Class C: 192–223, /24, 254 hosts. Class D: 224–239, reserved for multicast. Class E: 240–255, experimental. Read the first octet to identify the class. 127.x.x.x is reserved for loopback. Classful addressing is obsolete in practice — CIDR replaced it — but it is still asked constantly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Guru99", "JavaTpoint", "SoftwareTestingHelp", "GeeksforGeeks"]
+    },
+    {
+      "id": "45",
+      "section": "IP Addressing & Subnetting",
+      "question": "Difference between public and private IP addresses? Why are private IPs not routable on the Internet?",
+      "answer": "A public IP is globally unique and assigned by an ISP/registry. A private IP is used only inside a local network and is reserved by RFC 1918: 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16. Internet routers are configured to discard packets with private source/destination addresses, because the same private address exists in millions of homes simultaneously — there would be no unique destination. NAT translates private addresses to a public one at the gateway.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "LastMinuteNotes"]
+    },
+    {
+      "id": "46",
+      "section": "IP Addressing & Subnetting",
+      "question": "Difference between a static and a dynamic IP address?",
+      "answer": "A static IP is configured manually and never changes — required for servers, printers and anything others must reliably find, but it needs administration and costs more. A dynamic IP is leased automatically by DHCP and may change on renewal — ideal for client devices because it needs no configuration and reuses the address pool efficiently.",
+      "frequency": "MED",
+      "sources": ["SoftwareTestingHelp", "Guru99", "JavaTpoint"]
+    },
+    {
+      "id": "47",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is a subnet mask?",
+      "answer": "A 32-bit value that marks which part of an IP address is the network and which is the host — 1s cover the network bits, 0s the host bits (255.255.255.0 = /24). A device ANDs its own IP with the mask and the destination IP with the mask: if the results match, the destination is local and it uses ARP; if not, it sends the packet to the default gateway. That single comparison is the entire purpose of the mask.",
+      "frequency": "MOST_FREQ",
+      "sources": ["Guru99", "GeeksforGeeks", "InterviewBit", "LastMinuteNotes"]
+    },
+    {
+      "id": "48",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is subnetting and CIDR notation? Explain with an example.",
+      "answer": "Subnetting borrows bits from the host portion to split one large network into smaller ones — reducing broadcast traffic, improving security and stopping address waste. CIDR writes the mask as a suffix: 192.168.1.0/26 means 26 network bits, so 6 host bits = 64 addresses per subnet, of which 62 are usable (one network address, one broadcast). That /24 therefore splits into four subnets: .0–.63, .64–.127, .128–.191, .192–.255. Usable hosts = 2^(32−prefix) − 2.",
+      "frequency": "MOST_FREQ",
+      "sources": ["InterviewBit", "GeeksforGeeks", "Guru99", "LastMinuteNotes"]
+    },
+    {
+      "id": "49",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is VLSM? How does it differ from CIDR?",
+      "answer": "VLSM (Variable Length Subnet Masking) lets you use different mask lengths inside the same network, so a link needing 2 hosts gets a /30 while a department needing 200 gets a /24 — no wasted addresses. CIDR is the complementary idea applied outward: aggregating many contiguous prefixes into one advertised route (route summarization) to keep Internet routing tables small. VLSM divides efficiently; CIDR summarizes efficiently.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "50",
+      "section": "IP Addressing & Subnetting",
+      "question": "What do 127.0.0.1 and localhost mean?",
+      "answer": "127.0.0.1 is the loopback address — traffic sent to it never leaves the machine; the network stack turns it straight back up to the local host. `localhost` is the hostname that resolves to it. The entire 127.0.0.0/8 block is reserved for this. It is used to test whether the TCP/IP stack is working and to connect to services running on your own machine.",
+      "frequency": "MED",
+      "sources": ["SoftwareTestingHelp", "Guru99", "GeeksforGeeks"]
+    },
+    {
+      "id": "51",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is APIPA?",
+      "answer": "Automatic Private IP Addressing — when a DHCP client cannot reach a DHCP server, Windows self-assigns an address from 169.254.0.0/16 so the machine can still talk to others on the same segment. Seeing a 169.254.x.x address is a diagnostic signal that DHCP failed; such a host has no gateway and no Internet access.",
+      "frequency": "LOW",
+      "sources": ["JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "52",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is NAT? Why is it used and what are its limitations?",
+      "answer": "Network Address Translation rewrites the private source IP of outgoing packets to the router's public IP (and, in PAT/overloading, also rewrites the source port so many hosts share one address). It exists because IPv4 addresses ran out, and it incidentally hides the internal topology. Limitations: it breaks true end-to-end connectivity, complicates peer-to-peer, VoIP and gaming (hence STUN/TURN and port forwarding), adds router state and processing, and makes inbound connections impossible without explicit mapping.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "Guru99"]
+    },
+    {
+      "id": "53",
+      "section": "IP Addressing & Subnetting",
+      "question": "What is IPv6? How is it different from IPv4?",
+      "answer": "IPv6 uses 128-bit addresses written as eight hex groups (e.g. `2001:0db8::7334`), giving a practically unlimited space versus IPv4's 32 bits. Other differences: a simpler fixed 40-byte header with extension headers, no header checksum, built-in IPsec support, no broadcast (multicast and anycast instead), stateless address autoconfiguration, and no router fragmentation — the source handles it via Path MTU Discovery.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "54",
+      "section": "IP Addressing & Subnetting",
+      "question": "Why does IPv6 remove the need for NAT? What is Neighbor Discovery?",
+      "answer": "With 128 bits every device can have its own globally unique public address, so there is no scarcity to work around and end-to-end connectivity is restored — NAT's whole reason for existing disappears. Neighbor Discovery Protocol (NDP), which runs over ICMPv6, replaces IPv4's ARP: it resolves link-layer addresses, discovers routers and prefixes, detects duplicate addresses, and enables stateless autoconfiguration.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "55",
+      "section": "IP Addressing & Subnetting",
+      "question": "What are the network address and broadcast address? How many hosts fit in a subnet?",
+      "answer": "In any subnet the first address (all host bits 0) is the network address identifying the subnet itself, and the last (all host bits 1) is the directed broadcast address — neither can be assigned to a device. So usable hosts = 2^h − 2, where h is the number of host bits. Class A default /8 gives ~16.7 million hosts, class B /16 gives 65,534, class C /24 gives 254.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "56",
+      "section": "Network Layer & Routing",
+      "question": "Difference between routing and forwarding?",
+      "answer": "Routing is the control-plane process of building the routing table — running algorithms and exchanging protocol messages to work out the best path to every destination. Forwarding is the data-plane action performed per packet: look up the destination in the table and move the packet to the correct outgoing interface. Routing is slow and periodic; forwarding happens at line rate for every packet.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Guru99", "InterviewBit", "LastMinuteNotes"]
+    },
+    {
+      "id": "57",
+      "section": "Network Layer & Routing",
+      "question": "What is a routing table and how does a router use it?",
+      "answer": "A table mapping destination networks to the next-hop address and outgoing interface, with a metric/cost per entry. For each packet the router finds the entry with the longest matching prefix — the most specific route wins — and forwards accordingly; if nothing matches it uses the default route (0.0.0.0/0), and if there is no default it drops the packet and returns an ICMP unreachable.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "58",
+      "section": "Network Layer & Routing",
+      "question": "Difference between static and dynamic routing?",
+      "answer": "Static routing means an administrator configures routes manually — no protocol overhead, fully predictable and secure, but it does not adapt to failures and doesn't scale beyond small networks. Dynamic routing means routers exchange information via a protocol (RIP, OSPF, BGP) and adapt automatically to topology changes, at the cost of CPU, bandwidth and complexity.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "JavaTpoint"]
+    },
+    {
+      "id": "59",
+      "section": "Network Layer & Routing",
+      "question": "Difference between distance vector and link state routing?",
+      "answer": "Distance vector (RIP): each router knows only the distance and direction to each destination and periodically shares its whole table with its direct neighbours — simple and light, but slow convergence and prone to routing loops and count-to-infinity. Link state (OSPF): every router floods the state of its own links to all routers, so each builds an identical full map of the topology and runs Dijkstra locally — fast convergence and loop-free, but more CPU and memory.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "Guru99", "JavaTpoint"]
+    },
+    {
+      "id": "60",
+      "section": "Network Layer & Routing",
+      "question": "What is RIP? What is the count-to-infinity problem and how is it solved?",
+      "answer": "Routing Information Protocol is a distance-vector IGP using hop count as its metric, with a maximum of 15 hops (16 = unreachable) and updates every 30 seconds. Count-to-infinity happens when a network goes down and two routers keep learning the dead route back from each other, incrementing the hop count slowly toward 16. Fixes: split horizon (never advertise a route back on the interface you learned it from), route poisoning (advertise the dead route with metric 16), and hold-down timers.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "61",
+      "section": "Network Layer & Routing",
+      "question": "What is OSPF and why does it converge faster than RIP?",
+      "answer": "Open Shortest Path First is a link-state IGP that uses cost (based on bandwidth) rather than hop count and divides large networks into areas around a backbone (area 0). It converges faster because a change is flooded immediately to every router, each of which recomputes the shortest-path tree with Dijkstra's algorithm — whereas RIP waits for periodic timers and propagates changes hop by hop. OSPF also has no 15-hop ceiling, supports VLSM, and picks better paths since it accounts for link speed.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "JavaTpoint"]
+    },
+    {
+      "id": "62",
+      "section": "Network Layer & Routing",
+      "question": "What is BGP? Difference between IGP and EGP?",
+      "answer": "Border Gateway Protocol is the routing protocol of the Internet, running between Autonomous Systems. It is a path-vector protocol: it advertises the full list of AS numbers a route traverses, which both detects loops (an AS drops any route already containing itself) and enables policy decisions based on business relationships rather than shortest distance. IGPs (RIP, OSPF, EIGRP) route *within* one AS optimizing for speed; EGPs (BGP) route *between* ASes optimizing for policy and scale.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "63",
+      "section": "Network Layer & Routing",
+      "question": "What is ARP and how does it work? What is RARP?",
+      "answer": "Address Resolution Protocol maps a known IP address to the MAC address needed to actually build the frame. The host broadcasts 'who has 192.168.1.5?' to the whole LAN; only that host replies with its MAC, and the result is cached in the ARP table for a few minutes. RARP does the reverse — a diskless machine that knows only its MAC asks for its IP — and is obsolete, replaced by BOOTP and DHCP.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "64",
+      "section": "Network Layer & Routing",
+      "question": "What is ICMP? What do ping and traceroute do, and why doesn't ICMP use TCP?",
+      "answer": "Internet Control Message Protocol carries error and diagnostic messages for IP — destination unreachable, time exceeded, echo request/reply. `ping` sends an ICMP echo request and measures the round-trip time to check reachability. `traceroute`/`tracert` sends packets with TTL 1, 2, 3… so each successive router returns a time-exceeded message, revealing the whole path. ICMP doesn't use TCP because it carries tiny one-shot control messages — a connection setup, handshake and reliability machinery would cost far more than the message itself.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Guru99", "JavaTpoint", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "65",
+      "section": "Network Layer & Routing",
+      "question": "What is TTL and why does it exist?",
+      "answer": "Time To Live is an 8-bit IP header field decremented by one at every router. When it hits zero the packet is discarded and an ICMP time-exceeded message goes back to the sender. Its purpose is to stop packets circulating forever in a routing loop; traceroute exploits it deliberately to map the path. In DNS, TTL is a different thing — how long a record may be cached.",
+      "frequency": "MED",
+      "sources": ["LastMinuteNotes", "InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "66",
+      "section": "Network Layer & Routing",
+      "question": "What is MTU? What are fragmentation and Path MTU Discovery?",
+      "answer": "Maximum Transmission Unit is the largest frame payload a link can carry — 1500 bytes for standard Ethernet. If an IP packet exceeds the next link's MTU, IPv4 routers fragment it and the destination reassembles; this hurts performance because losing one fragment loses the whole packet. Path MTU Discovery avoids it: the sender sets the Don't Fragment bit and shrinks its packet size when a router replies with an ICMP 'fragmentation needed' message, converging on the smallest MTU along the path. IPv6 routers never fragment, so PMTUD is mandatory there.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "67",
+      "section": "Network Layer & Routing",
+      "question": "Difference between packet switching and circuit switching?",
+      "answer": "Circuit switching reserves a dedicated end-to-end path for the entire session before any data flows — guaranteed bandwidth and constant delay (the classic telephone network), but the circuit is wasted while idle and setup takes time. Packet switching splits data into packets routed independently and multiplexed with everyone else's traffic — far better link utilization and resilience to failures, at the cost of variable delay, jitter, and possible out-of-order or lost packets. The Internet is packet switched.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "JavaTpoint", "Guru99"]
+    },
+    {
+      "id": "68",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What are port numbers? What are well-known ports?",
+      "answer": "A 16-bit number (0–65535) identifying a specific application/process on a host, so the transport layer can demultiplex arriving segments to the right program. Well-known ports (0–1023) are reserved for standard services: 20/21 FTP, 22 SSH, 23 Telnet, 25 SMTP, 53 DNS, 67/68 DHCP, 80 HTTP, 110 POP3, 143 IMAP, 443 HTTPS, 3306 MySQL. Registered ports run 1024–49151 and ephemeral/dynamic client ports 49152–65535.",
+      "frequency": "MOST_FREQ",
+      "sources": ["InterviewBit", "GeeksforGeeks", "SoftwareTestingHelp", "Guru99"]
+    },
+    {
+      "id": "69",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What is a socket?",
+      "answer": "The endpoint of a two-way communication link, identified by the pair (IP address, port number). A full TCP connection is uniquely identified by a 4-tuple: source IP, source port, destination IP, destination port — which is how one server on port 80 can hold thousands of simultaneous connections. The socket API (`socket`, `bind`, `listen`, `accept`, `connect`, `send`, `recv`) is how applications reach the transport layer.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "70",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Difference between TCP and UDP?",
+      "answer": "TCP is connection-oriented (handshake first), reliable (acknowledgments and retransmission), ordered (sequence numbers reassemble in order), and does flow and congestion control — with a 20-byte header and higher overhead. UDP is connectionless, unreliable, unordered, has no flow or congestion control, and carries only an 8-byte header — so it is much faster and supports broadcast/multicast. TCP for web, email and file transfer; UDP for DNS, DHCP, VoIP, gaming and streaming.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "71",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Why is UDP preferred for streaming and online gaming despite being unreliable?",
+      "answer": "Because in real-time media, late data is useless data. TCP would stall the stream retransmitting a lost packet and delivering it in order — but by the time that video frame arrives, its moment has passed, and head-of-line blocking freezes everything behind it. UDP just drops the packet and moves on; the application conceals the loss (interpolation, error concealment) and keeps latency low. Games and VoIP make the same trade: a momentary glitch beats a stutter.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "LastMinuteNotes"]
+    },
+    {
+      "id": "72",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Explain the TCP three-way handshake. Why three steps and not two?",
+      "answer": "1) Client sends SYN with its initial sequence number x. 2) Server replies SYN-ACK with its own sequence number y and acknowledges x+1. 3) Client sends ACK of y+1 — the connection is established. Three steps are needed because both sides must exchange *and confirm* an initial sequence number; a two-way exchange would leave the server unsure the client received its ISN, and old delayed duplicate SYNs could open phantom connections.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "73",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "How is a TCP connection terminated? What is the TIME_WAIT state?",
+      "answer": "A four-way handshake, because each direction closes independently: A sends FIN, B ACKs it, B later sends its own FIN, A ACKs that. The side that sends the final ACK then sits in TIME_WAIT for 2×MSL (about 1–4 minutes) so that any delayed duplicate segments from the old connection expire before the same 4-tuple can be reused, and so it can retransmit that final ACK if it was lost — otherwise the peer would keep resending its FIN and end up resetting.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "74",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What are TCP sequence and acknowledgment numbers?",
+      "answer": "The sequence number is the byte offset of the first byte in this segment within the overall stream — it lets the receiver reassemble segments in order and discard duplicates. The acknowledgment number is the sequence number of the next byte the receiver expects, which cumulatively confirms everything before it. Initial sequence numbers are randomized to prevent an attacker guessing them and injecting data.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "75",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "How does TCP guarantee reliable delivery?",
+      "answer": "Five mechanisms working together: sequence numbers detect loss, duplication and reordering; cumulative acknowledgments confirm receipt; a checksum detects corruption; retransmission timers resend unacknowledged data; and the sliding window keeps data flowing without waiting for each ACK. On top of that, the handshake ensures both ends are ready and connection teardown is graceful.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "76",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What is the TCP sliding window and how does it improve throughput?",
+      "answer": "Instead of stopping after each segment to wait for an ACK, the sender may have a whole window's worth of unacknowledged bytes in flight; as ACKs arrive the window slides forward and more data can be sent. This keeps the pipe full — throughput becomes window size / RTT rather than one segment per RTT — which matters enormously on high-latency links. The window size is the minimum of the receiver's advertised window and the congestion window.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "InterviewBit"]
+    },
+    {
+      "id": "77",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Difference between flow control and congestion control?",
+      "answer": "Flow control protects the *receiver* from being overwhelmed — the receiver advertises a window (rwnd) saying how much buffer space it has, and the sender never exceeds it. Congestion control protects the *network* from being overwhelmed — the sender infers congestion from packet loss and adjusts its own congestion window (cwnd). Flow control is a two-party agreement; congestion control is a guess about everyone else on the path. TCP sends at min(rwnd, cwnd).",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes", "InterviewBit", "JavaTpoint"]
+    },
+    {
+      "id": "78",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Explain TCP congestion control: slow start, congestion avoidance and AIMD.",
+      "answer": "Slow start: cwnd begins at 1 MSS and doubles every RTT — exponential growth — until it reaches the slow-start threshold or loss occurs. Congestion avoidance: past the threshold, cwnd grows by roughly one MSS per RTT — linear — to probe capacity gently. On loss, the threshold halves and cwnd is cut (to 1 on timeout, halved on triple duplicate ACKs). This Additive Increase / Multiplicative Decrease is what makes TCP flows converge to a fair share of the bottleneck link.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "LastMinuteNotes"]
+    },
+    {
+      "id": "79",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What are TCP retransmission, RTO, fast retransmit and fast recovery?",
+      "answer": "RTO (Retransmission Timeout) is a timer derived from smoothed RTT estimates; if an ACK doesn't arrive before it fires, the segment is resent and cwnd collapses to 1. Fast retransmit avoids that wait — three duplicate ACKs for the same byte are treated as a loss signal, so the segment is resent immediately. Fast recovery then halves cwnd instead of dropping to 1, since duplicate ACKs prove data is still flowing and the network isn't dead.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "80",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "Difference between the congestion window (cwnd) and the receive window (rwnd)?",
+      "answer": "cwnd is maintained by the sender and estimates how much the *network* can absorb; it is never transmitted, only inferred from loss and ACK behaviour. rwnd is advertised by the receiver in every ACK and states how much free *buffer* it has. The sender's effective window is min(cwnd, rwnd) — so a fast network with a slow receiver is limited by rwnd, and a fast receiver behind a congested path is limited by cwnd.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "81",
+      "section": "Transport Layer (TCP & UDP)",
+      "question": "What is the Bandwidth-Delay Product and why does it matter?",
+      "answer": "BDP = bandwidth × round-trip time — the amount of data that can be 'in flight' on the link at once. To saturate a connection, the sender's window must be at least the BDP; a window smaller than that leaves the pipe partly empty no matter how fast the link is. This is why long-fat networks (high bandwidth, high latency — satellite, intercontinental) need window scaling, and why pipelining exists at all.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "82",
+      "section": "Application Layer & Protocols",
+      "question": "What is DNS and how does DNS resolution work?",
+      "answer": "The Domain Name System translates human-readable names into IP addresses. Resolution order: the browser cache, then the OS cache and hosts file, then the configured recursive resolver. If the resolver has no answer it queries a root server (which points to the TLD server for `.com`), then the TLD server (which points to the authoritative name server for the domain), then the authoritative server, which returns the record. The answer is cached everywhere along the way for its TTL. DNS uses UDP port 53 for queries and TCP for zone transfers and large responses.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "83",
+      "section": "Application Layer & Protocols",
+      "question": "Why is DNS hierarchical instead of centralized?",
+      "answer": "A single server could never handle the query volume, would be a single point of failure, would be far away from most users, and would be impossible to administer since every domain owner needs control of their own records. The hierarchy — root → TLD → authoritative — distributes both load and administrative authority, and aggressive caching means the root servers see only a tiny fraction of actual lookups.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "84",
+      "section": "Application Layer & Protocols",
+      "question": "What happens when you type a URL in a browser and press Enter?",
+      "answer": "1) The browser parses the URL and checks its cache. 2) DNS resolution turns the hostname into an IP (browser → OS → resolver → root → TLD → authoritative). 3) ARP finds the MAC of the default gateway. 4) A TCP three-way handshake opens a connection to the server's port 80/443. 5) For HTTPS, a TLS handshake negotiates keys and validates the certificate. 6) The browser sends an HTTP GET request. 7) The server responds with HTML. 8) The browser parses it, fires further requests for CSS/JS/images, builds the DOM and CSSOM, and renders the page. This one question tests the entire stack — expect follow-ups on any step.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "85",
+      "section": "Application Layer & Protocols",
+      "question": "What is HTTP? Why is it called stateless?",
+      "answer": "HyperText Transfer Protocol is the request-response application-layer protocol of the web, running over TCP on port 80. Methods: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS. It is stateless because the server retains nothing about previous requests — each one is independent, which is what makes servers scalable. State is layered on top using cookies, sessions and tokens.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "86",
+      "section": "Application Layer & Protocols",
+      "question": "Difference between HTTP and HTTPS?",
+      "answer": "HTTPS is HTTP layered over TLS on port 443 instead of plain HTTP on port 80. It adds confidentiality (traffic is encrypted, so an eavesdropper sees nothing usable), integrity (tampering is detected), and authentication (a CA-signed certificate proves the server is who it claims, preventing man-in-the-middle). Modern browsers mark plain HTTP as not secure, and features like HTTP/2 effectively require TLS.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "JavaTpoint", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "87",
+      "section": "Application Layer & Protocols",
+      "question": "Compare HTTP/1.1, HTTP/2 and HTTP/3.",
+      "answer": "HTTP/1.1: one request at a time per connection (pipelining never worked well), so browsers open 6 parallel TCP connections; plain text headers. HTTP/2: binary framing with true multiplexing of many streams over one TCP connection, header compression (HPACK) and server push — but a single lost TCP segment stalls every stream (TCP-level head-of-line blocking). HTTP/3: runs over QUIC on UDP, so each stream is independently reliable — losing one stream's packet no longer blocks the others — plus faster (often 0-RTT) connection setup with TLS 1.3 built in.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "88",
+      "section": "Application Layer & Protocols",
+      "question": "What is DHCP and how does it work?",
+      "answer": "Dynamic Host Configuration Protocol automatically assigns a host its IP address, subnet mask, default gateway and DNS servers. The DORA exchange: Discover (client broadcasts looking for a server), Offer (server offers an address), Request (client broadcasts acceptance of one offer), Acknowledge (server confirms and records the lease). Addresses are leased for a limited time and renewed at 50% of the lease. It runs over UDP, server port 67 and client port 68.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "Guru99", "SoftwareTestingHelp", "JavaTpoint"]
+    },
+    {
+      "id": "89",
+      "section": "Application Layer & Protocols",
+      "question": "What is FTP? How do FTP, TFTP and SFTP differ? What is anonymous FTP?",
+      "answer": "File Transfer Protocol moves files using two TCP connections — port 21 for control commands and port 20 for data. TFTP is a stripped-down version over UDP port 69 with no authentication, used for booting devices and pushing firmware. SFTP runs file transfer over SSH on port 22, encrypting both credentials and data — the only one of the three that is safe on the public Internet, since plain FTP sends passwords in clear text. Anonymous FTP lets anyone log in with the username `anonymous` and an email address as the password, for public file archives.",
+      "frequency": "MED",
+      "sources": ["Guru99", "JavaTpoint", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "90",
+      "section": "Application Layer & Protocols",
+      "question": "What are SMTP, POP3 and IMAP?",
+      "answer": "SMTP (port 25, or 587 with TLS) is the push protocol that *sends* mail from a client to a server and between servers. POP3 (port 110) downloads mail to one device and typically deletes it from the server — simple, good offline, but bad across multiple devices. IMAP (port 143) keeps mail on the server and synchronizes state (read, folders, flags) across every device — which is why almost everything uses IMAP today.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "Guru99", "JavaTpoint", "GeeksforGeeks"]
+    },
+    {
+      "id": "91",
+      "section": "Application Layer & Protocols",
+      "question": "Difference between Telnet and SSH?",
+      "answer": "Both give a remote terminal session. Telnet (port 23) sends everything — including your password — in plain text, so it is obsolete for anything but local device testing. SSH (port 22) encrypts the entire session, authenticates the server by host key and the user by password or public key, and additionally supports port forwarding/tunnelling and secure file transfer (SCP/SFTP).",
+      "frequency": "MED",
+      "sources": ["Guru99", "SoftwareTestingHelp", "GeeksforGeeks"]
+    },
+    {
+      "id": "92",
+      "section": "Application Layer & Protocols",
+      "question": "What is SNMP?",
+      "answer": "Simple Network Management Protocol lets an administrator monitor and manage network devices from a central station. An SNMP manager polls agents running on routers, switches and servers for values stored in their MIB (Management Information Base); agents can also push unsolicited `trap` messages on events like an interface going down. It runs over UDP ports 161 (queries) and 162 (traps).",
+      "frequency": "LOW",
+      "sources": ["SoftwareTestingHelp", "Guru99"]
+    },
+    {
+      "id": "93",
+      "section": "Network Security",
+      "question": "What is a firewall? What are its types?",
+      "answer": "A security barrier that monitors and filters traffic between a trusted internal network and untrusted external ones, based on configured rules. Types: packet-filtering (inspects IP/port headers only — fast, stateless), stateful inspection (tracks connection state, so it knows a reply belongs to an outbound request), application-layer/proxy firewalls (understand HTTP, FTP and can block by content), and next-generation firewalls (add IDS/IPS, deep packet inspection and application awareness). Firewalls can be hardware, software or host-based.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "Guru99", "SoftwareTestingHelp", "InterviewBit"]
+    },
+    {
+      "id": "94",
+      "section": "Network Security",
+      "question": "What is a VPN and how does it work?",
+      "answer": "A Virtual Private Network creates an encrypted tunnel across the public Internet so remote users or sites behave as if they were on the same private LAN. The client encrypts each packet and wraps it in a new outer packet addressed to the VPN gateway (encapsulation); the gateway decrypts and forwards it internally. It provides confidentiality on untrusted networks, hides your real IP from destinations, and lets remote employees reach internal resources. Protocols: IPsec, OpenVPN, WireGuard, SSL/TLS VPNs.",
+      "frequency": "MOST_FREQ",
+      "sources": ["LastMinuteNotes", "GeeksforGeeks", "InterviewBit", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "95",
+      "section": "Network Security",
+      "question": "What are the types of VPN?",
+      "answer": "Remote Access VPN: an individual user connects to a corporate network from anywhere — the work-from-home case. Site-to-Site VPN joins whole networks: Intranet VPN links offices of the same organization, Extranet VPN links an organization to partners or suppliers with limited access. There is also the tunnel-mode vs transport-mode distinction in IPsec — tunnel mode encrypts the entire original packet, transport mode only the payload.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "Guru99"]
+    },
+    {
+      "id": "96",
+      "section": "Network Security",
+      "question": "Difference between symmetric and asymmetric encryption?",
+      "answer": "Symmetric uses one shared secret key for both encryption and decryption (AES, DES) — very fast, ideal for bulk data, but distributing the key securely is the hard problem. Asymmetric uses a mathematically linked public/private key pair (RSA, ECC) — anyone can encrypt with the public key but only the private key decrypts, which solves key distribution and enables digital signatures, but it is orders of magnitude slower. Real systems combine both: asymmetric to exchange a session key, then symmetric for the actual data — exactly what TLS does.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "97",
+      "section": "Network Security",
+      "question": "How does SSL/TLS work? What happens during a TLS handshake?",
+      "answer": "TLS secures a TCP connection with encryption, integrity and server authentication. Handshake: the client sends ClientHello with supported cipher suites and a random; the server replies ServerHello choosing a cipher, plus its certificate; the client validates the certificate against a trusted CA chain and checks the domain and expiry; both sides derive a shared session key (via ECDHE key exchange, which also gives forward secrecy); they exchange Finished messages, and from then on all traffic uses fast symmetric encryption. TLS 1.3 cuts this to one round trip.",
+      "frequency": "MOST_FREQ",
+      "sources": ["InterviewBit", "GeeksforGeeks", "LastMinuteNotes"]
+    },
+    {
+      "id": "98",
+      "section": "Network Security",
+      "question": "What is a digital signature and a digital certificate?",
+      "answer": "A digital signature is a hash of the message encrypted with the sender's private key; anyone can decrypt it with the public key and compare hashes, which proves authenticity, integrity and non-repudiation. A digital certificate binds a public key to an identity and is signed by a trusted Certificate Authority — it is what stops an attacker from simply presenting their own public key and claiming to be your bank. Browsers ship with a root CA store to verify the chain.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "InterviewBit"]
+    },
+    {
+      "id": "99",
+      "section": "Network Security",
+      "question": "What is a DoS attack? How does DDoS differ?",
+      "answer": "A Denial of Service attack floods a target with traffic or requests until legitimate users cannot be served — for example a SYN flood that exhausts the server's half-open connection table. DDoS (Distributed DoS) launches the same attack from thousands of compromised machines (a botnet) at once, which makes it far harder to absorb and impossible to stop by blocking a single source. Defences: rate limiting, SYN cookies, traffic scrubbing services, CDNs and anycast.",
+      "frequency": "MED",
+      "sources": ["Guru99", "GeeksforGeeks", "SoftwareTestingHelp"]
+    },
+    {
+      "id": "100",
+      "section": "Network Security",
+      "question": "What is the CIA triad? Name common network attacks.",
+      "answer": "The three goals of security: Confidentiality (only authorized parties can read the data — encryption), Integrity (data cannot be altered undetected — hashing, signatures), Availability (services stay reachable — redundancy, DDoS protection). Common attacks: man-in-the-middle, IP/ARP/DNS spoofing, packet sniffing, phishing, SQL injection, DoS/DDoS, replay attacks and session hijacking. Defences layer authentication, encryption, firewalls, IDS/IPS and patching.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Guru99", "SoftwareTestingHelp"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "Networking Fundamentals & Topologies": 11,
+      "OSI & TCP/IP Models": 11,
+      "Physical & Data Link Layer": 12,
+      "Network Devices": 8,
+      "IP Addressing & Subnetting": 13,
+      "Network Layer & Routing": 12,
+      "Transport Layer (TCP & UDP)": 14,
+      "Application Layer & Protocols": 11,
+      "Network Security": 8
+    },
+    "by_frequency": {
+      "MOST_FREQ": 41,
+      "MED": 48,
+      "LOW": 11
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q22 (fundamentals, topologies, OSI and TCP/IP), Q27 and Q35 (MAC vs IP, hub vs switch vs router), Q43–Q48 (IP addressing and subnetting), Q63–Q64 (ARP, ICMP/ping), Q70–Q72 (TCP vs UDP and the three-way handshake), and Q82–Q88 (DNS, the URL walkthrough, HTTP/HTTPS, DHCP). Every MOST_FREQ in that range is must-know — OSI layers, TCP vs UDP and the handshake are near-guaranteed.",
+      "mid_level_2_to_5_yrs": "Add Q56–Q67 (routing protocols, TTL, MTU, packet vs circuit switching), Q73–Q78 (connection teardown, sequence numbers, sliding window, flow vs congestion control), Q49 and Q52 (VLSM, NAT), Q41 (VLANs) and Q93–Q98 (firewalls, VPN, TLS handshake). Be able to subnet on paper without a calculator.",
+      "senior_5_plus_yrs": "All 100 + follow-ups on TCP internals (Q79–Q81: fast retransmit, cwnd vs rwnd, bandwidth-delay product), BGP and path-vector policy (Q62), STP (Q34), HTTP/2 vs HTTP/3 and QUIC (Q87), and IPv6 transition (Q53–Q54) — plus real debugging stories using tcpdump, traceroute and packet captures."
+    },
+    "highest_probability_topics": [
+      "OSI model — 7 layers and what each does (Q13)",
+      "OSI vs TCP/IP model (Q20)",
+      "TCP vs UDP (Q70)",
+      "TCP three-way handshake (Q72)",
+      "What happens when you type a URL and press Enter (Q84)",
+      "DNS and how resolution works (Q82)",
+      "HTTP vs HTTPS (Q86)",
+      "IP address classes + public vs private (Q44, Q45)",
+      "Subnetting and CIDR (Q48)",
+      "Hub vs Switch vs Router (Q35)",
+      "MAC address vs IP address (Q27)",
+      "ARP (Q63)",
+      "DHCP and the DORA process (Q88)",
+      "Flow control vs congestion control (Q77)",
+      "NAT (Q52)"
+    ]
+  }
+}

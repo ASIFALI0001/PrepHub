@@ -5,30 +5,37 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Printer, ArrowLeft, Loader2, CheckCircle2, GraduationCap, Zap, ChevronRight } from "lucide-react";
 import type { IRoadmap, ICareerPath } from "@/models/CareerGuide";
+import { scoreTheme } from "@/lib/score";
+import { easeOutExpo } from "@/lib/motion";
 
 interface GuideData { roadmap: IRoadmap; careerOptions: ICareerPath[]; }
 
+// Timeline phase accents (mid-tones legible on both themes)
 const PHASE_COLORS = ["#6366f1", "#06b6d4", "#8b5cf6", "#10b981"];
 
 const SKILL_PRIORITY = ["Must Have", "Must Have", "Must Have", "Important", "Important", "Good to Have", "Good to Have", "Good to Have"];
 const SKILL_PRIORITY_STYLE: Record<string, string> = {
-  "Must Have":    "bg-red-500/10 text-red-400 border-red-500/20",
-  "Important":    "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  "Good to Have": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  "Must Have":    "bg-accent-pink/10 text-accent-pink border-accent-pink/20",
+  "Important":    "bg-accent-orange/10 text-accent-orange border-accent-orange/20",
+  "Good to Have": "bg-accent-green/10 text-accent-green border-accent-green/20",
 };
 
 function ScoreRing({ score }: { score: number }) {
-  const r = 52, circ = 2 * Math.PI * r;
-  const color = score >= 80 ? "#10b981" : score >= 60 ? "#f59e0b" : "#6b7280";
+  const t = scoreTheme(score);
+  const r = 52, circ = 2 * Math.PI * r, dash = (score / 100) * circ;
   return (
-    <svg width="140" height="140" viewBox="0 0 140 140" className="shrink-0">
-      <circle cx="70" cy="70" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
-      <circle cx="70" cy="70" r={r} fill="none" stroke={color} strokeWidth="10"
-        strokeDasharray={circ} strokeDashoffset={circ - (score / 100) * circ}
-        strokeLinecap="round" transform="rotate(-90 70 70)" />
-      <text x="70" y="65" textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="26" fontWeight="900">{score}%</text>
-      <text x="70" y="84" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.5)" fontSize="11" fontWeight="600">MATCH</text>
-    </svg>
+    <div className="relative w-[140px] h-[140px] shrink-0">
+      <svg width="140" height="140" viewBox="0 0 140 140" className="-rotate-90">
+        <circle cx="70" cy="70" r={r} fill="none" stroke="currentColor" strokeWidth="9" className="text-bg-border" />
+        <motion.circle cx="70" cy="70" r={r} fill="none" strokeWidth="9" strokeLinecap="round" className={t.ring}
+          initial={{ strokeDasharray: `0 ${circ}` }} animate={{ strokeDasharray: `${dash} ${circ}` }}
+          transition={{ duration: 1.1, ease: easeOutExpo, delay: 0.2 }} />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className={`tnum text-2xl font-bold ${t.text}`}>{score}%</span>
+        <span className="text-[11px] text-text-muted font-semibold tracking-wider">MATCH</span>
+      </div>
+    </div>
   );
 }
 
@@ -53,8 +60,8 @@ export default function CareerGuideRoadmap() {
   }, [router, searchParams]);
 
   if (loading) return (
-    <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-      <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+    <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
+      <div className="mesh-gradient fixed inset-0 pointer-events-none" />
       <div className="relative z-10 flex items-center justify-center min-h-[60vh]">
         <Loader2 className="w-9 h-9 text-primary animate-spin" />
       </div>
@@ -130,8 +137,8 @@ export default function CareerGuideRoadmap() {
           SCREEN VERSION
       ═══════════════════════════════════════════════════ */}
       <div id="screen-doc">
-        <main className="pt-20 pb-24 px-4 sm:px-6 min-h-screen relative overflow-hidden">
-          <div className="noise-overlay" /><div className="mesh-gradient fixed inset-0 pointer-events-none" />
+        <main className="pt-24 pb-24 px-4 sm:px-6 min-h-screen relative">
+          <div className="mesh-gradient fixed inset-0 pointer-events-none" />
           <div className="relative z-10 max-w-4xl mx-auto">
 
             {/* Toolbar */}
@@ -147,40 +154,38 @@ export default function CareerGuideRoadmap() {
             </div>
 
             {/* Hero */}
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-              <div className="relative overflow-hidden rounded-3xl" style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #042f2e 100%)" }}>
-                <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-20" style={{ background: "radial-gradient(circle, #6366f1, transparent 70%)", transform: "translate(30%,-30%)" }} />
-                <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-15" style={{ background: "radial-gradient(circle, #06b6d4, transparent 70%)", transform: "translate(-30%,30%)" }} />
-                <div className="relative p-8 sm:p-10">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: easeOutExpo }} className="mb-6">
+              <div className="relative overflow-hidden rounded-2xl glass-card">
+                <div className="grid-backdrop absolute inset-0 opacity-70" />
+                <div className="relative p-7 sm:p-9">
                   <div className="flex items-center gap-2 mb-6">
-                    <div className="h-px flex-1 bg-white/10" />
-                    <span className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase">PrepHub · AI Career Report · {date}</span>
-                    <div className="h-px flex-1 bg-white/10" />
+                    <div className="h-px flex-1 bg-bg-border" />
+                    <span className="eyebrow">PrepHub · AI Career Report · {date}</span>
+                    <div className="h-px flex-1 bg-bg-border" />
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
                     {chosen && <ScoreRing score={chosen.score} />}
                     <div className="flex-1">
-                      <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">Recommended Path</p>
-                      <h1 className="text-3xl sm:text-4xl font-black text-white mb-1">{roadmap.chosenPath}</h1>
-                      <p className="text-white/60 text-base mb-5">Specialization: <span className="text-white font-semibold">{roadmap.specialization}</span></p>
-                      <div className="flex flex-wrap gap-3">
-                        {[{ l: "Timeline", v: "24 Months" }, { l: "Phases", v: `${roadmap.phases.length} Phases` }, { l: "Skills", v: `${roadmap.keySkills?.length ?? 0} to Build` }].map(({ l, v }) => (
-                          <div key={l} className="px-4 py-2 rounded-xl text-sm" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                            <span className="text-white/40 text-xs">{l} · </span><span className="text-white font-bold">{v}</span>
+                      <p className="eyebrow mb-2">Recommended path</p>
+                      <h1 className="text-3xl sm:text-4xl font-bold text-text tracking-tight mb-1">{roadmap.chosenPath}</h1>
+                      <p className="text-text-muted text-base mb-5">Specialization: <span className="text-text font-semibold">{roadmap.specialization}</span></p>
+                      <div className="flex flex-wrap gap-2.5">
+                        {[{ l: "Timeline", v: "24 months" }, { l: "Phases", v: `${roadmap.phases.length} phases` }, { l: "Skills", v: `${roadmap.keySkills?.length ?? 0} to build` }].map(({ l, v }) => (
+                          <div key={l} className="px-3.5 py-2 rounded-xl text-sm bg-bg-surface border border-bg-border">
+                            <span className="text-text-muted text-xs">{l} · </span><span className="text-text font-bold">{v}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
                   {chosen?.reasoning && (
-                    <div className="mt-8 pt-6 border-t border-white/10">
-                      <p className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">Why this path was recommended</p>
-                      <p className="text-white/70 text-sm leading-relaxed">{chosen.reasoning}</p>
+                    <div className="mt-8 pt-6 border-t border-bg-border">
+                      <p className="eyebrow mb-3">Why this path was recommended</p>
+                      <p className="text-text-muted text-sm leading-relaxed">{chosen.reasoning}</p>
                       {chosen.pros?.length > 0 && (
                         <div className="mt-4 flex flex-wrap gap-2">
                           {chosen.pros.map(p => (
-                            <span key={p} className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full"
-                              style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)", color: "#6ee7b7" }}>
+                            <span key={p} className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full bg-accent-green/10 border border-accent-green/25 text-accent-green">
                               <CheckCircle2 className="w-3 h-3" />{p}
                             </span>
                           ))}
@@ -199,11 +204,11 @@ export default function CareerGuideRoadmap() {
               {roadmap.keySkills?.length > 0 && (
                 <div className="glass-card rounded-2xl border border-bg-border overflow-hidden">
                   <div className="px-5 py-4 border-b border-bg-border flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-amber-400" />
+                    <div className="w-8 h-8 rounded-lg bg-bg-surface border border-bg-border flex items-center justify-center text-accent-orange">
+                      <Zap className="w-4 h-4" />
                     </div>
                     <div>
-                      <h2 className="text-sm font-bold text-text">Skills to Build</h2>
+                      <h2 className="text-sm font-bold text-text">Skills to build</h2>
                       <p className="text-xs text-text-muted">Prioritized for your chosen path</p>
                     </div>
                   </div>

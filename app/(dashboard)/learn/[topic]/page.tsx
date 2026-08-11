@@ -25,8 +25,7 @@ export default async function TopicPage({ params }: { params: { topic: string } 
   return (
     <>
       <DashboardNav userName={session.user.name} />
-      <main className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
-        <div className="noise-overlay" />
+      <main className="pt-24 pb-20 px-4 sm:px-6 min-h-screen relative">
         <div className="mesh-gradient fixed inset-0 pointer-events-none" />
         <div className="relative z-10 max-w-6xl mx-auto">
           <TopicPageContent topic={topic} initialLearnedIds={learnedIds} />

@@ -142,15 +142,15 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
             {/* Status badge */}
             <div className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border ${
               status === "active" ? "bg-accent-green/10 border-accent-green/30 text-accent-green" :
-              status === "connecting" ? "bg-yellow-400/10 border-yellow-400/30 text-yellow-400" :
-              status === "ended" ? "bg-bg-border border-bg-border text-text-muted" :
-              status === "error" ? "bg-red-500/10 border-red-500/30 text-red-400" :
-              "bg-bg-border border-bg-border text-text-muted"
+              status === "connecting" ? "bg-accent-orange/10 border-accent-orange/30 text-accent-orange" :
+              status === "ended" ? "bg-bg-surface border-bg-border text-text-muted" :
+              status === "error" ? "bg-accent-pink/10 border-accent-pink/30 text-accent-pink" :
+              "bg-bg-surface border-bg-border text-text-muted"
             }`}>
               <span className={`w-1.5 h-1.5 rounded-full ${
                 status === "active" ? "bg-accent-green animate-pulse" :
-                status === "connecting" ? "bg-yellow-400 animate-pulse" :
-                status === "error" ? "bg-red-400" : "bg-text-muted"
+                status === "connecting" ? "bg-accent-orange animate-pulse" :
+                status === "error" ? "bg-accent-pink" : "bg-text-muted"
               }`} />
               {status === "idle" && "Ready"}
               {status === "connecting" && "Connecting"}
@@ -163,14 +163,14 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
             {/* Controls */}
             {status === "idle" && (
               <button onClick={() => startCall(buildFirstMessage(interview, userName), buildVariableValues(interview, userName))}
-                className="btn-primary flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-xs">
-                <Phone className="w-3.5 h-3.5" /> Start Interview
+                className="btn-primary gap-1.5 !px-4 !py-2 text-xs">
+                <Phone className="w-3.5 h-3.5" /> Start interview
               </button>
             )}
             {(status === "active" || status === "connecting") && (
               <button onClick={endCall}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-xs bg-red-500/15 border border-red-500/30 text-red-400 hover:bg-red-500/25 transition-colors">
-                <PhoneOff className="w-3.5 h-3.5" /> End Call
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium text-xs bg-accent-pink/10 border border-accent-pink/30 text-accent-pink hover:bg-accent-pink/20 transition-colors">
+                <PhoneOff className="w-3.5 h-3.5" /> End call
               </button>
             )}
           </div>
@@ -183,8 +183,8 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
               <span>Question {currentQ} of {totalQ}</span>
               <span>{progress}%</span>
             </div>
-            <div className="h-1 rounded-full bg-bg-border overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-primary to-primary-light transition-all duration-700"
+            <div className="h-1 rounded-full bg-bg-surface overflow-hidden">
+              <div className="h-full rounded-full bg-primary transition-all duration-700"
                 style={{ width: `${progress}%` }} />
             </div>
           </div>
@@ -205,14 +205,14 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
         <div className="grid grid-cols-2 gap-4">
 
           {/* Alex block */}
-          <div className={`glass-card rounded-2xl border p-5 flex flex-col items-center gap-3 transition-all duration-300 ${
+          <div className={`glass-card rounded-2xl p-5 flex flex-col items-center gap-3 transition-all duration-300 ${
             alexActive
-              ? "border-primary/50 shadow-[0_0_30px_rgba(139,92,246,0.2)] bg-primary/5"
-              : "border-bg-border"
+              ? "border-primary/50 shadow-accent bg-primary/5"
+              : ""
           }`}>
             {/* Photo */}
             <div className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
-              alexActive ? "border-primary/60 shadow-[0_0_20px_rgba(139,92,246,0.35)]" : "border-bg-border"
+              alexActive ? "border-primary/60 shadow-accent" : "border-bg-border"
             }`}>
               <Image src="/Alex.png" alt="Alex" fill className="object-cover" />
               {alexActive && (
@@ -241,15 +241,15 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
           </div>
 
           {/* You block */}
-          <div className={`glass-card rounded-2xl border p-5 flex flex-col items-center gap-3 transition-all duration-300 ${
+          <div className={`glass-card rounded-2xl p-5 flex flex-col items-center gap-3 transition-all duration-300 ${
             youActive
-              ? "border-accent-green/50 shadow-[0_0_30px_rgba(16,185,129,0.2)] bg-accent-green/5"
-              : "border-bg-border"
+              ? "border-accent-green/50 bg-accent-green/5"
+              : ""
           }`}>
             {/* Initials avatar */}
-            <div className={`relative w-20 h-20 rounded-2xl flex items-center justify-center border-2 transition-all duration-300 text-xl font-black ${
+            <div className={`relative w-20 h-20 rounded-2xl flex items-center justify-center border-2 transition-all duration-300 text-xl font-bold ${
               youActive
-                ? "border-accent-green/60 shadow-[0_0_20px_rgba(16,185,129,0.35)] bg-accent-green/15 text-accent-green"
+                ? "border-accent-green/60 bg-accent-green/15 text-accent-green"
                 : "border-bg-border bg-bg-surface text-text-muted"
             }`}>
               {getInitials(userName)}
@@ -284,7 +284,7 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
       {(status === "active" || status === "ended" || status === "ending") && (
         <div className="glass-card rounded-2xl border border-bg-border overflow-hidden">
           <div className="px-4 py-2.5 border-b border-bg-border flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-muted uppercase tracking-widest">Live Transcript</span>
+            <span className="eyebrow">Live transcript</span>
             {status === "active" && (
               <span className="flex items-center gap-1.5 text-[10px] text-accent-green font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
@@ -345,7 +345,7 @@ export default function VapiInterviewSession({ interview, userName }: Props) {
       )}
 
       {submitError && (
-        <div className="text-xs text-red-400 bg-red-500/10 rounded-xl px-4 py-3 border border-red-500/20">
+        <div className="text-xs text-accent-pink bg-accent-pink/10 rounded-xl px-4 py-3 border border-accent-pink/20">
           {submitError}
         </div>
       )}

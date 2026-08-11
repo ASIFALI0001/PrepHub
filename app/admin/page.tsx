@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Shield, Users, FileText, MessageSquare, Star, ChevronDown, ChevronUp,
-  Flame, BarChart3, Trophy, LogOut, Loader2, Brain,
+  Flame, BarChart3, Trophy, LogOut, Loader2, Brain, Ban, ShieldCheck, Layers,
 } from "lucide-react";
+import { TOGGLEABLE_PAGES } from "@/lib/pages";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
 interface AdminUser {
-  _id: string; name: string; email: string; streak: number;
+  _id: string; name: string; email: string; blocked: boolean; streak: number;
   lastActive: string; createdAt: string;
   profile: { semester?: string; college?: string; branch?: string };
   quizAccuracy: number | null; quizTopics: number;
@@ -45,7 +46,12 @@ function StarDisplay({ rating }: { rating: number }) {
   );
 }
 
-type Tab = "users" | "resumes" | "feedback";
+type Tab = "users" | "resumes" | "feedback" | "pages";
+
+const TAB_LABEL = (t: Tab, n: { u: number; r: number; f: number }) =>
+  t === "users" ? `Users (${n.u})` : t === "resumes" ? `Top Resumes (${n.r})` : t === "feedback" ? `Feedback (${n.f})` : "Pages";
+const TAB_LABEL_SHORT = (t: Tab, n: { u: number; r: number; f: number }) =>
+  t === "users" ? `Users (${n.u})` : t === "resumes" ? `Resumes (${n.r})` : t === "feedback" ? `Feedback (${n.f})` : "Pages";
 
 // ─── Component ────────────────────────────────────────────────────────────
 
@@ -56,6 +62,7 @@ export default function AdminPage() {
   const [resumes,        setResumes]   = useState<AdminResume[]>([]);
   const [feedbacks,      setFeedbacks] = useState<AdminFeedback[]>([]);
   const [fbAvgs,         setFbAvgs]    = useState<FeedbackAvgs>({});
+  const [disabledPages,  setDisabledPages] = useState<string[]>([]);
   const [loading,        setLoading]   = useState(true);
   const [expandedUser,   setExpandedUser]   = useState<string | null>(null);
   const [expandedResume, setExpandedResume] = useState<string | null>(null);
@@ -70,12 +77,14 @@ export default function AdminPage() {
       fetch("/api/admin/users",       { headers }).then(r => r.json()),
       fetch("/api/admin/top-resumes", { headers }).then(r => r.json()),
       fetch("/api/admin/feedback",    { headers }).then(r => r.json()),
-    ]).then(([u, r, f]) => {
+      fetch("/api/admin/settings",    { headers }).then(r => r.json()),
+    ]).then(([u, r, f, s]) => {
       if (u.error) { router.replace("/admin/login"); return; }
       setUsers(u.users ?? []);
       setResumes(r.resumes ?? []);
       setFeedbacks(f.feedbacks ?? []);
       setFbAvgs(f.averages ?? {});
+      setDisabledPages(s.disabledPages ?? []);
     }).catch(() => router.replace("/admin/login"))
       .finally(() => setLoading(false));
   }, [router]);
@@ -83,6 +92,46 @@ export default function AdminPage() {
   function logout() {
     sessionStorage.removeItem("admin_token");
     router.replace("/admin/login");
+  }
+
+  // Block / unblock a user (optimistic, reverts on failure)
+  async function toggleBlock(userId: string, blocked: boolean) {
+    const token = sessionStorage.getItem("admin_token");
+    if (!token) return;
+    setUsers(prev => prev.map(u => u._id === userId ? { ...u, blocked } : u));
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ userId, blocked }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      setUsers(prev => prev.map(u => u._id === userId ? { ...u, blocked: !blocked } : u));
+    }
+  }
+
+  // Pause / resume a feature page (persisted to DB; optimistic UI)
+  async function togglePage(key: string) {
+    const token = sessionStorage.getItem("admin_token");
+    if (!token) return;
+    const next = disabledPages.includes(key)
+      ? disabledPages.filter(k => k !== key)
+      : [...disabledPages, key];
+    const prev = disabledPages;
+    setDisabledPages(next);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "x-admin-token": token },
+        body: JSON.stringify({ disabledPages: next }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (Array.isArray(data.disabledPages)) setDisabledPages(data.disabledPages);
+    } catch {
+      setDisabledPages(prev);
+    }
   }
 
   if (loading) return (
@@ -95,28 +144,39 @@ export default function AdminPage() {
     <div className="min-h-screen bg-bg">
       {/* Top bar */}
       <div className="border-b border-bg-border bg-bg-card sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Shield className="w-5 h-5 text-primary" />
-            <span className="text-base font-bold text-text">PrepHub Admin</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Shield className="w-5 h-5 text-primary shrink-0" />
+            <span className="text-base font-bold text-text truncate">PrepHub Admin</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex gap-1">
-              {(["users", "resumes", "feedback"] as Tab[]).map((t) => (
+            {/* Desktop tabs */}
+            <div className="hidden md:flex gap-1">
+              {(["users", "resumes", "feedback", "pages"] as Tab[]).map((t) => (
                 <button key={t} onClick={() => setTab(t)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${tab === t ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}>
-                  {t === "users" ? `Users (${users.length})` : t === "resumes" ? `Top Resumes (${resumes.length})` : `Feedback (${feedbacks.length})`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${tab === t ? "bg-primary text-white" : "text-text-muted hover:text-text"}`}>
+                  {TAB_LABEL(t, { u: users.length, r: resumes.length, f: feedbacks.length })}
                 </button>
               ))}
             </div>
-            <button onClick={logout} className="flex items-center gap-2 text-sm text-text-muted hover:text-red-400 transition-colors">
-              <LogOut className="w-4 h-4" /> Logout
+            <button onClick={logout} aria-label="Logout"
+              className="flex items-center gap-2 text-sm text-text-muted hover:text-accent-pink transition-colors">
+              <LogOut className="w-4 h-4" /> <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
+        {/* Mobile tabs row */}
+        <div className="md:hidden border-t border-bg-border px-4 flex gap-1 overflow-x-auto no-scrollbar">
+          {(["users", "resumes", "feedback", "pages"] as Tab[]).map((t) => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`px-3 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${tab === t ? "border-primary text-primary" : "border-transparent text-text-muted"}`}>
+              {TAB_LABEL_SHORT(t, { u: users.length, r: resumes.length, f: feedbacks.length })}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ── USERS TAB ── */}
         {tab === "users" && (
@@ -144,12 +204,17 @@ export default function AdminPage() {
                   <button onClick={() => setExpandedUser(expandedUser === u._id ? null : u._id)}
                     className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-bg-card/50 transition-colors">
                     {/* Avatar */}
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent-cyan flex items-center justify-center text-white text-sm font-bold shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">
                       {u.name.charAt(0).toUpperCase()}
                     </div>
                     {/* Name + email */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-text">{u.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-semibold text-text truncate">{u.name}</p>
+                        {u.blocked && (
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-accent-pink/10 text-accent-pink border border-accent-pink/20 shrink-0">Blocked</span>
+                        )}
+                      </div>
                       <p className="text-xs text-text-muted truncate">{u.email}</p>
                     </div>
                     {/* Quick stats */}
@@ -171,7 +236,8 @@ export default function AdminPage() {
                   </button>
 
                   {expandedUser === u._id && (
-                    <div className="border-t border-bg-border px-5 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4 bg-bg-card/30">
+                    <div className="border-t border-bg-border px-5 py-4 bg-bg-card/30 space-y-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       <div>
                         <p className="text-xs text-text-muted mb-1">College</p>
                         <p className="text-sm text-text">{u.profile?.college || "—"}</p>
@@ -199,6 +265,26 @@ export default function AdminPage() {
                       <div>
                         <p className="text-xs text-text-muted mb-1">Last Active</p>
                         <p className="text-sm text-text">{new Date(u.lastActive).toLocaleDateString("en-IN")}</p>
+                      </div>
+                      </div>
+
+                      {/* Block / unblock */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                        <p className="text-xs text-text-muted">
+                          {u.blocked
+                            ? "Blocked — this user sees an “Admin blocked you” screen and can't use PrepHub."
+                            : "Active — this user has full access to PrepHub."}
+                        </p>
+                        <button
+                          onClick={() => toggleBlock(u._id, !u.blocked)}
+                          className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors shrink-0 ${
+                            u.blocked
+                              ? "border-accent-green/30 text-accent-green bg-accent-green/10 hover:bg-accent-green/20"
+                              : "border-accent-pink/30 text-accent-pink bg-accent-pink/10 hover:bg-accent-pink/20"
+                          }`}
+                        >
+                          {u.blocked ? <><ShieldCheck className="w-4 h-4" /> Unblock user</> : <><Ban className="w-4 h-4" /> Block user</>}
+                        </button>
                       </div>
                     </div>
                   )}
@@ -293,7 +379,7 @@ export default function AdminPage() {
                 <div key={fb._id} className="glass-card rounded-2xl border border-bg-border p-5">
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent-cyan flex items-center justify-center text-white text-sm font-bold shrink-0">
+                      <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white text-sm font-bold shrink-0">
                         {fb.userName.charAt(0).toUpperCase()}
                       </div>
                       <div>
@@ -324,6 +410,58 @@ export default function AdminPage() {
                 </div>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {/* ── PAGES TAB ── */}
+        {tab === "pages" && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center gap-3 mb-6">
+              <Layers className="w-5 h-5 text-primary" />
+              <div>
+                <h2 className="text-lg font-bold text-text">Page availability</h2>
+                <p className="text-sm text-text-muted">
+                  Pause a feature for maintenance — users see an “under maintenance” screen until you resume it.
+                </p>
+              </div>
+            </div>
+
+            <div className="glass-card rounded-2xl divide-y divide-bg-border overflow-hidden max-w-2xl">
+              {TOGGLEABLE_PAGES.map((p) => {
+                const paused = disabledPages.includes(p.key);
+                return (
+                  <div key={p.key} className="flex items-center justify-between gap-4 px-5 py-4">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-text">{p.label}</span>
+                        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${
+                          paused
+                            ? "text-accent-orange bg-accent-orange/10 border-accent-orange/20"
+                            : "text-accent-green bg-accent-green/10 border-accent-green/20"
+                        }`}>
+                          {paused ? "Paused" : "Live"}
+                        </span>
+                      </div>
+                      <p className="text-xs text-text-muted mt-0.5 font-mono">{p.href}</p>
+                    </div>
+                    <button
+                      onClick={() => togglePage(p.key)}
+                      role="switch"
+                      aria-checked={!paused}
+                      aria-label={`${paused ? "Resume" : "Pause"} ${p.label}`}
+                      className={`relative w-12 h-7 rounded-full transition-colors shrink-0 ${paused ? "bg-bg-border" : "bg-accent-green"}`}
+                    >
+                      <span className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${paused ? "translate-x-0" : "translate-x-5"}`} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="text-xs text-text-muted mt-4 max-w-2xl leading-relaxed">
+              Changes are saved instantly and remembered — refreshing this page keeps your settings.
+              Users get the update within about 30 seconds, or on their next navigation.
+            </p>
           </motion.div>
         )}
       </div>

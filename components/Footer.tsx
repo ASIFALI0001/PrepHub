@@ -1,22 +1,52 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-bg-border py-10 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-primary to-accent-cyan flex items-center justify-center">
-            <BookOpen className="w-3 h-3 text-white" />
+    <footer className="relative border-t border-bg-border">
+      <div className="max-w-6xl mx-auto px-6 py-14">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <Logo href="/" markClassName="w-8 h-8" />
+            <p className="text-text-muted text-sm mt-4 max-w-xs leading-relaxed">
+              The calm, all-in-one workspace to learn concepts, drill quizzes,
+              and rehearse live AI interviews.
+            </p>
           </div>
-          <span className="font-bold gradient-text">PrepHub</span>
-        </Link>
-        <p className="text-text-muted text-sm">
-          © {new Date().getFullYear()} PrepHub. Built to make you interview-ready.
-        </p>
-        <div className="flex gap-6 text-sm text-text-muted">
-          <Link href="/login" className="hover:text-text transition-colors">Login</Link>
-          <Link href="/signup" className="hover:text-text transition-colors">Sign Up</Link>
+
+          <div>
+            <p className="eyebrow mb-3">Product</p>
+            <ul className="space-y-2.5 text-sm">
+              {[
+                { href: "/learn", label: "Learn" },
+                { href: "/quiz", label: "Quiz" },
+                { href: "/interview", label: "Live Interview" },
+                { href: "/career-guide", label: "Career Guide" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="text-text-muted hover:text-text transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="eyebrow mb-3">Account</p>
+            <ul className="space-y-2.5 text-sm">
+              <li><Link href="/login" className="text-text-muted hover:text-text transition-colors">Log in</Link></li>
+              <li><Link href="/signup" className="text-text-muted hover:text-text transition-colors">Sign up</Link></li>
+              <li><Link href="/admin/login" className="text-text-muted hover:text-text transition-colors">Admin</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 pt-6 border-t border-bg-border flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-text-dim text-sm">
+            © {new Date().getFullYear()} PrepHub. Built to make you interview-ready.
+          </p>
+          <p className="text-text-dim text-xs">Crafted with precision.</p>
         </div>
       </div>
     </footer>

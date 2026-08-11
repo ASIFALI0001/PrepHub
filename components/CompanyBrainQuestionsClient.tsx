@@ -17,8 +17,8 @@ interface Props {
 
 const CATEGORY_COLORS: Record<string, string> = {
   DSA: "text-accent-blue bg-accent-blue/10 border-accent-blue/20",
-  "System Design": "text-violet-400 bg-violet-400/10 border-violet-400/20",
-  OOPS: "text-primary-light bg-primary/10 border-primary/20",
+  "System Design": "text-accent-violet bg-accent-violet/10 border-accent-violet/20",
+  OOPS: "text-primary bg-primary/10 border-primary/20",
   "Core CS": "text-accent-cyan bg-accent-cyan/10 border-accent-cyan/20",
   Behavioral: "text-accent-green bg-accent-green/10 border-accent-green/20",
   Domain: "text-accent-orange bg-accent-orange/10 border-accent-orange/20",
@@ -26,8 +26,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const DIFF_COLOR: Record<string, string> = {
   easy: "text-accent-green",
-  medium: "text-yellow-400",
-  hard: "text-red-400",
+  medium: "text-accent-orange",
+  hard: "text-accent-pink",
 };
 
 const ALL_CATEGORIES = ["All", "DSA", "System Design", "OOPS", "Core CS", "Behavioral", "Domain"];
@@ -61,9 +61,9 @@ export default function CompanyBrainQuestionsClient({ questions }: Props) {
               className={`text-xs px-3 py-1.5 rounded-lg border font-medium transition-all ${
                 activeCategory === cat
                   ? cat === "All"
-                    ? "bg-primary/15 border-primary/30 text-primary"
-                    : (CATEGORY_COLORS[cat] ?? "bg-primary/15 border-primary/30 text-primary")
-                  : "bg-bg-border/50 border-bg-border text-text-muted hover:text-text"
+                    ? "bg-primary/10 border-primary/30 text-primary"
+                    : (CATEGORY_COLORS[cat] ?? "bg-primary/10 border-primary/30 text-primary")
+                  : "bg-bg-surface border-bg-border text-text-muted hover:text-text hover:border-text-dim/40"
               }`}
             >
               {cat} {count > 0 && <span className="ml-0.5 opacity-70">({count})</span>}

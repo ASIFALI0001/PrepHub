@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
-  ChevronLeft, Zap, Loader2, BookOpen,
-  TrendingUp, RotateCcw, Clock,
+  ChevronLeft, Zap, Loader2, BookOpen, TrendingUp, RotateCcw, Clock,
 } from "lucide-react";
 import QuizSession from "./QuizSession";
+import { scoreTheme } from "@/lib/score";
+import { easeOutExpo } from "@/lib/motion";
 
 const TOPIC_LABELS: Record<string, string> = {
   java: "Java", oops: "OOPS", cn: "Computer Networks",
@@ -23,15 +24,14 @@ interface Question {
   options: string[]; correct: number; explanation: string; difficulty: string;
 }
 
-function gradeLabel(avg: number) {
-  if (avg >= 80) return { text: "Well Prepared 🎉", color: "text-accent-green" };
-  if (avg >= 60) return { text: "On Track 👍", color: "text-yellow-400" };
-  if (avg >= 40) return { text: "Needs Practice 📚", color: "text-accent-orange" };
-  return { text: "Just Starting 🌱", color: "text-text-muted" };
+function readiness(avg: number) {
+  if (avg >= 80) return { text: "Well prepared", color: "text-accent-green" };
+  if (avg >= 60) return { text: "On track", color: "text-primary" };
+  if (avg >= 40) return { text: "Needs practice", color: "text-accent-orange" };
+  return { text: "Just starting", color: "text-text-muted" };
 }
 
 export default function QuizTopicContent({ topic }: { topic: string }) {
-  const router = useRouter();
   const label = TOPIC_LABELS[topic] ?? topic;
 
   const [phase, setPhase] = useState<"setup" | "loading" | "quiz" | "unavailable">("setup");
@@ -61,13 +61,12 @@ export default function QuizTopicContent({ topic }: { topic: string }) {
     setPhase("quiz");
   };
 
-  // ── Active quiz ──────────────────────────────────────────────────────────
   if (phase === "quiz") {
     return (
-      <div>
+      <div className="max-w-6xl mx-auto">
         <div className="max-w-2xl mx-auto mb-5">
-          <Link href="/quiz" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors">
-            <ChevronLeft className="w-4 h-4" /> Back to Quiz
+          <Link href="/quiz" className="group inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors">
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" /> Back to quiz
           </Link>
         </div>
         <QuizSession questions={questions} topic={topic} topicLabel={label} />
@@ -75,31 +74,39 @@ export default function QuizTopicContent({ topic }: { topic: string }) {
     );
   }
 
-  // ── Loading ──────────────────────────────────────────────────────────────
   if (phase === "loading") {
     return (
-      <div className="max-w-2xl mx-auto glass-card rounded-2xl border border-bg-border p-16 text-center">
-        <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
-        <p className="text-base font-medium text-text">Loading {count} questions…</p>
+      <div className="max-w-2xl mx-auto glass-card rounded-2xl p-16 text-center">
+        <div className="relative w-12 h-12 mx-auto mb-4">
+          <div className="absolute inset-0 rounded-2xl bg-primary/10 animate-ping" />
+          <div className="relative w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+            <Loader2 className="w-5 h-5 animate-spin" />
+          </div>
+        </div>
+        <p className="tnum text-base font-medium text-text">Loading {count} questions…</p>
       </div>
     );
   }
 
-  // ── Setup ────────────────────────────────────────────────────────────────
   const prepared = stats ? Math.min(100, stats.avgScore) : 0;
-  const { text: readiness, color: readinessColor } = gradeLabel(prepared);
+  const r = readiness(prepared);
+  const bar = scoreTheme(prepared);
 
   return (
-    <div className="max-w-xl mx-auto">
-      <Link href="/quiz" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6">
-        <ChevronLeft className="w-4 h-4" /> Back to Quiz
+    <motion.div
+      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: easeOutExpo }}
+      className="max-w-xl mx-auto"
+    >
+      <Link href="/quiz" className="group inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6">
+        <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" /> Back to quiz
       </Link>
 
-      {/* ── Stats card ──────────────────────────────────────────────── */}
-      <div className="glass-card rounded-2xl border border-bg-border p-6 mb-5">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Zap className="w-6 h-6 text-primary-light" />
+      {/* Stats card */}
+      <div className="glass-card rounded-2xl p-6 mb-4">
+        <div className="flex items-center gap-3.5 mb-5">
+          <div className="w-11 h-11 rounded-xl bg-bg-surface border border-bg-border flex items-center justify-center text-primary">
+            <Zap className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-text">{label} Quiz</h1>
@@ -108,8 +115,9 @@ export default function QuizTopicContent({ topic }: { topic: string }) {
         </div>
 
         {statsLoading ? (
-          <div className="flex items-center gap-2 text-sm text-text-muted">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading your stats…
+          <div className="space-y-3">
+            <div className="skeleton h-2.5 w-full rounded-full" />
+            <div className="grid grid-cols-3 gap-3">{[0, 1, 2].map((i) => <div key={i} className="skeleton h-20 rounded-xl" />)}</div>
           </div>
         ) : !available ? (
           <div className="flex items-center gap-2 text-sm text-text-muted">
@@ -117,30 +125,26 @@ export default function QuizTopicContent({ topic }: { topic: string }) {
           </div>
         ) : stats ? (
           <div className="space-y-5">
-            {/* Prepared bar */}
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className={`font-semibold ${readinessColor}`}>{readiness}</span>
-                <span className="text-text font-bold">{prepared}% prepared</span>
+                <span className={`font-semibold ${r.color}`}>{r.text}</span>
+                <span className="tnum text-text font-bold">{prepared}% ready</span>
               </div>
-              <div className="h-3 rounded-full bg-bg-border overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-700 ${prepared >= 75 ? "bg-accent-green" : prepared >= 60 ? "bg-yellow-400" : "bg-primary"}`}
-                  style={{ width: `${prepared}%` }}
-                />
+              <div className="h-2.5 rounded-full bg-bg-surface overflow-hidden">
+                <motion.div className={`h-full rounded-full ${bar.bar}`}
+                  initial={{ width: 0 }} animate={{ width: `${prepared}%` }}
+                  transition={{ duration: 0.8, ease: easeOutExpo }} />
               </div>
             </div>
-
-            {/* Stats tiles */}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { icon: RotateCcw, value: String(stats.attempts), label: "Times taken", color: "text-text" },
-                { icon: TrendingUp, value: `${stats.avgScore}%`, label: "Avg score", color: stats.avgScore >= 75 ? "text-accent-green" : stats.avgScore >= 60 ? "text-yellow-400" : "text-text" },
-                { icon: Clock, value: `${stats.lastScore}%`, label: "Last score", color: stats.lastScore >= 75 ? "text-accent-green" : stats.lastScore >= 60 ? "text-yellow-400" : "text-text" },
+                { icon: TrendingUp, value: `${stats.avgScore}%`, label: "Avg score", color: scoreTheme(stats.avgScore).text },
+                { icon: Clock, value: `${stats.lastScore}%`, label: "Last score", color: scoreTheme(stats.lastScore).text },
               ].map(({ icon: Icon, value, label: lbl, color }) => (
-                <div key={lbl} className="bg-bg-surface rounded-2xl border border-bg-border px-4 py-4 text-center">
-                  <Icon className="w-4 h-4 text-text-muted mx-auto mb-2" />
-                  <div className={`text-2xl font-black ${color}`}>{value}</div>
+                <div key={lbl} className="bg-bg-surface rounded-xl border border-bg-border px-4 py-4 text-center">
+                  <Icon className="w-4 h-4 text-text-dim mx-auto mb-2" />
+                  <div className={`tnum text-2xl font-bold ${color}`}>{value}</div>
                   <div className="text-xs text-text-muted mt-1">{lbl}</div>
                 </div>
               ))}
@@ -148,57 +152,54 @@ export default function QuizTopicContent({ topic }: { topic: string }) {
           </div>
         ) : (
           <div className="flex items-center gap-2 text-sm text-text-muted py-1">
-            <Zap className="w-4 h-4 text-primary/50" />
-            No attempts yet — start your first quiz!
+            <Zap className="w-4 h-4 text-primary/60" /> No attempts yet — start your first quiz!
           </div>
         )}
       </div>
 
-      {/* ── Question count picker ────────────────────────────────────── */}
+      {/* Count picker */}
       {available && (
-        <div className="glass-card rounded-2xl border border-bg-border p-6 space-y-6">
+        <div className="glass-card rounded-2xl p-6 space-y-6">
           <div>
             <h2 className="text-base font-semibold text-text mb-1">How many questions?</h2>
             <p className="text-sm text-text-muted">Questions are randomly picked from the full bank.</p>
           </div>
 
-          {/* Quick-pick buttons */}
           <div className="grid grid-cols-4 gap-2.5">
             {[5, 10, 15, 20, 25, 30, 50, 100].map((n) => (
-              <button key={n} onClick={() => setCount(n)}
-                className={`py-3 rounded-xl border text-base font-bold transition-all ${
+              <motion.button key={n} whileTap={{ scale: 0.96 }} onClick={() => setCount(n)}
+                className={`tnum py-3 rounded-xl border text-base font-bold transition-all ${
                   count === n
-                    ? "border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgba(139,92,246,0.2)]"
-                    : "border-bg-border text-text-muted hover:border-primary/30 hover:text-text"
+                    ? "border-primary/50 bg-primary/10 text-primary ring-4 ring-primary/10"
+                    : "border-bg-border text-text-muted hover:border-text-dim/40 hover:text-text"
                 }`}>
                 {n}
-              </button>
+              </motion.button>
             ))}
           </div>
 
-          {/* Slider */}
           <div className="flex items-center gap-4">
             <input type="range" min={5} max={100} step={5} value={count}
               onChange={(e) => setCount(Number(e.target.value))}
-              className="flex-1 accent-primary h-2" />
-            <span className="text-lg font-black text-primary w-16 text-right">{count} Qs</span>
+              className="flex-1 accent-[rgb(var(--accent))] h-2" />
+            <span className="tnum text-lg font-bold text-primary w-16 text-right">{count} Qs</span>
           </div>
 
-          {/* Start */}
-          <button onClick={startQuiz}
-            className="w-full btn-primary py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2">
-            <Zap className="w-5 h-5" /> Start Quiz
+          <button onClick={startQuiz} className="w-full btn-primary py-3.5 text-base gap-2">
+            <Zap className="w-5 h-5" /> Start quiz
           </button>
         </div>
       )}
 
       {phase === "unavailable" && !statsLoading && (
-        <div className="glass-card rounded-2xl border border-bg-border p-10 text-center">
-          <BookOpen className="w-10 h-10 text-text-muted mx-auto mb-3" />
+        <div className="glass-card rounded-2xl p-10 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-bg-surface border border-bg-border flex items-center justify-center mx-auto mb-4 text-text-muted">
+            <BookOpen className="w-6 h-6" />
+          </div>
           <p className="text-base font-semibold text-text mb-1">Quiz coming soon</p>
-          <p className="text-sm text-text-muted">MCQ bank for {label} is being prepared.</p>
+          <p className="text-sm text-text-muted">The MCQ bank for {label} is being prepared.</p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

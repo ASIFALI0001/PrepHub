@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     await connectDB();
 
     const users = await User.find({})
-      .select("name email streak lastActive quizStats profile createdAt")
+      .select("name email blocked streak lastActive quizStats profile createdAt")
       .sort({ createdAt: -1 })
       .lean();
 
@@ -53,6 +53,7 @@ export async function GET(req: NextRequest) {
         _id:           u._id,
         name:          u.name,
         email:         u.email,
+        blocked:       u.blocked ?? false,
         streak:        u.streak ?? 0,
         lastActive:    u.lastActive,
         createdAt:     u.createdAt,
@@ -68,6 +69,27 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ users: enriched, total: enriched.length });
   } catch (err) {
     console.error("[GET /api/admin/users]", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
+// Block / unblock a user
+export async function PATCH(req: NextRequest) {
+  if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    const { userId, blocked } = await req.json();
+    if (!userId || typeof blocked !== "boolean") {
+      return NextResponse.json({ error: "userId and blocked (boolean) required" }, { status: 400 });
+    }
+
+    await connectDB();
+    const user = await User.findByIdAndUpdate(userId, { blocked }, { new: true }).select("_id blocked");
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    return NextResponse.json({ ok: true, userId, blocked: user.blocked });
+  } catch (err) {
+    console.error("[PATCH /api/admin/users]", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

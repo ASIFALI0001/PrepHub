@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Mic, Bot, ChevronRight, Zap, MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
+import { Mic, Bot, ChevronRight, Zap, MessageSquare, Check } from "lucide-react";
+import { staggerContainer, fadeUp } from "@/lib/motion";
 
 export type InterviewMode = "web" | "vapi";
 
@@ -12,93 +13,86 @@ interface Props {
 }
 
 export default function InterviewModeSelector({ onSelect, interviewTitle, questionCount }: Props) {
-  const [hovered, setHovered] = useState<InterviewMode | null>(null);
-
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="glass-card rounded-2xl border border-bg-border p-6 mb-6">
-        <h2 className="text-base font-semibold text-text mb-1">Choose Interview Mode</h2>
-        <p className="text-sm text-text-muted">
-          <span className="font-medium text-text">{interviewTitle}</span> · {questionCount} questions
-        </p>
-      </div>
+    <div className="max-w-3xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="text-center mb-8"
+      >
+        <p className="eyebrow mb-2">Choose how to run it</p>
+        <h2 className="text-xl font-bold text-text">{interviewTitle}</h2>
+        <p className="text-sm text-text-muted mt-1 tnum">{questionCount} questions</p>
+      </motion.div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <motion.div variants={staggerContainer(0.1)} initial="hidden" animate="show" className="grid sm:grid-cols-2 gap-4">
         {/* Web Speech */}
-        <button
+        <motion.button
+          variants={fadeUp}
+          whileHover={{ y: -4 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
           onClick={() => onSelect("web")}
-          onMouseEnter={() => setHovered("web")}
-          onMouseLeave={() => setHovered(null)}
-          className={`glass-card rounded-2xl border p-6 text-left transition-all duration-200 ${
-            hovered === "web" ? "border-accent-blue/50 shadow-[0_0_20px_rgba(59,130,246,0.1)]" : "border-bg-border"
-          }`}
+          className="group glass-card rounded-2xl p-6 text-left hover:border-accent-blue/40 transition-colors"
         >
-          <div className="w-12 h-12 rounded-2xl bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center mb-4">
-            <Mic className="w-6 h-6 text-accent-blue" />
+          <div className="w-12 h-12 rounded-xl bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center mb-4 text-accent-blue">
+            <Mic className="w-6 h-6" />
           </div>
-          <h3 className="text-sm font-semibold text-text mb-2">Web Speech</h3>
+          <h3 className="text-sm font-semibold text-text mb-1.5">Web Speech</h3>
           <p className="text-xs text-text-muted leading-relaxed mb-4">
-            Uses browser's built-in speech recognition. Type or speak your answers, advance manually at your own pace.
+            Uses your browser&apos;s built-in speech recognition. Type or speak answers and advance at your own pace.
           </p>
-          <div className="space-y-1.5 mb-5">
-            {[
-              "Works offline",
-              "Manual control over pacing",
-              "Type or speak answers",
-              "Edit before submitting",
-            ].map((f) => (
-              <div key={f} className="flex items-center gap-2 text-xs text-text-muted">
-                <div className="w-1 h-1 rounded-full bg-accent-blue shrink-0" />
-                {f}
-              </div>
+          <ul className="space-y-1.5 mb-5">
+            {["Works offline", "Manual pacing control", "Type or speak answers", "Edit before submitting"].map((f) => (
+              <li key={f} className="flex items-center gap-2 text-xs text-text-muted">
+                <Check className="w-3.5 h-3.5 text-accent-blue shrink-0" /> {f}
+              </li>
             ))}
-          </div>
-          <div className={`flex items-center gap-1.5 text-xs font-medium text-accent-blue transition-opacity ${hovered === "web" ? "opacity-100" : "opacity-60"}`}>
-            Start Basic Interview <ChevronRight className="w-3.5 h-3.5" />
-          </div>
-        </button>
+          </ul>
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-blue">
+            Start basic interview
+            <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </motion.button>
 
         {/* Vapi AI Agent */}
-        <button
+        <motion.button
+          variants={fadeUp}
+          whileHover={{ y: -4 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
           onClick={() => onSelect("vapi")}
-          onMouseEnter={() => setHovered("vapi")}
-          onMouseLeave={() => setHovered(null)}
-          className={`glass-card rounded-2xl border p-6 text-left transition-all duration-200 relative overflow-hidden ${
-            hovered === "vapi" ? "border-primary/50 shadow-[0_0_20px_rgba(139,92,246,0.15)]" : "border-primary/20"
-          }`}
+          className="group glass-card rounded-2xl p-6 text-left relative overflow-hidden border-primary/25 hover:border-primary/50 transition-colors"
         >
-          {/* Recommended badge */}
-          <div className="absolute top-4 right-4 text-[10px] px-2 py-0.5 rounded-full bg-primary/15 border border-primary/30 text-primary font-medium">
-            Recommended
+          <div className="absolute top-4 right-4">
+            <span className="chip !text-primary !border-primary/30 !bg-primary/10">Recommended</span>
           </div>
-
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
-            <Bot className="w-6 h-6 text-primary-light" />
+          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 text-primary">
+            <Bot className="w-6 h-6" />
           </div>
-          <h3 className="text-sm font-semibold text-text mb-2">Vapi AI Agent</h3>
+          <h3 className="text-sm font-semibold text-text mb-1.5">Vapi AI Agent</h3>
           <p className="text-xs text-text-muted leading-relaxed mb-4">
-            A real AI interviewer calls you, asks questions conversationally, asks follow-ups for depth, and evaluates your answers.
+            A real AI interviewer calls you, asks conversationally, digs in with follow-ups, and evaluates your answers.
           </p>
-          <div className="space-y-1.5 mb-5">
+          <ul className="space-y-1.5 mb-5">
             {[
               { icon: Bot, text: "Natural voice conversation" },
               { icon: MessageSquare, text: "Intelligent follow-up questions" },
               { icon: Zap, text: "Real interview feel" },
               { icon: Mic, text: "Automatic answer capture" },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-xs text-text-muted">
-                <Icon className="w-3 h-3 text-primary/60 shrink-0" />
-                {text}
-              </div>
+              <li key={text} className="flex items-center gap-2 text-xs text-text-muted">
+                <Icon className="w-3.5 h-3.5 text-primary shrink-0" /> {text}
+              </li>
             ))}
-          </div>
-          <div className={`flex items-center gap-1.5 text-xs font-medium text-primary-light transition-opacity ${hovered === "vapi" ? "opacity-100" : "opacity-60"}`}>
-            Start AI Interview <ChevronRight className="w-3.5 h-3.5" />
-          </div>
-        </button>
-      </div>
+          </ul>
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+            Start AI interview
+            <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </motion.button>
+      </motion.div>
 
-      <p className="text-center text-xs text-text-muted mt-5">
+      <p className="text-center text-xs text-text-dim mt-5">
         Vapi AI Agent requires microphone access and an internet connection.
       </p>
     </div>

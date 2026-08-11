@@ -130,7 +130,7 @@ export default function FeedbackModal({ open, onClose }: Props) {
 
                 {/* Text feedback */}
                 <div>
-                  <label className="block text-xs font-medium text-text-muted mb-1.5 flex items-center gap-1.5">
+                  <label className="text-xs font-medium text-text-muted mb-1.5 flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5" /> Anything else to share? <span className="font-normal">(optional)</span>
                   </label>
                   <textarea
@@ -142,10 +142,10 @@ export default function FeedbackModal({ open, onClose }: Props) {
                   />
                 </div>
 
-                {error && <p className="text-xs text-red-400">{error}</p>}
+                {error && <p className="text-xs text-accent-pink">{error}</p>}
 
                 <button type="submit" disabled={saving}
-                  className="w-full btn-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50">
+                  className="w-full btn-primary py-3 justify-center gap-2 disabled:opacity-50">
                   {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting…</> : "Submit feedback"}
                 </button>
               </form>

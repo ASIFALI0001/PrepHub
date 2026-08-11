@@ -1,0 +1,888 @@
+{
+  "metadata": {
+    "title": "Top 100 Pandas Interview Questions",
+    "description": "Most probable pandas interview questions compiled from the highest-traffic data-science interview banks. Weighted toward what actually gets asked in data analyst, data engineer and data science screens — loc vs iloc, groupby, merge vs join vs concat, missing-data handling, apply vs map vs vectorization and SettingWithCopyWarning — with rarely-used API trivia pushed to LOW. Answers name the exact pandas calls you are expected to produce. Note: the LastMinuteNotes repo has no pandas sheet (it covers only CN, DBMS, OOPS, OS and SQL), so this bank is built from six library-specific sources instead.",
+    "total_questions": 100,
+    "last_updated": "2026-08-08",
+    "sources": {
+      "GeeksforGeeks": {
+        "full_name": "GeeksforGeeks Pandas Interview Questions",
+        "url": "https://www.geeksforgeeks.org/pandas/pandas-interview-questions/",
+        "strength": "By far the deepest bank (67 Q); the only source that covers the scenario-style questions properly — top-N per group, rank within group, anti-join, percentage of group total, missing dates in a time series, IQR outlier removal"
+      },
+      "InterviewBit": {
+        "full_name": "InterviewBit Pandas Section",
+        "url": "https://www.interviewbit.com/pandas-interview-questions/",
+        "strength": "Basic → experienced → coding → data-scientist split (50 Q); strongest on the comparison questions (join vs merge vs concat, interpolate vs fillna, pivot_table vs groupby) and the write-the-code round"
+      },
+      "DataCamp": {
+        "full_name": "DataCamp Pandas Interview Questions",
+        "url": "https://www.datacamp.com/blog/top-python-pandas-interview-questions-and-answers",
+        "strength": "Current practitioner framing; the modern items other banks miss — .append() removal, Polars vs pandas, schema validation in production, resampling, rolling means, SettingWithCopyWarning"
+      },
+      "ProjectPro": {
+        "full_name": "ProjectPro Python Pandas Interview Questions",
+        "url": "https://www.projectpro.io/article/pandas-interview-questions-and-answers/985",
+        "strength": "Beginner → experienced → coding → data-science split (36 Q); good on memory usage, reducing footprint on large datasets, normalization, transform(), nunique vs unique and categorical handling"
+      },
+      "upGrad": {
+        "full_name": "upGrad Pandas Interview Questions for Freshers & Experienced",
+        "url": "https://www.upgrad.com/blog/pandas-interview-questions-answers-for-freshers-experienced/",
+        "strength": "Broadest practical how-to list (60 Q); confirms the everyday operations interviewers actually ask freshers to perform — filtering, sorting, renaming, dtype changes, dummies, SQL reads, conditional columns, cumulative sums"
+      },
+      "Devinterview": {
+        "full_name": "Devinterview.io Pandas Interview Questions",
+        "url": "https://github.com/Devinterview-io/pandas-interview-questions",
+        "strength": "ML/data-science interview repo; precise on fundamentals — data alignment and broadcasting, slicing vs filtering, the purpose of apply(), where() for conditional logic, categorical-to-numeric conversion"
+      }
+    },
+    "frequency_legend": {
+      "MOST_FREQ": "Asked in almost every pandas interview. Appears in 5-6 of the 6 sources. Master these first.",
+      "MED": "Asked in many interviews. Appears in 3-4 sources. Expected knowledge for 2+ years experience.",
+      "LOW": "Appears in 1-2 sources or is a deep-dive follow-up. Expected for senior roles or specialized interviews."
+    }
+  },
+  "questions": [
+    {
+      "id": "1",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What is pandas and why is it used?",
+      "answer": "An open-source Python library for data manipulation and analysis, built on top of NumPy. It provides labelled, tabular data structures (Series and DataFrame) plus tools for reading almost any file format, cleaning missing data, filtering, grouping, joining, reshaping and time-series work. It is the standard first step of nearly every data science and ML pipeline.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "2",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What are the main data structures in pandas?",
+      "answer": "Two: the **Series**, a one-dimensional labelled array holding a single dtype, and the **DataFrame**, a two-dimensional labelled table whose columns can each have a different dtype. A DataFrame is essentially a dict of Series sharing one index. (The old three-dimensional `Panel` was removed in pandas 1.0 — use MultiIndex or xarray instead.)",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "3",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What is a Series in pandas?",
+      "answer": "A one-dimensional labelled array capable of holding any single data type, with an associated index that defaults to `0..n-1` but can be any labels. Its size is immutable once created, though the values are mutable. Every DataFrame column is a Series, and most Series methods (`.mean()`, `.value_counts()`, `.str`, `.dt`) apply to columns directly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "4",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What is a DataFrame in pandas?",
+      "answer": "A two-dimensional, size-mutable, heterogeneous tabular structure with labelled rows (the index) and labelled columns. Each column is a Series with its own dtype, so one table can mix integers, floats, strings and datetimes. It is the primary object you work with — think of it as a spreadsheet or SQL table with a Python API.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "5",
+      "section": "Pandas Basics & Data Structures",
+      "question": "Difference between a Series and a DataFrame?",
+      "answer": "A Series is 1D with a single index and one dtype; a DataFrame is 2D with both an index and columns, and each column may carry a different dtype. Selecting one column with `df['col']` returns a Series, while `df[['col']]` returns a one-column DataFrame — a shape distinction that trips people up constantly.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "6",
+      "section": "Pandas Basics & Data Structures",
+      "question": "Difference between pandas and NumPy?",
+      "answer": "NumPy provides the homogeneous, unlabelled `ndarray` optimized for raw numerical computation. Pandas wraps NumPy arrays and adds labelled indexes, per-column dtypes, built-in missing-data handling, grouping, joining and time-series tools. Use NumPy for pure math on uniform numeric data, pandas for messy heterogeneous tabular data. Pandas is slower but far more expressive.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "7",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What are the key features of pandas?",
+      "answer": "Fast labelled Series/DataFrame objects; automatic data alignment on index; integrated missing-data handling; flexible reshaping and pivoting; powerful groupby split-apply-combine; SQL-style merge and join; robust I/O across CSV, Excel, JSON, SQL, Parquet and HDF5; hierarchical (multi-level) indexing; and first-class time-series functionality such as resampling and rolling windows.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "8",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What is an index in pandas?",
+      "answer": "The labels identifying rows (and, for columns, the column names). It defaults to a RangeIndex but can be any immutable array — strings, dates, or multiple levels. The index is what makes pandas different from NumPy: operations between objects **align on the index automatically**, so adding two Series matches labels rather than positions. A meaningful index also makes `.loc` lookups fast.",
+      "frequency": "MOST_FREQ",
+      "sources": ["DataCamp", "Devinterview", "upGrad", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "9",
+      "section": "Pandas Basics & Data Structures",
+      "question": "What is the difference between axis=0 and axis=1?",
+      "answer": "`axis=0` is the index/row axis — the operation runs **down** the rows and produces one result per column (`df.mean(axis=0)` gives a column-wise mean; `df.drop(idx, axis=0)` drops rows). `axis=1` is the column axis — the operation runs **across** the columns and produces one result per row. Mnemonic: the axis you name is the one that gets collapsed or acted upon.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "10",
+      "section": "Pandas Basics & Data Structures",
+      "question": "Why does df.shape have no parentheses while df.count() does?",
+      "answer": "Because `shape` is an **attribute** — a stored property returning the `(rows, columns)` tuple with no computation — while `count()` is a **method** that has to scan the data. The same distinction applies to `df.dtypes`, `df.columns`, `df.index`, `df.values`, `df.size` and `df.T` (attributes) versus `df.head()`, `df.describe()`, `df.info()` (methods).",
+      "frequency": "MED",
+      "sources": ["DataCamp", "GeeksforGeeks"]
+    },
+    {
+      "id": "11",
+      "section": "Pandas Basics & Data Structures",
+      "question": "When would you use a Series instead of a DataFrame?",
+      "answer": "When you genuinely have one dimension of labelled data — a single time series, one feature column, or the result of an aggregation. A Series is lighter and its API is simpler. Use a DataFrame as soon as you need multiple related columns, mixed dtypes, or column-wise operations. Many pandas methods return one or the other depending on how you index, so knowing which you are holding matters.",
+      "frequency": "LOW",
+      "sources": ["ProjectPro"]
+    },
+    {
+      "id": "12",
+      "section": "Pandas Basics & Data Structures",
+      "question": "When should you use Polars or Dask instead of pandas?",
+      "answer": "Pandas is single-threaded and holds everything in memory, so it struggles past roughly a few GB. Polars is a multi-threaded Rust-based alternative with lazy evaluation and a query optimizer — much faster on large single-machine workloads. Dask (or PySpark) partitions data across cores or machines for datasets that do not fit in RAM. Stick with pandas for its ecosystem and familiarity until size or speed actually becomes the bottleneck.",
+      "frequency": "LOW",
+      "sources": ["DataCamp"]
+    },
+    {
+      "id": "13",
+      "section": "Series & DataFrame Creation",
+      "question": "What are the different ways to create a Series?",
+      "answer": "From a list: `pd.Series([1,2,3])`. From a list with custom labels: `pd.Series([1,2,3], index=['a','b','c'])`. From a dict, where keys become the index: `pd.Series({'a':1,'b':2})`. From a scalar with an index, which broadcasts the value: `pd.Series(5, index=range(3))`. From a NumPy array: `pd.Series(np.arange(5))`. Or by selecting one column of a DataFrame.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "14",
+      "section": "Series & DataFrame Creation",
+      "question": "What are the different ways to create a DataFrame?",
+      "answer": "From a dict of lists (each key becomes a column): `pd.DataFrame({'a':[1,2], 'b':[3,4]})`. From a list of dicts (each dict becomes a row). From a list of lists with explicit `columns=`. From a NumPy 2D array. From a dict of Series. From another DataFrame. Or by reading a file with `pd.read_csv`, `read_excel`, `read_sql` and friends.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "15",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you convert a Series to a DataFrame and vice versa?",
+      "answer": "Series to DataFrame: `s.to_frame(name='col')` or `pd.DataFrame(s)`; use `s.reset_index()` if you want the index to become a column too. DataFrame to Series: select a single column `df['col']`, or use `df.squeeze()` when the frame has only one column.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "GeeksforGeeks"]
+    },
+    {
+      "id": "16",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you convert a DataFrame to a NumPy array and back?",
+      "answer": "`df.to_numpy()` is the modern call (`df.values` is the older one); both drop the index and column labels and coerce everything to a single common dtype — so a mixed-dtype frame becomes slow `object` dtype. Select numeric columns first if that matters. To go back: `pd.DataFrame(arr, columns=['a','b'], index=idx)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "17",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you copy a DataFrame? Difference between a shallow and a deep copy?",
+      "answer": "`df.copy()` defaults to `deep=True`, allocating independent data so later edits do not touch the original. `df.copy(deep=False)` creates a new object that still shares the underlying data, so modifications propagate. Plain assignment `df2 = df` is not a copy at all — it is a second name for the same object. Failing to copy before mutating is the usual cause of SettingWithCopyWarning.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "18",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you add a new column to a DataFrame?",
+      "answer": "Direct assignment: `df['total'] = df['qty'] * df['price']`. At a specific position: `df.insert(1, 'total', values)`. Without mutating the original, which is chain-friendly: `df = df.assign(total=lambda d: d.qty * d.price)`. Assigning a scalar broadcasts it to every row; assigning a Series aligns on index, filling non-matching labels with NaN.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "19",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you add a new row to a DataFrame?",
+      "answer": "By label with `df.loc[len(df)] = [v1, v2, v3]` or `df.loc['new_label'] = {...}`. To add many rows, build a second DataFrame and use `pd.concat([df, new_rows], ignore_index=True)`. Never append inside a loop — each call copies the whole frame, making it O(n²); collect the rows in a list and concatenate once at the end.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "20",
+      "section": "Series & DataFrame Creation",
+      "question": "The DataFrame.append() method was removed — how do you combine DataFrames now?",
+      "answer": "`df.append()` was deprecated in pandas 1.4 and removed in 2.0. Use `pd.concat([df1, df2], ignore_index=True)` instead. This was deliberate: `append` encouraged row-by-row growth in loops, which copies the entire frame each time. The recommended pattern is to accumulate rows or frames in a Python list and call `pd.concat` once.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "GeeksforGeeks"]
+    },
+    {
+      "id": "21",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you delete rows and columns from a DataFrame?",
+      "answer": "Columns: `df.drop(['a','b'], axis=1)` or the clearer `df.drop(columns=['a','b'])`; `del df['a']` and `df.pop('a')` mutate in place. Rows: `df.drop([0, 2])` or `df.drop(index=[0,2])`. `drop` returns a new frame by default — pass `inplace=True` or reassign. To delete conditionally, filter instead: `df = df[df['age'] >= 18]`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "22",
+      "section": "Series & DataFrame Creation",
+      "question": "How do you rename columns in a DataFrame?",
+      "answer": "Selectively with a mapping: `df.rename(columns={'old':'new'})`. All at once: `df.columns = ['a','b','c']` or `df.set_axis(['a','b','c'], axis=1)`. Programmatically: `df.columns = df.columns.str.lower().str.replace(' ', '_')` to normalize messy headers. `df.add_prefix('x_')` and `add_suffix` are handy before a merge to avoid collisions. Rename the index with `df.rename(index={...})`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "upGrad", "ProjectPro"]
+    },
+    {
+      "id": "23",
+      "section": "Reading & Writing Data",
+      "question": "How do you read a CSV file into a DataFrame?",
+      "answer": "`df = pd.read_csv('data.csv')`. Common arguments: `sep=';'` for a different delimiter, `header=None` when there is no header row, `names=[...]` to supply column names, `index_col='id'` to set the index while reading, `parse_dates=['date']` to get real datetimes, `dtype={...}` to control types, `na_values=['NA','-']` for custom missing markers, and `encoding='utf-8'` for encoding issues.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "24",
+      "section": "Reading & Writing Data",
+      "question": "How do you read only specific columns or skip rows from a CSV?",
+      "answer": "`pd.read_csv('f.csv', usecols=['a','b'])` reads only those columns — a large memory and speed win on wide files. `skiprows=5` skips leading rows (or pass a list/callable), `nrows=1000` reads only the first N rows for a quick look, and `skipfooter=2` drops trailing rows. Combining `usecols` with an explicit `dtype` map is the standard way to load a big file cheaply.",
+      "frequency": "MED",
+      "sources": ["upGrad", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "25",
+      "section": "Reading & Writing Data",
+      "question": "How do you read a large CSV file that does not fit in memory?",
+      "answer": "Use the `chunksize` parameter, which returns an iterator of smaller DataFrames: `for chunk in pd.read_csv('big.csv', chunksize=100_000): process(chunk)` — then concatenate or aggregate the partial results. Combine it with `usecols` to load fewer columns and `dtype` to avoid wasteful int64/object columns. For repeated access, convert once to Parquet, or move to Dask or Polars.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "26",
+      "section": "Reading & Writing Data",
+      "question": "What file formats does pandas support?",
+      "answer": "CSV/TSV (`read_csv`), Excel (`read_excel`), JSON (`read_json`), SQL databases (`read_sql`), Parquet (`read_parquet`), HDF5 (`read_hdf`), HTML tables (`read_html`), fixed-width text (`read_fwf`), pickle, Feather, ORC, SAS, SPSS and Stata. Each has a matching `to_*` writer. Parquet is the best default for intermediate storage — columnar, compressed, and it preserves dtypes, unlike CSV.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "27",
+      "section": "Reading & Writing Data",
+      "question": "How do you export a DataFrame to an Excel file?",
+      "answer": "`df.to_excel('out.xlsx', sheet_name='Report', index=False)` — set `index=False` unless the index carries meaning, otherwise you get a stray unnamed first column. To write several sheets into one workbook use a writer context: `with pd.ExcelWriter('out.xlsx') as w: df1.to_excel(w, sheet_name='A'); df2.to_excel(w, sheet_name='B')`. Requires `openpyxl` or `xlsxwriter` installed.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "28",
+      "section": "Reading & Writing Data",
+      "question": "How do you export a DataFrame to JSON, SQL or Parquet?",
+      "answer": "`df.to_json('f.json', orient='records', lines=True)` — `orient` controls the shape ('records' gives a list of row objects, the usual API format). `df.to_sql('table', con=engine, if_exists='replace', index=False)` writes to a database via SQLAlchemy. `df.to_parquet('f.parquet', compression='snappy')` writes a compressed columnar file that keeps dtypes intact. There is also `to_csv`, `to_html` and `to_pickle`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "29",
+      "section": "Reading & Writing Data",
+      "question": "How do you read data from a SQL database?",
+      "answer": "Create a connection (usually a SQLAlchemy engine) and call `pd.read_sql('SELECT * FROM orders WHERE year = 2026', con=engine)`, or `pd.read_sql_table('orders', con=engine)` for a whole table. Always parameterize user input rather than formatting it into the query string. For very large results, pass `chunksize` to iterate, and push filtering and aggregation into SQL rather than pulling everything into pandas.",
+      "frequency": "MED",
+      "sources": ["upGrad", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "30",
+      "section": "Reading & Writing Data",
+      "question": "How do you read a plain text or fixed-width file?",
+      "answer": "`pd.read_csv('f.txt', sep='\\t')` handles tab-separated text (`read_table` defaults to tab). For irregular whitespace use `sep=r'\\s+'`. For columns defined by character position rather than a delimiter, use `pd.read_fwf('f.txt', widths=[10, 5, 20])` or pass explicit `colspecs`.",
+      "frequency": "LOW",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "31",
+      "section": "Reading & Writing Data",
+      "question": "How do you check the memory usage of a DataFrame?",
+      "answer": "`df.info(memory_usage='deep')` prints dtypes, non-null counts and true memory including the contents of object columns. `df.memory_usage(deep=True)` gives per-column bytes, which quickly reveals that a handful of string columns dominate. The `deep=True` part matters — without it, object columns report only the size of their pointers, badly understating reality.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "DataCamp", "GeeksforGeeks"]
+    },
+    {
+      "id": "32",
+      "section": "Indexing & Selection",
+      "question": "How do you inspect a DataFrame you have just loaded?",
+      "answer": "`df.head(n)` shows the first n rows (5 by default), `df.tail(n)` the last n, `df.sample(5)` a random selection. `df.shape` gives dimensions, `df.info()` gives dtypes and non-null counts, `df.describe()` gives numeric summary statistics, `df.columns` and `df.dtypes` list the schema, and `df.isnull().sum()` counts missing values per column. That sequence is the standard first look at any dataset.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "ProjectPro", "InterviewBit"]
+    },
+    {
+      "id": "33",
+      "section": "Indexing & Selection",
+      "question": "How do you select a single column or multiple columns?",
+      "answer": "One column as a Series: `df['age']` or `df.age` (dot notation fails for names with spaces or that clash with methods, so prefer brackets). One column as a DataFrame: `df[['age']]`. Several columns: `df[['name','age']]` — note the double brackets, since you are passing a list. By dtype: `df.select_dtypes(include='number')`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "upGrad", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "34",
+      "section": "Indexing & Selection",
+      "question": "Difference between loc, iloc, at and iat?",
+      "answer": "`loc` selects by **label** and is inclusive of the end point — `df.loc[2:5, 'name':'age']` returns rows labelled 2 through 5. `iloc` selects by **integer position** and is exclusive of the end — `df.iloc[2:5, 0:3]`. `at` and `iat` are the fast scalar equivalents for a single cell — `df.at[3,'name']` and `df.iat[3,0]` — noticeably quicker than loc/iloc when you access one value at a time. `loc` also accepts a boolean mask; `iloc` does not.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "35",
+      "section": "Indexing & Selection",
+      "question": "How do you filter rows based on a condition?",
+      "answer": "Boolean indexing — build a boolean Series and pass it in: `df[df['age'] > 30]`. Equivalent forms: `df.loc[df['age'] > 30]` (which also lets you pick columns and is safe for assignment), `df.query('age > 30')`, and `df[df['city'].isin(['Delhi','Pune'])]` for membership tests. The mask must be the same length as the frame and aligned on the index.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "36",
+      "section": "Indexing & Selection",
+      "question": "How do you filter on multiple conditions?",
+      "answer": "Combine masks with `&` (and), `|` (or) and `~` (not) — **not** Python's `and`/`or`/`not`, which raise `ValueError: truth value of a Series is ambiguous`. Every condition must be parenthesized because `&` binds tighter than the comparison operators: `df[(df.age > 30) & (df.city == 'Pune')]`. The readable alternative is `df.query('age > 30 and city == \"Pune\"')`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "upGrad", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "37",
+      "section": "Indexing & Selection",
+      "question": "What is the query() method?",
+      "answer": "It filters using a SQL-like string expression: `df.query('age > 30 and dept == \"Sales\"')`. It is far more readable than stacked boolean masks, supports `in`/`not in`, and can reference Python variables with the `@` prefix — `df.query('age > @min_age')`. Column names with spaces need backticks. It is also slightly faster on large frames because it can use numexpr.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "38",
+      "section": "Indexing & Selection",
+      "question": "How do you filter rows using string pattern matching?",
+      "answer": "Use the `.str` accessor, which vectorizes string methods over a Series: `df[df['name'].str.contains('an', case=False, na=False)]`. Related methods include `.str.startswith()`, `.str.endswith()`, `.str.match()` for a regex anchored at the start, `.str.len()`, `.str.lower()`, `.str.strip()`, `.str.split()` and `.str.extract()` for capture groups. Always pass `na=False` or NaNs will raise.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad", "ProjectPro"]
+    },
+    {
+      "id": "39",
+      "section": "Indexing & Selection",
+      "question": "How do you set and reset the index?",
+      "answer": "`df.set_index('id')` promotes a column to the index (pass `drop=False` to keep it as a column too, and a list for a MultiIndex). `df.reset_index()` moves the index back into a column and restores a RangeIndex; `reset_index(drop=True)` discards it instead — which is what you want after filtering or sorting, so the index does not stay full of gaps.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "upGrad", "DataCamp", "ProjectPro"]
+    },
+    {
+      "id": "40",
+      "section": "Indexing & Selection",
+      "question": "What is reindexing in pandas?",
+      "answer": "`df.reindex(new_labels)` conforms the object to a new set of index (or column) labels: existing labels keep their data, labels that were not present are created and filled with NaN, and labels you omit are dropped. Key parameters: `fill_value` for the filler, `method='ffill'/'bfill'` for ordered data, and `limit`. It is the standard way to align two datasets onto a common index or to insert missing dates into a time series.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "41",
+      "section": "Indexing & Selection",
+      "question": "What is multi-indexing (hierarchical indexing)?",
+      "answer": "An index with more than one level, so rows are addressed by a tuple of labels — for example (state, city) or (ticker, date). Create it with `df.set_index(['state','city'])` or `pd.MultiIndex.from_tuples()`. Select with `df.loc[('MH','Pune')]`, and use `df.xs('Pune', level='city')` for a cross-section on an inner level. Groupby on several keys produces one automatically; flatten it back with `reset_index()`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "42",
+      "section": "Indexing & Selection",
+      "question": "How do you find the row where a column has its maximum or minimum value?",
+      "answer": "`df.loc[df['salary'].idxmax()]` returns the full row with the highest salary — `idxmax()`/`idxmin()` give the index **label** of the extreme value, whereas `max()`/`min()` give the value itself. For the top few rows use `df.nlargest(3, 'salary')` and `df.nsmallest(3, 'salary')`, which are faster than sorting the whole frame.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "43",
+      "section": "Indexing & Selection",
+      "question": "How do you find the Nth highest value in a column?",
+      "answer": "For the Nth highest **distinct** value: `df['salary'].drop_duplicates().nlargest(N).iloc[-1]`. Without deduplication, `df.nlargest(N, 'salary')` returns the top N rows including ties. Alternatively `df['salary'].rank(method='dense', ascending=False)` lets you filter on rank directly — the pandas equivalent of SQL's `DENSE_RANK`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "44",
+      "section": "Indexing & Selection",
+      "question": "What is SettingWithCopyWarning and how do you avoid it?",
+      "answer": "It fires when you assign to something pandas cannot prove is a view or a copy — typically **chained indexing** like `df[df.age > 30]['salary'] = 0`, where the first operation may return a copy so the write silently does nothing. The fix is single-step `.loc` assignment: `df.loc[df.age > 30, 'salary'] = 0`. When you deliberately want a separate object, take an explicit `.copy()` first. It is a warning, not an error — which is why it causes silent bugs.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "ProjectPro"]
+    },
+    {
+      "id": "45",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you handle missing data in pandas?",
+      "answer": "Detect with `df.isnull()` / `df.isna()`, and summarize with `df.isnull().sum()` per column. Then choose: drop with `df.dropna()` (by row or column, with `thresh` and `subset` for control), fill with `df.fillna(value)` or a strategy like the column mean/median/mode, forward/backward fill with `ffill()`/`bfill()` for ordered data, or estimate with `interpolate()`. The right choice depends on how much is missing and whether it is missing at random.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "46",
+      "section": "Data Cleaning & Missing Values",
+      "question": "Difference between NaN, None and NaT?",
+      "answer": "`NaN` is a float value from NumPy used for missing numeric data. `None` is the Python null object, used in `object`-dtype columns. `NaT` (Not a Time) is the missing marker for datetime and timedelta columns. `pd.isna()` detects all three uniformly. Note that a column of integers containing a NaN gets upcast to float — use the nullable `Int64` dtype (capital I) to keep integers with missing values.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "47",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you count and locate missing values?",
+      "answer": "`df.isnull().sum()` gives the count per column; `df.isnull().sum().sum()` the grand total; `df.isnull().mean() * 100` the percentage per column, which is what drives the drop-or-impute decision. `df.info()` shows non-null counts. To see the offending rows: `df[df.isnull().any(axis=1)]`. `notnull()` is simply the inverse of `isnull()`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "48",
+      "section": "Data Cleaning & Missing Values",
+      "question": "Difference between dropna() and fillna()?",
+      "answer": "`dropna()` removes data — `axis=0` drops rows containing NaN, `axis=1` drops columns, `how='all'` only when everything is missing, `thresh=n` keeps rows with at least n non-null values, and `subset=['col']` restricts the check. `fillna()` keeps every row and substitutes a value — a constant, a per-column dict, or `method='ffill'/'bfill'`. Drop when the missing share is small or the column is mostly empty; fill when you cannot afford to lose rows.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "ProjectPro", "InterviewBit"]
+    },
+    {
+      "id": "49",
+      "section": "Data Cleaning & Missing Values",
+      "question": "Difference between fillna() and interpolate()?",
+      "answer": "`fillna()` substitutes a value you supply — a constant, the column mean, or the neighbouring value with ffill/bfill. `interpolate()` **estimates** the missing value from the surrounding data points, defaulting to linear interpolation between the previous and next known values, with `method='time'`, `'polynomial'`, `'spline'` and others available. Interpolation suits ordered numeric data such as sensor readings and time series; `fillna` suits categorical or unordered data.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "50",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you fill missing values differently for each column?",
+      "answer": "Pass a dict mapping columns to fill values: `df.fillna({'age': df.age.median(), 'city': 'Unknown', 'score': 0})`. This is the usual production pattern — median for skewed numerics, mean for symmetric ones, mode or a sentinel string for categoricals. In an ML pipeline, compute those statistics on the training set only and reuse them on the test set to avoid leakage.",
+      "frequency": "MED",
+      "sources": ["upGrad", "GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "51",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you check for and remove duplicate rows?",
+      "answer": "`df.duplicated()` returns a boolean Series marking rows already seen; `df.duplicated().sum()` counts them. Remove with `df.drop_duplicates()`. Useful parameters: `subset=['id']` to define duplicates by specific columns only, and `keep='first'` (default), `'last'`, or `False` to drop every occurrence. Follow with `reset_index(drop=True)` to tidy the index.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "upGrad", "Devinterview", "InterviewBit"]
+    },
+    {
+      "id": "52",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you display all duplicate rows, not just the repeats?",
+      "answer": "`df[df.duplicated(keep=False)]` — with `keep=False` every member of a duplicate group is marked True, including the first occurrence, so you can inspect them side by side. Sorting the result by the key columns makes the comparison readable. With the default `keep='first'` you would only see the later copies.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "53",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you change the data type of a column?",
+      "answer": "`df['age'] = df['age'].astype('int32')`. For messy input use `pd.to_numeric(df['x'], errors='coerce')`, which turns unparseable values into NaN instead of raising — the standard way to clean a numeric column read as strings. Similarly `pd.to_datetime()` for dates. `df.convert_dtypes()` infers the best nullable types for the whole frame.",
+      "frequency": "MOST_FREQ",
+      "sources": ["upGrad", "GeeksforGeeks", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "54",
+      "section": "Data Cleaning & Missing Values",
+      "question": "What is the category dtype and why use it?",
+      "answer": "A dtype for columns with a small fixed set of repeated values. Internally pandas stores integer codes plus one dictionary of categories, so a column of a million rows holding five distinct strings shrinks dramatically — often 10-100× less memory — and groupby and comparison operations get faster. Convert with `df['col'] = df['col'].astype('category')`. It also supports meaningful ordering for ordinal data like Low/Medium/High.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "55",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you detect and remove outliers using the IQR method?",
+      "answer": "Compute the quartiles and bounds, then filter: `q1, q3 = df.col.quantile([.25,.75]); iqr = q3 - q1; lo, hi = q1 - 1.5*iqr, q3 + 1.5*iqr; df = df[(df.col >= lo) & (df.col <= hi)]`. The z-score alternative flags points more than 3 standard deviations from the mean, but IQR is more robust because extreme values inflate the mean and std themselves. Consider capping with `clip(lo, hi)` instead of dropping rows.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "DataCamp"]
+    },
+    {
+      "id": "56",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you normalize or standardize data in pandas?",
+      "answer": "Min-max normalization to [0,1]: `(df - df.min()) / (df.max() - df.min())`. Standardization (z-score): `(df - df.mean()) / df.std()`. Both broadcast column-wise on a DataFrame automatically. Note that pandas `std()` defaults to the **sample** standard deviation (`ddof=1`) while NumPy defaults to the population one (`ddof=0`) — a classic discrepancy. In ML, fit these statistics on the training split only.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "57",
+      "section": "Data Cleaning & Missing Values",
+      "question": "How do you convert continuous values into discrete bins?",
+      "answer": "`pd.cut(df.age, bins=[0,18,35,60,100], labels=['Teen','Young','Mid','Senior'])` bins by **value ranges** you specify, so the bins can be unevenly populated. `pd.qcut(df.income, q=4)` bins by **quantiles**, giving roughly equal counts per bin — the way to build quartiles or deciles. Both return a categorical Series, and `retbins=True` gives back the actual edges.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "58",
+      "section": "Transformation & Vectorization",
+      "question": "Difference between map(), applymap() and apply()?",
+      "answer": "`map()` works on a **Series**, element-wise, and also accepts a dict or another Series for substitution — `df.city.map({'DEL':'Delhi'})`. `apply()` works on a Series element-wise, or on a DataFrame along an axis where it receives whole rows or columns — `df.apply(np.sum, axis=1)`. `applymap()` worked element-wise on every cell of a DataFrame but was deprecated in pandas 2.1 in favour of `DataFrame.map()`. In short: map for Series values, apply for row/column logic, DataFrame.map for cell-wise.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "Devinterview", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "59",
+      "section": "Transformation & Vectorization",
+      "question": "How do you apply a custom function to rows or columns?",
+      "answer": "`df.apply(func, axis=1)` passes each **row** as a Series to the function; `axis=0` (the default) passes each column. Example: `df['bmi'] = df.apply(lambda r: r.weight / r.height**2, axis=1)`. It is flexible but slow, because it loops in Python — for the example above the vectorized `df.weight / df.height**2` is far faster. Reach for `apply` only when the logic genuinely cannot be vectorized.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "Devinterview", "upGrad", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "60",
+      "section": "Transformation & Vectorization",
+      "question": "Is iterating over a DataFrame a good practice?",
+      "answer": "No — it is the single most common pandas performance mistake. Iteration runs in Python, giving up the compiled C paths and often being 100× slower, and modifying rows during iteration does not reliably propagate back to the frame. Reach for a vectorized expression first, then `np.where`/`np.select` for conditional logic, then `groupby().transform()`, then `apply()`. Iterate only for genuinely sequential logic or tiny frames.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "61",
+      "section": "Transformation & Vectorization",
+      "question": "How do you iterate over rows? Difference between iterrows() and itertuples()?",
+      "answer": "`for idx, row in df.iterrows()` yields each row as a Series — convenient, but it boxes every row and coerces mixed dtypes to `object`, so it is slow and can silently change types. `for row in df.itertuples()` yields lightweight namedtuples accessed as `row.column`, and is typically several times faster while preserving dtypes — prefer it when you must iterate. `df.items()` iterates over columns instead.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "62",
+      "section": "Transformation & Vectorization",
+      "question": "What is vectorization in pandas and why is it preferred?",
+      "answer": "Applying an operation to an entire Series or DataFrame at once — `df['total'] = df.qty * df.price` — so the loop happens inside compiled NumPy/C code instead of the Python interpreter. It avoids per-element type dispatch and interpreter overhead, typically running 10-100× faster than an equivalent `iterrows` loop, and it reads better. The rule of thumb: if you are writing a `for` loop over rows, there is almost certainly a vectorized form.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "upGrad", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "63",
+      "section": "Transformation & Vectorization",
+      "question": "What are data alignment and broadcasting in pandas?",
+      "answer": "Operations between two pandas objects align on the **index and column labels**, not on position — adding two Series matches labels and produces NaN wherever a label is missing from either side. That is pandas' defining behaviour versus NumPy. Broadcasting handles shape differences: a scalar applies to every element, and a Series operating on a DataFrame broadcasts across rows by default (use `df.sub(s, axis=0)` to broadcast down columns instead).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "Devinterview", "DataCamp"]
+    },
+    {
+      "id": "64",
+      "section": "Transformation & Vectorization",
+      "question": "How do you create a new column derived from existing columns?",
+      "answer": "Vectorized arithmetic: `df['total'] = df.qty * df.price`. Chain-friendly and non-mutating: `df = df.assign(total=lambda d: d.qty * d.price, margin=lambda d: d.total * 0.1)` — `assign` can reference columns it just created. String columns use the `.str` accessor and dates the `.dt` accessor. Avoid `apply` for arithmetic that vectorizes.",
+      "frequency": "MOST_FREQ",
+      "sources": ["DataCamp", "upGrad", "GeeksforGeeks", "ProjectPro"]
+    },
+    {
+      "id": "65",
+      "section": "Transformation & Vectorization",
+      "question": "How do you create a new column based on conditions?",
+      "answer": "Two conditions: `df['flag'] = np.where(df.score >= 50, 'Pass', 'Fail')`. Many conditions: `np.select([c1, c2, c3], ['A','B','C'], default='D')`, which is far more readable than nested `np.where`. Pandas-native options are `df['x'].where(cond, other)` — which keeps values where the condition is True and replaces the rest — and its inverse `mask()`. For range-based labels use `pd.cut`.",
+      "frequency": "MED",
+      "sources": ["upGrad", "Devinterview", "GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "66",
+      "section": "Transformation & Vectorization",
+      "question": "What is method chaining in pandas?",
+      "answer": "Writing a pipeline as a single expression instead of a sequence of reassignments: `(df.dropna().query('age > 18').assign(band=lambda d: pd.cut(d.age, 3)).groupby('band', observed=True)['salary'].mean())`. Benefits: no throwaway intermediate variables, no accidental mutation of the original, and the logic reads top to bottom. Wrap in parentheses to allow line breaks, and use `.pipe(fn)` to insert a custom function into the chain.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "DataCamp"]
+    },
+    {
+      "id": "67",
+      "section": "Transformation & Vectorization",
+      "question": "How do you perform label encoding in pandas?",
+      "answer": "`df['code'] = pd.factorize(df['city'])[0]` maps each distinct value to an integer and returns the codes plus the unique values. Equivalent: `df['city'].astype('category').cat.codes`. Use it for tree-based models and for ordinal data where the ordering is meaningful — but not for nominal categories fed to linear models, which would wrongly read the integers as an ordering; use one-hot encoding there.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "68",
+      "section": "Transformation & Vectorization",
+      "question": "How do you perform one-hot encoding in pandas?",
+      "answer": "`pd.get_dummies(df, columns=['city'], drop_first=True)` creates one binary column per category. `drop_first=True` removes one column to avoid the dummy-variable trap (perfect multicollinearity) in linear models. Watch out for high-cardinality columns, which explode the width, and for the train/test mismatch when a category appears in only one split — `sklearn`'s `OneHotEncoder` with a fixed vocabulary is safer in a real pipeline.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "ProjectPro", "Devinterview"]
+    },
+    {
+      "id": "69",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "What is groupby() and how does it work?",
+      "answer": "It implements **split-apply-combine**: split the rows into groups by one or more keys, apply a function to each group independently, and combine the results into a new object. `df.groupby('dept')['salary'].mean()` gives the average salary per department. Grouping by several keys — `df.groupby(['dept','city'])` — produces a MultiIndex result; add `.reset_index()` to flatten it back into a normal frame.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "70",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you apply multiple aggregations with groupby and agg()?",
+      "answer": "Pass a list for several functions on one column — `df.groupby('dept')['salary'].agg(['mean','max','count'])` — or a dict to aggregate different columns differently: `df.groupby('dept').agg({'salary':'mean', 'age':['min','max']})`. Named aggregation gives clean output column names: `df.groupby('dept').agg(avg_sal=('salary','mean'), n=('salary','size'))`. Custom functions and lambdas are accepted too.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "71",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "Difference between agg(), transform() and filter() in groupby?",
+      "answer": "`agg()` **reduces** each group to a single value, so the result has one row per group. `transform()` returns an object the **same shape as the original**, broadcasting the group result back to every member row — which is how you attach a group statistic to each row. `filter()` keeps or discards whole groups based on a group-level predicate: `df.groupby('dept').filter(lambda g: len(g) > 5)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "ProjectPro", "InterviewBit"]
+    },
+    {
+      "id": "72",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you find employees earning more than their department's average?",
+      "answer": "Use `transform` so the group average lines up row by row: `df[df.salary > df.groupby('dept')['salary'].transform('mean')]`. This is the classic test of whether you understand `transform` versus `agg` — an `agg` result has one row per department and would not align with the original frame, forcing an unnecessary merge. It is the pandas equivalent of a SQL correlated subquery or window function.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "73",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you get the top N rows per group?",
+      "answer": "Sort first, then take the head of each group: `df.sort_values('salary', ascending=False).groupby('dept').head(3)`. Equivalent alternatives are `df.groupby('dept').apply(lambda g: g.nlargest(3, 'salary'))` (slower) and a rank filter: `df[df.groupby('dept')['salary'].rank(method='first', ascending=False) <= 3]`. This mirrors SQL's `ROW_NUMBER() OVER (PARTITION BY ...)`.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "74",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you rank values within each group?",
+      "answer": "`df['rank'] = df.groupby('dept')['salary'].rank(ascending=False, method='dense')`. The `method` parameter controls ties: `'average'` (default) splits the ranks, `'min'` gives everyone the lowest rank of the tie (SQL's RANK), `'dense'` avoids gaps (SQL's DENSE_RANK), and `'first'` breaks ties by the order of appearance (ROW_NUMBER).",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad"]
+    },
+    {
+      "id": "75",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you calculate each row's percentage contribution to its group total?",
+      "answer": "`df['pct'] = df.value / df.groupby('cat')['value'].transform('sum') * 100`. Again `transform` is the key — it broadcasts the group sum back to every row so the division aligns. Using `agg` here would give one sum per group and require a merge first.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "76",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "What does describe() do?",
+      "answer": "`df.describe()` returns a summary of the numeric columns: count, mean, std, min, the 25/50/75th percentiles and max — the fastest way to spot scale differences, outliers and missing values. `df.describe(include='object')` summarizes string columns with count, unique, top and freq, and `include='all'` covers everything. Custom percentiles are available via `percentiles=[.1,.9]`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "ProjectPro", "InterviewBit"]
+    },
+    {
+      "id": "77",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "What statistical functions does pandas provide?",
+      "answer": "`mean()`, `median()`, `mode()`, `sum()`, `min()`, `max()`, `std()`, `var()`, `count()`, `quantile()`, `skew()`, `kurt()`, plus the cumulative family `cumsum()`, `cumprod()`, `cummax()`, `cummin()`. `df.corr()` gives the pairwise correlation matrix (Pearson by default, with 'spearman' and 'kendall' available) and `df.cov()` the covariance. All accept `axis` and skip NaN by default — note `std()` uses `ddof=1` (sample), unlike NumPy's default.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "upGrad", "ProjectPro"]
+    },
+    {
+      "id": "78",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "How do you get the frequency count of unique values?",
+      "answer": "`df['city'].value_counts()` returns each distinct value with its count, sorted descending. Useful options: `normalize=True` for proportions instead of counts, `dropna=False` to include NaN, and `bins=5` to bucket a numeric column. For several columns at once, `df.value_counts(['city','dept'])` or `df.groupby(['city','dept']).size()`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "DataCamp", "upGrad"]
+    },
+    {
+      "id": "79",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "Difference between unique(), nunique() and value_counts()?",
+      "answer": "`unique()` returns an array of the distinct values in order of appearance (Series only). `nunique()` returns just the **count** of distinct values, and works on a whole DataFrame column-wise — much cheaper than `len(df.col.unique())` when you only need the number, and it excludes NaN by default. `value_counts()` returns the distinct values together with their frequencies.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "80",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "What is pivot_table()? How does it differ from pivot()?",
+      "answer": "`df.pivot_table(index='dept', columns='year', values='salary', aggfunc='mean', fill_value=0, margins=True)` reshapes long data into a cross-tab and **aggregates** duplicates. `df.pivot()` does the same reshape but performs no aggregation, so it raises an error if the index/column pair is not unique. `pd.crosstab(df.a, df.b)` is a shortcut for a frequency cross-tabulation, and `pd.melt()` unpivots wide data back to long.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "81",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "Difference between pivot_table() and groupby()?",
+      "answer": "They can compute the same numbers; the difference is the shape of the output. `groupby(['a','b']).mean()` produces a long result with a MultiIndex. `pivot_table(index='a', columns='b')` spreads one key across the columns to produce a wide, report-style cross-tab, and adds conveniences like `fill_value` and `margins` for row/column totals. Use groupby for further computation, pivot_table for presentation.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "82",
+      "section": "GroupBy, Aggregation & Reshaping",
+      "question": "What are stack(), unstack() and melt()?",
+      "answer": "`stack()` pivots the columns into the index, turning a wide frame into a long one with a MultiIndex. `unstack()` is its inverse, moving an index level out into columns. `pd.melt(df, id_vars=['id'], value_vars=['q1','q2'], var_name='quarter', value_name='sales')` also converts wide to long, but produces plain columns rather than a MultiIndex — the usual choice for getting data into tidy format before plotting.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "83",
+      "section": "Merging, Joining & Concatenation",
+      "question": "How do you merge two DataFrames?",
+      "answer": "`pd.merge(left, right, on='id', how='inner')` — SQL-style joining on one or more key columns. Use `left_on`/`right_on` when the key names differ, `suffixes=('_l','_r')` to disambiguate overlapping columns, and `validate='one_to_many'` to assert the expected cardinality and catch accidental row multiplication. `indicator=True` adds a `_merge` column showing which side each row came from.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad", "Devinterview"]
+    },
+    {
+      "id": "84",
+      "section": "Merging, Joining & Concatenation",
+      "question": "What are the different join types in pandas?",
+      "answer": "`how='inner'` (the default) keeps only keys present in both frames. `'left'` keeps every row of the left frame, filling unmatched right columns with NaN. `'right'` is the mirror image. `'outer'` keeps everything from both sides. `'cross'` produces the Cartesian product. After a left join, `df[df.right_col.isna()]` finds the unmatched rows — the anti-join pattern.",
+      "frequency": "MOST_FREQ",
+      "sources": ["upGrad", "GeeksforGeeks", "ProjectPro", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "85",
+      "section": "Merging, Joining & Concatenation",
+      "question": "Difference between merge() and join()?",
+      "answer": "`merge()` is the general function and joins on **columns** by default, with full control over keys and join type. `join()` is a DataFrame method that joins on the **index** by default (though `on=` lets it use a column of the caller), and it defaults to a left join rather than an inner one. `join` is shorthand for the index-aligned case; `merge` is what you use for real key-based joins.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp", "ProjectPro", "upGrad"]
+    },
+    {
+      "id": "86",
+      "section": "Merging, Joining & Concatenation",
+      "question": "Difference between merge() and concat()?",
+      "answer": "`merge()` combines frames **horizontally by matching key values**, like a SQL join — the row count depends on how the keys match. `concat()` simply **stacks** frames along an axis: `axis=0` appends rows (aligning on column names), `axis=1` appends columns (aligning on the index). Use merge when you need key-based lookup, concat when you are gluing together pieces of the same dataset.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "87",
+      "section": "Merging, Joining & Concatenation",
+      "question": "When would you use merge() over concat() and vice versa?",
+      "answer": "Use `merge` when the frames describe **different attributes of the same entities** and must be matched on a key — customers with their orders. Use `concat` when the frames have the **same structure** and represent different slices of one dataset — January plus February sales, or the outputs of a chunked read. If you find yourself concatenating and then deduplicating on a key, you wanted a merge.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "GeeksforGeeks"]
+    },
+    {
+      "id": "88",
+      "section": "Merging, Joining & Concatenation",
+      "question": "How do you concatenate DataFrames vertically and horizontally?",
+      "answer": "Vertically: `pd.concat([df1, df2], ignore_index=True)` — columns align by name, and any column missing from one frame is filled with NaN. Horizontally: `pd.concat([df1, df2], axis=1)`, which aligns on the index, so reset the index first if it is not meaningful. Pass `keys=['a','b']` to tag which frame each row came from, and `join='inner'` to keep only shared columns.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "upGrad", "InterviewBit", "ProjectPro"]
+    },
+    {
+      "id": "89",
+      "section": "Merging, Joining & Concatenation",
+      "question": "How do you find records present in one DataFrame but not in another (anti-join)?",
+      "answer": "Merge with an indicator, then filter: `m = df1.merge(df2, on='id', how='left', indicator=True); m[m._merge == 'left_only']`. A lighter alternative when you only need the keys is `df1[~df1['id'].isin(df2['id'])]`. The indicator approach is preferable when the join key is composite or when you also want the matched columns.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit"]
+    },
+    {
+      "id": "90",
+      "section": "Merging, Joining & Concatenation",
+      "question": "How do you get the items of Series A that are not present in Series B?",
+      "answer": "`a[~a.isin(b)]` returns the elements of A missing from B, preserving duplicates and order. For set semantics, `pd.Index(a).difference(pd.Index(b))` returns sorted unique values. `np.setdiff1d(a, b)` works too but drops the pandas index.",
+      "frequency": "MED",
+      "sources": ["InterviewBit", "ProjectPro", "GeeksforGeeks"]
+    },
+    {
+      "id": "91",
+      "section": "Merging, Joining & Concatenation",
+      "question": "What happens to the index when you concatenate, and what does ignore_index do?",
+      "answer": "By default `concat` preserves each frame's original index, so you end up with duplicate labels — which then break `.loc` lookups and silently misalign later operations. `ignore_index=True` discards them and generates a fresh `0..n-1` RangeIndex. Use `verify_integrity=True` if you want pandas to raise on duplicates instead of accepting them quietly.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "92",
+      "section": "Time Series & Performance",
+      "question": "What is time-series support in pandas?",
+      "answer": "Pandas has first-class datetime handling: a `DatetimeIndex` enables partial-string slicing like `df['2026-08']` or `df['2026-01':'2026-06']`, plus resampling, rolling windows, shifting (`shift()`, `diff()`), timezone conversion, business-day offsets and holiday calendars. It grew out of financial analytics, which is why the time-series API is unusually complete.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "InterviewBit", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "93",
+      "section": "Time Series & Performance",
+      "question": "How do you convert a string column to datetime?",
+      "answer": "`df['date'] = pd.to_datetime(df['date'])`. Pass `format='%d-%m-%Y'` when you know the layout — it is much faster and avoids ambiguous parsing — `dayfirst=True` for European dates, and `errors='coerce'` to turn unparseable values into `NaT` instead of raising. Better still, parse while reading: `pd.read_csv('f.csv', parse_dates=['date'])`.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "ProjectPro", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "94",
+      "section": "Time Series & Performance",
+      "question": "How do you extract the year, month and day from a datetime column?",
+      "answer": "Use the `.dt` accessor: `df['year'] = df.date.dt.year`, plus `.dt.month`, `.dt.day`, `.dt.hour`, `.dt.dayofweek` (Monday = 0), `.dt.day_name()`, `.dt.quarter`, `.dt.is_month_end`, and `.dt.to_period('M')` for a monthly period. The column must already be datetime dtype — on an object column `.dt` raises `AttributeError`, which is the usual sign you forgot `pd.to_datetime`.",
+      "frequency": "MED",
+      "sources": ["ProjectPro", "upGrad", "GeeksforGeeks"]
+    },
+    {
+      "id": "95",
+      "section": "Time Series & Performance",
+      "question": "What is Timedelta in pandas?",
+      "answer": "A duration — the difference between two datetimes. Subtracting two datetime columns yields a `timedelta64` Series, and you can construct one directly with `pd.Timedelta(days=3, hours=2)` or `pd.to_timedelta('3 days')`. Extract components with the `.dt` accessor: `.dt.days`, `.dt.seconds` (the seconds **within** the day, not the total — a classic trap), and `.dt.total_seconds()` for the full duration.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "InterviewBit", "DataCamp"]
+    },
+    {
+      "id": "96",
+      "section": "Time Series & Performance",
+      "question": "What is resampling?",
+      "answer": "Changing the frequency of a time series on a DatetimeIndex. Downsampling aggregates to a coarser frequency — `df.resample('M').sum()` converts daily to monthly. Upsampling moves to a finer frequency and creates gaps you then fill: `df.resample('D').ffill()`. Common aliases: 'D' day, 'W' week, 'ME' month-end, 'QE' quarter-end, 'YE' year-end, 'h' hour. Think of it as a groupby where the key is a time bucket.",
+      "frequency": "MED",
+      "sources": ["DataCamp", "upGrad", "GeeksforGeeks"]
+    },
+    {
+      "id": "97",
+      "section": "Time Series & Performance",
+      "question": "What are rolling() and expanding() window functions?",
+      "answer": "`df['ma7'] = df.sales.rolling(window=7).mean()` computes a 7-period moving average over a **fixed-size sliding window**, producing NaN for the first `window-1` rows (use `min_periods` to relax that). `expanding()` uses a **growing** window that always starts at the first row, so `df.sales.expanding().mean()` gives the cumulative average to date. Both accept any aggregation — sum, std, max — and `ewm()` gives an exponentially weighted version.",
+      "frequency": "MOST_FREQ",
+      "sources": ["GeeksforGeeks", "DataCamp", "upGrad", "InterviewBit"]
+    },
+    {
+      "id": "98",
+      "section": "Time Series & Performance",
+      "question": "How do you find missing dates in a time series?",
+      "answer": "Generate the complete range and subtract what you have: `full = pd.date_range(df.date.min(), df.date.max(), freq='D'); missing = full.difference(pd.DatetimeIndex(df.date))`. To actually insert the gaps as NaN rows, set the date as the index and call `df.reindex(full)` or `df.resample('D').asfreq()`.",
+      "frequency": "LOW",
+      "sources": ["GeeksforGeeks"]
+    },
+    {
+      "id": "99",
+      "section": "Time Series & Performance",
+      "question": "How do you compute a running or cumulative total?",
+      "answer": "`df['running'] = df.sales.cumsum()`. Per group: `df.groupby('region')['sales'].cumsum()`. The family also includes `cumprod()`, `cummax()` and `cummin()`. Related tools: `diff()` for the period-over-period change, `pct_change()` for growth rate, and `shift(1)` to compare against the previous row.",
+      "frequency": "MED",
+      "sources": ["GeeksforGeeks", "upGrad", "DataCamp"]
+    },
+    {
+      "id": "100",
+      "section": "Time Series & Performance",
+      "question": "How do you optimize pandas performance on large datasets?",
+      "answer": "Downcast dtypes — `int64` to `int32`, `float64` to `float32`, and repeated strings to `category`, which often cuts memory several-fold. Load only what you need with `usecols`, an explicit `dtype` map, and `chunksize`. Vectorize instead of using `apply` or `iterrows`. Store intermediates as Parquet rather than CSV. Use `query()` and `eval()` on very large frames, avoid growing a frame in a loop, and profile with `df.info(memory_usage='deep')`. Past a few GB, move to Polars, Dask or DuckDB.",
+      "frequency": "MOST_FREQ",
+      "sources": ["DataCamp", "ProjectPro", "upGrad", "GeeksforGeeks"]
+    }
+  ],
+  "summary": {
+    "by_section": {
+      "Pandas Basics & Data Structures": 12,
+      "Series & DataFrame Creation": 10,
+      "Reading & Writing Data": 9,
+      "Indexing & Selection": 13,
+      "Data Cleaning & Missing Values": 13,
+      "Transformation & Vectorization": 11,
+      "GroupBy, Aggregation & Reshaping": 14,
+      "Merging, Joining & Concatenation": 9,
+      "Time Series & Performance": 9
+    },
+    "by_frequency": {
+      "MOST_FREQ": 50,
+      "MED": 45,
+      "LOW": 5
+    },
+    "study_plan": {
+      "freshers_0_to_2_yrs": "Focus on Q1–Q5 (what pandas is, Series vs DataFrame), Q13–Q14 and Q18–Q22 (creating frames, adding/dropping/renaming), Q23 (read_csv), Q32–Q36 (head/info, column selection, loc vs iloc, filtering), Q45–Q54 (missing data, duplicates, dtypes, category), Q58–Q62 (map vs apply, why not to iterate, vectorization), Q69–Q70 and Q76–Q78 (groupby, agg, describe, value_counts), and Q83–Q86 (merge, join types, merge vs join vs concat). loc vs iloc and groupby are near-guaranteed.",
+      "mid_level_2_to_5_yrs": "Add Q37–Q44 (query, .str, set_index, reindex, MultiIndex, SettingWithCopyWarning), Q55–Q57 (outliers, normalization, cut/qcut), Q64–Q68 (derived and conditional columns, chaining, encoding), Q71–Q75 and Q79–Q82 (transform vs agg, top-N per group, rank, pivot_table vs groupby, stack/melt), Q87–Q91, and Q92–Q97 (datetime, resampling, rolling). Be able to write the SQL equivalent of any pandas operation and vice versa.",
+      "senior_5_plus_yrs": "All 100 + follow-ups on memory and dtype strategy (Q31, Q54, Q100), chunked and columnar I/O (Q25, Q28), why apply is slow and what replaces it (Q59–Q62), transform-based window logic (Q72–Q75), the copy-vs-view model behind SettingWithCopyWarning (Q17, Q44), and when to leave pandas for Polars, Dask or DuckDB (Q12, Q100)."
+    },
+    "highest_probability_topics": [
+      "Series vs DataFrame (Q5)",
+      "loc vs iloc vs at vs iat (Q34)",
+      "Filtering rows with boolean indexing (Q35, Q36)",
+      "groupby and split-apply-combine (Q69, Q70)",
+      "merge vs join vs concat (Q85, Q86)",
+      "Handling missing data — dropna vs fillna vs interpolate (Q45, Q48, Q49)",
+      "map vs apply vs applymap (Q58)",
+      "Why you should not iterate — vectorization (Q60, Q61, Q62)",
+      "SettingWithCopyWarning (Q44)",
+      "pivot_table vs groupby (Q80, Q81)",
+      "Removing duplicates (Q51)",
+      "value_counts and unique vs nunique (Q78, Q79)",
+      "The category dtype and memory optimization (Q54, Q100)",
+      "read_csv and its key parameters (Q23)",
+      "One-hot encoding with get_dummies (Q68)",
+      "MultiIndex (Q41)"
+    ]
+  }
+}

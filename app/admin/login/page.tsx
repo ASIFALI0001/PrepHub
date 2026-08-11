@@ -36,13 +36,14 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-bg flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="grid-backdrop absolute inset-0 pointer-events-none" />
+      <div className="w-full max-w-sm relative z-10">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-7 h-7 text-primary" />
+          <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-primary">
+            <Shield className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-bold text-text">Admin Panel</h1>
+          <h1 className="text-2xl font-bold text-text tracking-tight">Admin Panel</h1>
           <p className="text-sm text-text-muted mt-1">PrepHub administration</p>
         </div>
 
@@ -59,9 +60,9 @@ export default function AdminLoginPage() {
               className="w-full bg-bg-surface border border-bg-border rounded-xl px-4 py-3 text-sm text-text focus:outline-none focus:border-primary/50"
               placeholder="••••••••" />
           </div>
-          {error && <p className="text-xs text-red-400">{error}</p>}
+          {error && <p className="text-xs text-accent-pink">{error}</p>}
           <button type="submit" disabled={loading}
-            className="w-full btn-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50">
+            className="w-full btn-primary py-3 justify-center gap-2 disabled:opacity-50">
             {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Signing in…</> : "Sign in"}
           </button>
         </form>
